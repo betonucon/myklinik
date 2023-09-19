@@ -28,8 +28,8 @@ class RawatJalanController extends Controller
         }
         // $data=KirimCreated::dispatch('@P01');
         // dd($data);
-        dd(penomoran_register(3,0));
-        // return view('rawatjalan.index',compact('waktu'));
+        // dd(penomoran_register(3,0));
+        return view('rawatjalan.index',compact('waktu'));
        
         
     }
