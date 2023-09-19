@@ -124,6 +124,13 @@
 			max-width: 100%;
 			max-height: 140px;
 		}
+		.typright{
+			text-align:right;
+		}
+		.text-inverse {
+			color: #2d353c!important;
+			padding-left: 3vw;
+		}
 		.sidebar .nav>li.nav-profile .cover {
 			position: absolute;
 			top: 0;

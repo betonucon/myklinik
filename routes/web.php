@@ -3,10 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ObatController;
+use App\Http\Controllers\PasienController;
 use App\Http\Controllers\PoliController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\TransaksiobatController;
 use App\Http\Controllers\AsuransiController;
+use App\Http\Controllers\RawatJalanController;
 use App\Http\Controllers\Auth\LogoutController;
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +58,15 @@ Route::group(['middleware' => 'auth','prefix' => 'master/poli'],function(){
     Route::get('/delete', [PoliController::class, 'delete_data']);
     Route::get('/getdata', [PoliController::class, 'get_data']);
 });
+Route::group(['middleware' => 'auth','prefix' => 'pasien'],function(){
+    Route::get('/', [PasienController::class, 'index']);
+    Route::get('/view', [PasienController::class, 'view']);
+    Route::post('/', [PasienController::class, 'store']);
+    Route::get('/modal', [PasienController::class, 'modal']);
+    Route::get('/switch_status', [PasienController::class, 'switch_status']);
+    Route::get('/delete', [PasienController::class, 'delete_data']);
+    Route::get('/getdata', [PasienController::class, 'get_data']);
+});
 Route::group(['middleware' => 'auth','prefix' => 'master/dokter'],function(){
     Route::get('/', [DokterController::class, 'index']);
     Route::get('/view', [DokterController::class, 'view']);
@@ -90,6 +101,30 @@ Route::group(['middleware' => 'auth','prefix' => 'transaksiobat'],function(){
     Route::get('/getdata', [TransaksiobatController::class, 'get_data']);
     Route::get('/getdatapersediaan', [TransaksiobatController::class, 'get_data_persediaan']);
     Route::get('/getdataobat', [TransaksiobatController::class, 'get_data_obat']);
+});
+Route::get('rawatjalan/layar', [RawatJalanController::class, 'index_layar']);
+Route::get('rawatjalan/getdatalayar', [RawatJalanController::class, 'get_data_layar']);
+Route::group(['middleware' => 'auth','prefix' => 'rawatjalan'],function(){
+    Route::get('/', [RawatJalanController::class, 'index']);
+    Route::get('/pasien', [RawatJalanController::class, 'index_pasien']);
+   
+    Route::get('/persediaan', [RawatJalanController::class, 'index_persediaan']);
+    Route::get('/viewpersediaan', [RawatJalanController::class, 'view_persediaan']);
+    Route::get('/view', [RawatJalanController::class, 'view']);
+    Route::post('/', [RawatJalanController::class, 'store']);
+    Route::post('/lama', [RawatJalanController::class, 'store_lama']);
+    Route::post('/edit', [RawatJalanController::class, 'store_edit']);
+    Route::post('/obat', [RawatJalanController::class, 'store_obat']);
+    Route::post('/publish', [RawatJalanController::class, 'store_publish']);
+    Route::get('/modal', [RawatJalanController::class, 'modal']);
+    Route::get('/modal_stok', [RawatJalanController::class, 'modal_stok']);
+    Route::get('/switch_status', [RawatJalanController::class, 'switch_status']);
+    Route::get('/delete', [RawatJalanController::class, 'delete_data']);
+    Route::get('/delete_detail', [RawatJalanController::class, 'delete_detail']);
+    Route::get('/getdata', [RawatJalanController::class, 'get_data']);
+    Route::get('/getdatakepala', [RawatJalanController::class, 'get_data_kepala']);
+    Route::get('/getdataobat', [RawatJalanController::class, 'get_data_obat']);
+    
 });
 
 

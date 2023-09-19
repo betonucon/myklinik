@@ -81,6 +81,7 @@ function repleace_name($job){
 function tanggal_indo_lengkap($date){
    return date('d-m-Y H:i:s',strtotime($date));
 }
+
 function tahun_saja($date){
    return date('y',strtotime($date));
 }

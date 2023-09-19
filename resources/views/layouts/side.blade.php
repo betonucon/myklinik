@@ -36,6 +36,19 @@
 							<li><a href="{{url('transaksiobat/permintaan')}}"><i class="fas fa-check-circle fa-sm"></i> PERMINTAAN OBAT</a></li>
 						</ul>
 					</li>
+					<li class="has-sub @if((Request::is('rawatjalan')==1 || Request::is('rawatjalan/*')==1)  ) active  @endif">
+						<a href="javascript:;">
+							<b class="caret"></b>
+							<i class="fa fa-th-large"></i>
+							<span>RAWAT JALAN </span>
+						</a>
+						<ul class="sub-menu">
+							<li><a href="{{url('rawatjalan')}}"><i class="fas fa-check-circle fa-sm"></i> PENDAFTARAN</a></li>
+							<li><a href="{{url('rawatjalan/pasien')}}"><i class="fas fa-check-circle fa-sm"></i> PASIEN</a></li>
+							<li><a href="{{url('rawatjalan/persediaan')}}"><i class="fas fa-check-circle fa-sm"></i> REKAM MEDIS</a></li>
+							
+						</ul>
+					</li>
 					<li class="has-sub">
 						<a href="javascript:;">
 							<span class="badge pull-right">10</span>

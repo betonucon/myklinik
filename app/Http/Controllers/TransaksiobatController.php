@@ -223,7 +223,53 @@ class TransaksiobatController extends Controller
             ->rawColumns(['action','act','status'])
             ->make(true);
     }
+    
     public function get_data(request $request)
+    {
+        error_reporting(0);
+        $query = ViewStok::query();
+        if($request->statusnya!=""){
+            $data=$query->where('statusnya',$request->statusnya);
+        }
+        
+        $data=$query->whereIn('active',array(1,0))->orderBy('nama_obat','Asc')->get();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                $btn='
+                <div class="btn-group btn-group-sm ">
+                    <a href="#" data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" title="Pilih proses"><i class="fas fa-cog fa-fw"></i></a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="javascript:;" class="dropdown-item" onclick="tambah(`'.encoder($row->id).'`)"><i class="fas fa-pencil-alt fa-fw"></i> Ubah</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="javascript:;" class="dropdown-item" onclick="delete_data(`'.encoder($row->id).'`)"><i class="fas fa-trash-alt fa-fw"></i> Hapus</a>
+                    </div>
+                </div>
+                ';
+                return $btn;
+            })
+            ->addColumn('pilih', function ($row) {
+                $btn='<span class="btn btn-primary btn-xs" onclick="pilih(0,`'.$row->kode_obat.'`,'.$row->stok.')">Pilih</span>';
+                
+                return $btn;
+            })
+            ->addColumn('harga', function ($row) {
+                
+                return uang($row->harga);
+            })
+            ->addColumn('status', function ($row) {
+                $btn='<span class="label label-'.$row->statusnya.'">&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+                
+                
+                return $btn;
+            })
+           
+            
+            ->rawColumns(['action','act','status','pilih'])
+            ->make(true);
+    }
+    public function get_data_layar(request $request)
     {
         error_reporting(0);
         $query = ViewStok::query();
