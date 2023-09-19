@@ -269,18 +269,28 @@ class RawatJalanController extends Controller
         if($cekaktif>0){
             $aktif = ViewTransaksi::where('kode_poli',$request->kode_poli)->where('active',1)->where('status',2)->orderBy('nomor','desc')->FirstOrfail();
             $noaktif=$aktif->nomor;
+            $nama_pasien=$aktif->nama_pasien;
+            $awal=explode(' ',$aktif->nama_pasien);
+            $singkatanawal=$awal[0];
         }else{
             $noaktif='000';
+            $nama_pasien='';
+            $singkatanawal='';
         }
         $success=[];
             $sub=[];
             foreach($data as $o){
+                $aws=explode(' ',$o->nama_pasien);
+                $singkatan=$aws[0];
                 $detail['nomor']=$o->nomor;
                 $detail['nama_pasien']=$o->nama_pasien;
+                $detail['singkatan']=$singkatan;
                 $detail['no_register']=$o->no_register;
                 $sub[]=$detail;
             }
         $success['nomor_aktif']=$noaktif;
+        $success['nama_pasien']=$nama_pasien;
+        $success['singkatan']=$singkatanawal;
         $success['item']=$sub;
         return response()->json($success, 200);
     }

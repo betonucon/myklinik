@@ -39,7 +39,10 @@
 						<div class="col-md-12" style="font-size:170px; font-weight:bold;text-align:center">
 							<div class="panel">
 						
-								<div class="panel-body" id="nomor-aktif" style="height:270px;padding: 1px; font-family: sans-serif;">
+								<div class="panel-body" id="nomor-aktif" style="height:190px;padding: 1px; font-family: sans-serif;">
+									
+								</div>
+								<div class="panel-body" id="nama_pasien" style="text-transform:uppercase;font-size:60px;height:70px;padding: 1px; font-family: sans-serif;color:blue">
 									
 								</div>
 							</div>
@@ -89,10 +92,14 @@
 			success: function (data) {
 				
 				$('#nomor-aktif').html(data.nomor_aktif);
+				$('#nama_pasien').html(data.singkatan);
 				
 				$.each(data.item, function(i, result){
 					$("#tampil-urutan").append('<div class="col-md-3"  style="font-size:30px; font-weight:bold;text-align:center;background:#fff;border:solid 1px #aaaab7">'
 						+result.nomor
+						+'</div>'
+						+'<div class="col-md-9"  style="color:blue;text-transform:uppercase;font-size:30px; font-weight:bold;text-align:center;background:#fff;border:solid 1px #aaaab7">'
+						+result.nama_pasien
 						+'</div>');
 					});
 					
