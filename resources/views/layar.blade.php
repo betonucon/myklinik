@@ -99,7 +99,7 @@
 						+result.nomor
 						+'</div>'
 						+'<div class="col-md-9"  style="color:blue;text-transform:uppercase;font-size:30px; font-weight:bold;text-align:center;background:#fff;border:solid 1px #aaaab7">'
-						+result.nama_pasien
+						+result.singkatan
 						+'</div>');
 					});
 					
