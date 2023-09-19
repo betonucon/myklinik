@@ -562,12 +562,7 @@
 			} 
             
 			function pilih_status_keluarga(id){
-				if(id==2 || id==3){
-                    $('#non_kepala').show();
-                }else{
-                    $('#no_register').val("");
-                    $('#non_kepala').hide();
-                }
+				
 			} 
             function pilih_pasien(no_register,nik,nama_pasien,no_bpjs){
                 $('#modal-pasien-all').modal('hide');

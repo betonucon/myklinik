@@ -28,7 +28,8 @@ class RawatJalanController extends Controller
         }
         // $data=KirimCreated::dispatch('@P01');
         // dd($data);
-        return view('rawatjalan.index',compact('waktu'));
+        dd(penomoran_register(3,0));
+        // return view('rawatjalan.index',compact('waktu'));
        
         
     }
@@ -367,17 +368,7 @@ class RawatJalanController extends Controller
         $rules['jenis_kelamin']= 'required|string';
         $messages['jenis_kelamin.required']= 'Pilih Jenis Kelamin ';
         $messages['jenis_kelamin.string']= 'eror inputan Jenis Kelamin';
-        if($request->status_keluarga==3){
-            $rules['nama_kepala']= 'required|string';
-            $messages['nama_kepala.required']= 'Pilih Nama Orangtua ';
-            $messages['nama_kepala.string']= 'eror inputan Nama Orangtua';
-        }
-        if($request->status_keluarga==2){
-            $rules['nama_kepala']= 'required|string';
-            $messages['nama_kepala.required']= 'Pilih Nama Suami ';
-            $messages['nama_kepala.string']= 'eror inputan Nama Suami';
-        }
-
+        
         $rules['status_keluarga']= 'required|numeric';
         $messages['status_keluarga.required']= 'Pilih Status Keluarga ';
         $messages['status_keluarga.numeric']= 'eror inputan Status Keluarga';
@@ -457,14 +448,14 @@ class RawatJalanController extends Controller
                             ]);
                         }else{
                             
-                            if($request->no_kepala!=""){
-                                $no_kepala=$request->no_kepala;
-                                $penomoran_register=penomoran_register($request->status_keluarga,$request->no_kepala);
-                            }else{
+                            // if($request->no_kepala!=""){
+                            //     $no_kepala=$request->no_kepala;
+                            //     $penomoran_register=penomoran_register($request->status_keluarga,0);
+                            // }else{
                                
                                 $penomoran_register=penomoran_register($request->status_keluarga,0);
                                 $no_kepala=$penomoran_register;
-                            }
+                            // }
                             
                             $data=Pasien::UpdateOrcreate([
                                 'nik'=>$request->nik,

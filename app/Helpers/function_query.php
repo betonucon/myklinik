@@ -94,9 +94,9 @@
                 }else{
                     $no=2;
                 }
-                $cek=App\Models\Pasien::whereYear('tgl_register',date('Y'))->where('status_keluarga',1)->count();
+                $cek=App\Models\Pasien::whereYear('tgl_register',date('Y'))->count();
                 if($cek>0){
-                    $mst=App\Models\Pasien::whereYear('tgl_register',date('Y'))->where('status_keluarga',1)->orderBy('no_register','Desc')->firstOrfail();
+                    $mst=App\Models\Pasien::whereYear('tgl_register',date('Y'))->orderBy('no_register','Desc')->firstOrfail();
                     $urutan = (int) substr($mst['no_register'], 3, 5);
                     $urutan++;
                     $nomor=$th.'-'.sprintf("%05s",  $urutan).$no;
