@@ -74,7 +74,7 @@ class RawatJalanController extends Controller
         $id=decoder($request->id);
         $data=ViewTransaksi::find($id);
         
-        if(Auth::user()->role_id==1){
+        if(Auth::user()->role_id==2){
             if($id>0){
                 $disabled='readonly';
                 return view('rawatjalan.view_edit',compact('template','data','disabled','id'));
@@ -317,7 +317,7 @@ class RawatJalanController extends Controller
         return response()->json($success, 200);
     }
     public function delete_data(request $request){
-        if(Auth::user()->role_id==1){
+        if(Auth::user()->role_id==2){
             $id=decoder($request->id);
             $data = Transaksi::where('id',$id)->update(['active'=>2]);
         }
