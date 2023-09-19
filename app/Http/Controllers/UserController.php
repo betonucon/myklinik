@@ -115,7 +115,7 @@ class UserController extends Controller
         $messages['name.required']= 'Masukan nama penggguna';
         $rules['role_id']= 'required|numeric';
         $messages['role_id.required']= 'Pilih jenis otorisasi';
-        if($request->role_id==4){
+        if($request->role_id==3){
             $rules['kode_poli']= 'required|string';
             $messages['kode_poli.required']= 'Pilih Poli / Penugasan';
         }

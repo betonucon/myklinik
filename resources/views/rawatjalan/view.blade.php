@@ -565,6 +565,7 @@
 				if(id==2 || id==3){
                     $('#non_kepala').show();
                 }else{
+                    $('#no_register').val("");
                     $('#non_kepala').hide();
                 }
 			} 
