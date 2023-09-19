@@ -13,7 +13,27 @@
         Author: Sean Ngu
         Website: http://www.seantheme.com/color-admin/admin/
         */
-        
+        function load_data(){
+			$.ajax({ 
+                type: 'GET', 
+                url: "{{ url('rawatjalan/getdataantrian')}}", 
+                data: { id: 1 }, 
+                dataType: 'json',
+                beforeSend: function() {
+                    $('#tampil-urutan').html("")
+                    
+                },
+                success: function (data) {
+                    
+                    $('#nilai-all').html(data.all);
+                    $('#nilai-umum').html(data.umum);
+                    $('#nilai-anak').html(data.anak);
+                    $('#nilai-gigi').html(data.gigi);
+                    
+                    
+                }
+			});
+		}
         function show_data() {
             if ($('#data-table-fixed-header').length !== 0) {
                 var table=$('#data-table-fixed-header').DataTable({
@@ -62,9 +82,9 @@
 
         $(document).ready(function() {
 			show_data();
-
+            load_data();
 		});
-
+        
 		
     </script>
 @endpush
@@ -113,10 +133,10 @@
                                             
                                         </tr>
                                         <tr>
-                                            <td style="border:solid 1px #fff;color:#000;background:aqua;text-align:center">TOTAl</td>
-                                            <td style="border:solid 1px #fff;color:#000;background:aqua;text-align:center">PL.U</td>
-                                            <td style="border:solid 1px #fff;color:#000;background:aqua;text-align:center">PL.G</td>
-                                            <td style="border:solid 1px #fff;color:#000;background:aqua;text-align:center">PL.A</td>
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-all">0</td>
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-umum">0</td>
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-gigi">0</td>
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-anak">0</td>
                                             
                                         </tr>
                                         
@@ -162,7 +182,17 @@
 @push('ajax')
         
         <script type="text/javascript">
-			
+			var channel = pusher.subscribe('my-chanel');
+                channel.bind('kirim-created', function(data) {
+                
+                var pesan = data.message;
+                var bat = pesan.split('@');
+                if(bat[1]=="P"){
+                    show_data();
+                }
+                
+                
+            });
 			function tambah(id){
 				location.assign("{{url('rawatjalan/view')}}?id="+id)
 			} 

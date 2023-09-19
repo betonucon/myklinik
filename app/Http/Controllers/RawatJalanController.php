@@ -15,6 +15,7 @@ use App\Models\Transaksi;
 use App\Models\ViewKepala;
 use App\Models\ViewTransaksi;
 use App\Models\ViewPasien;
+use App\Events\KirimCreated;  
 class RawatJalanController extends Controller
 {
     
@@ -25,8 +26,22 @@ class RawatJalanController extends Controller
         }else{
             $waktu=date('Y-m-d');
         }
-
+        // $data=KirimCreated::dispatch('@P01');
+        // dd($data);
         return view('rawatjalan.index',compact('waktu'));
+       
+        
+    }
+    public function index_medis(request $request)
+    {
+        if($request->waktu!=""){
+            $waktu=$request->waktu;
+        }else{
+            $waktu=date('Y-m-d');
+        }
+        // $data=KirimCreated::dispatch('@P01');
+        // dd($data);
+        return view('rawatjalan.index_medis',compact('waktu'));
        
         
     }
@@ -75,6 +90,23 @@ class RawatJalanController extends Controller
         
         
     }
+    public function view_medis (request $request)
+    {
+        error_reporting(0);
+        $template='top';
+        $id=decoder($request->id);
+        $data=ViewTransaksi::find($id);
+        
+        if(Auth::user()->role_id==3){
+            return view('rawatjalan.view_medis',compact('template','data','disabled','id'));
+            
+        }else{
+            return view('error');
+        }
+        
+        
+        
+    }
     
     public function get_data(request $request)
     {
@@ -108,6 +140,69 @@ class RawatJalanController extends Controller
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a href="javascript:;" class="dropdown-item" onclick="tambah(`'.encoder($row->id).'`)"><i class="fas fa-pencil-alt fa-fw"></i> Ubah</a>
                              </div>
+                        </div>
+                    ';
+                }
+                return $btn;
+            })
+            ->addColumn('act', function ($row) {
+                $btn='<a href="javascript:;"  class="btn btn-xs btn-'.$row->color.'" title="Dalam '.$row->nama_status.'">&nbsp;&nbsp;&nbsp;&nbsp;</a>';
+                
+                return $btn;
+            })
+            ->addColumn('harga', function ($row) {
+                
+                return uang($row->harga);
+            })
+            ->addColumn('status', function ($row) {
+                if($row->active==1){
+                    $btn='<div class="custom-control custom-switch mb-1">
+                        <input type="checkbox" class="custom-control-input" onclick="switch_data('.$row->id.',0)" id="customSwitch'.$row->id.'" checked>
+                        <label class="custom-control-label" for="customSwitch'.$row->id.'"></label>
+                    </div>';
+                }else{
+                    $btn='<div class="custom-control custom-switch mb-1">
+                        <input type="checkbox" class="custom-control-input" onclick="switch_data('.$row->id.',1)" id="customSwitch'.$row->id.'" >
+                        <label class="custom-control-label" for="customSwitch'.$row->id.'"></label>
+                    </div>';
+                }
+                
+                
+                return $btn;
+            })
+           
+            
+            ->rawColumns(['action','act','status'])
+            ->make(true);
+    }
+    public function get_data_medis(request $request)
+    {
+        error_reporting(0);
+        $query=ViewTransaksi::query();
+        $kode_poli='P01';
+        if($request->waktu!=""){
+            $data = $query->where('waktu',$request->waktu);
+            
+        }else{
+            $data = $query->where('waktu',date('Y-m-d'));
+        }
+        $data = $query->where('kode_poli',$kode_poli)->whereIn('status',array(1,2));
+        $data = $query->where('active',1)->orderBy('id','Asc')->get();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                if($row->status==1){
+                    $btn='
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-warning" onclick="proses_antrian('.$row->id.')" href="javascript:;">Proses</a>
+                        </div>
+                    ';
+                }else{
+                    $btn='
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-blue" onclick="tambah(`'.encoder($row->id).'`)" href="javascript:;"><i class="fa fa-check-square"></i></a>
+                            <a class="btn btn-red " href="javascript:;"><i class="fa fa-window-close"></i></a>
                         </div>
                     ';
                 }
@@ -189,6 +284,38 @@ class RawatJalanController extends Controller
         $success['item']=$sub;
         return response()->json($success, 200);
     }
+    public function get_data_antrian(request $request)
+    {
+        error_reporting(0);
+        $query=ViewTransaksi::query();
+        $data = $query->where('waktu',date('Y-m-d'));
+        $all = $query->where('active',1)->count();
+        $umum = $query->where('kode_poli','P01')->where('active',1)->count();
+        $gigi = $query->where('kode_poli','P02')->where('active',1)->count();
+        $anak = $query->where('kode_poli','P03')->where('active',1)->count();
+        
+        
+        $success=[];
+        $success['all']=$all;
+        $success['umum']=$umum;
+        $success['gigi']=$gigi;
+        $success['anak']=$anak;
+        return response()->json($success, 200);
+    }
+    public function get_data_antrian_medis(request $request)
+    {
+        error_reporting(0);
+        $kode_poli='P01';
+        $query=ViewTransaksi::query();
+        $antrian = $query->where('waktu',date('Y-m-d'))->where('kode_poli',$kode_poli)->where('active',1)->whereIn('status',array(1,2))->count();
+        $selesai = $query->where('waktu',date('Y-m-d'))->where('kode_poli',$kode_poli)->where('active',1)->where('status','>',2)->count();
+        
+        
+        $success=[];
+        $success['antrian']=$antrian;
+        $success['selesai']=$selesai;
+        return response()->json($success, 200);
+    }
     public function delete_data(request $request){
         if(Auth::user()->role_id==1){
             $id=decoder($request->id);
@@ -197,10 +324,12 @@ class RawatJalanController extends Controller
         
 
     }
-    public function switch_status(request $request){
-        if(Auth::user()->role_id==1){
-            $data = Dokter::where('id',$request->id)->update(['active'=>$request->act]);
-        }
+    public function proses_antrian(request $request){
+       
+            $mst = Transaksi::where('id',$request->id)->first();
+            $data = Transaksi::where('id',$request->id)->update(['status'=>2]);
+            $datanot='@P@'.$mst->kode_poli.'@';
+            KirimCreated::dispatch($datanot);
         
 
     }
@@ -364,7 +493,8 @@ class RawatJalanController extends Controller
                             'status'=>1,
                             'active'=>1,
                         ]);
-    
+                        $datanot='@P@'.$request->kode_poli.'@';
+                        KirimCreated::dispatch($datanot);
                         echo'@ok';
                     }
                     
@@ -447,7 +577,8 @@ class RawatJalanController extends Controller
                         'status'=>1,
                         'active'=>1,
                     ]);
-
+                    $datanot='@P@'.$request->kode_poli.'@';
+                    KirimCreated::dispatch($datanot);
                     echo'@ok';
                     
                 

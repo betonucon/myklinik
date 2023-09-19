@@ -71,10 +71,23 @@
                                             <label class="col-lg-2 text-lg-right col-form-label">Otorisasi <span class="text-danger">*</span></label>
                                             <div class="col-lg-9 col-xl-3">
                                             
-                                                <select class="form-control" name="role_id">
+                                                <select class="form-control" onchange="pilih_role(this.value)" name="role_id">
                                                     <option value="">-- Pilih --</option>
                                                     @foreach(get_role() as $gt)
                                                         <option value="{{$gt->id}}" @if($data->role_id==$gt->id) selected @endif >- {{$gt->role}}</option>
+                                                    @endforeach
+                                                </select>
+                                                    
+                                            </div>
+                                        </div>
+                                        <div class="form-group row m-b-10 akses_poli">
+                                            <label class="col-lg-2 text-lg-right col-form-label">Poli / Penugasan <span class="text-danger">*</span></label>
+                                            <div class="col-lg-9 col-xl-3">
+                                            
+                                                <select class="form-control" name="kode_poli">
+                                                    <option value="">-- Pilih --</option>
+                                                    @foreach(get_poli() as $gt)
+                                                        <option value="{{$gt->kode_poli}}" @if($data->kode_poli==$gt->kode_poli) selected @endif >- {{$gt->kode_poli}} {{$gt->nama_poli}}</option>
                                                     @endforeach
                                                 </select>
                                                     
@@ -114,9 +127,25 @@
 @push('ajax')
         
         <script type="text/javascript">
-			
+			@if($id>0)
+                @if($data->role_id==4)
+                $('.akses_poli').show();
+                @else
+                $('.akses_poli').hide();
+                @endif
+            @else
+                $('.akses_poli').hide();
+            @endif
 			function tambah(id){
 				location.assign("{{url('user/view')}}?id="+id)
+			} 
+			function pilih_role(id){
+                // alert(id)
+				if(id==3){
+                    $('.akses_poli').show();
+                }else{
+                    $('.akses_poli').hide();
+                }
 			} 
 			function kembali(){
 				location.assign("{{url('user')}}")

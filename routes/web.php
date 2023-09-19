@@ -102,8 +102,20 @@ Route::group(['middleware' => 'auth','prefix' => 'transaksiobat'],function(){
     Route::get('/getdatapersediaan', [TransaksiobatController::class, 'get_data_persediaan']);
     Route::get('/getdataobat', [TransaksiobatController::class, 'get_data_obat']);
 });
+Route::group(['middleware' => 'auth','prefix' => 'medis'],function(){
+    Route::get('/', [RawatjalanController::class, 'index_medis']);
+    Route::get('/view', [RawatjalanController::class, 'view_medis']);
+    Route::post('/', [RawatjalanController::class, 'store_medis']);
+    
+    Route::get('/proses_antrian', [RawatjalanController::class, 'proses_antrian']);
+    Route::get('/getdata', [RawatjalanController::class, 'get_data_medis']);
+    Route::get('/getdatapersediaan', [RawatjalanController::class, 'get_data_persediaan']);
+    Route::get('/getdataobat', [RawatjalanController::class, 'get_data_obat']);
+    Route::get('/getdataantrian', [RawatjalanController::class, 'get_data_antrian_medis']);
+});
 Route::get('rawatjalan/layar', [RawatJalanController::class, 'index_layar']);
 Route::get('rawatjalan/getdatalayar', [RawatJalanController::class, 'get_data_layar']);
+Route::get('rawatjalan/getdataantrian', [RawatJalanController::class, 'get_data_antrian']);
 Route::group(['middleware' => 'auth','prefix' => 'rawatjalan'],function(){
     Route::get('/', [RawatJalanController::class, 'index']);
     Route::get('/pasien', [RawatJalanController::class, 'index_pasien']);

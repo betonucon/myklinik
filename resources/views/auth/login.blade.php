@@ -28,7 +28,7 @@
 			<div class="news-feed">
 				<div class="news-image" style="background-image: url({{url_plug()}}/assets/img/login-bg/login-bg-11.jpg)"></div>
 				<div class="news-caption">
-					<h4 class="caption-title"><b>Color</b> Admin App</h4>
+					<h4 class="caption-title"><b>KLINIK</b> UWEN SERANG</h4>
 					<p>
 						Download the Color Admin app for iPhone®, iPad®, and Android™. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 					</p>
@@ -40,7 +40,7 @@
 				<!-- begin login-header -->
 				<div class="login-header">
 					<div class="brand">
-						<span class="logo"></span> <b>Color</b> Admin
+						<b>KLINIK</b> UWEN SERANG
 						<small>responsive bootstrap 4 admin template</small>
 					</div>
 					<div class="icon">
@@ -75,7 +75,7 @@
 						</div>
 						<hr />
 						<p class="text-center text-grey-darker mb-0">
-							&copy; Color Admin All Right Reserved 2020
+							&copy; Klinik Uwen Serang Reserved 2020
 						</p>
 					</form>
 				</div>

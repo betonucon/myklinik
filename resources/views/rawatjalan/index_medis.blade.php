@@ -13,7 +13,26 @@
         Author: Sean Ngu
         Website: http://www.seantheme.com/color-admin/admin/
         */
-        
+        function load_data(){
+			$.ajax({ 
+                type: 'GET', 
+                url: "{{ url('medis/getdataantrian')}}", 
+                data: { id: 1 }, 
+                dataType: 'json',
+                beforeSend: function() {
+                    $('#tampil-urutan').html("")
+                    
+                },
+                success: function (data) {
+                    
+                    $('#nilai-antrian').html(data.antrian);
+                    $('#nilai-selesai').html(data.selesai);
+                    $('#nilai-total').html((data.antrian+data.selesai));
+                    
+                    
+                }
+			});
+		}
         function show_data() {
             if ($('#data-table-fixed-header').length !== 0) {
                 var table=$('#data-table-fixed-header').DataTable({
@@ -23,8 +42,8 @@
                         header: true,
                         headerOffset: $('#header').height()
                     },
-                    responsive: false,
-                    ajax:"{{ url('transaksiobat/getdatapersediaan')}}",
+                    responsive: true,
+                    ajax:"{{ url('medis/getdata')}}",
                     dom: 'lrtip',
 					columns: [
                         { data: 'id', render: function (data, type, row, meta) 
@@ -32,15 +51,16 @@
 								return meta.row + meta.settings._iDisplayStart + 1;
 							} 
 						},
-						{ data: 'statusnya' },
-                        { data: 'action' },
-						
-						{ data: 'no_persediaan' },
-						{ data: 'supplier' },
-                        { data: 'name' },
-                        { data: 'total',className: "text-center"  },
-                        { data: 'tanggal',className: "text-center"  },
-						{ data: 'created_at',className: "text-center"  },
+						{ data: 'act' },
+						{ data: 'action' },
+						{ data: 'nomor' },
+						{ data: 'no_transaksi' },
+						{ data: 'no_register' },
+						{ data: 'nama_pasien' },
+						{ data: 'nama_asuransi' },
+                        { data: 'jenis_kelamin' },
+                        { data: 'umur' },
+						{ data: 'nm_poli',className: "text-center"  },
 						
 						
 					],
@@ -61,9 +81,9 @@
 
         $(document).ready(function() {
 			show_data();
-
+            load_data();
 		});
-
+        
 		
     </script>
 @endpush
@@ -74,11 +94,11 @@
 			<!-- begin breadcrumb -->
 			<ol class="breadcrumb float-xl-right">
 				<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
-				<li class="breadcrumb-item active">Persediaan Stok</li>
+				<li class="breadcrumb-item active">Daftar Rawat Jalan</li>
 			</ol>
 			<!-- end breadcrumb -->
 			<!-- begin page-header -->
-			<h1 class="page-header">Persediaan Stok <small></small></h1>
+			<h1 class="page-header">Daftar Rawat Jalan <small></small></h1>
 			<!-- end page-header -->
 			<!-- begin row -->
 			<div class="row">
@@ -98,26 +118,49 @@
 						<!-- begin alert -->
 						
 						<div class="panel-body">
-                            <div class="row" style="margin-bottom:2%">
-                                <div class="col-md-8">
-                                    <a href="javascript:;" onclick="tambah(`{{encoder(0)}}`)" class="btn btn-primary m-r-5"><i class="fa fa-plus"></i> Buat Persediaan</a>
+							<div class="row" style="margin-bottom:2%">
+                                <div class="col-md-5" style="background: #fdf5cd; padding: 1%;">
+                                    <table width="100%">
+                                        <tr>
+                                            <td colspan="4" style="font-size:20px">TGL : {{$waktu}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="%">TOTAL PASIEN</td>
+                                            <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="30%">ANTRIAN</td>
+                                            <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="30%">SELESAI</td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-total">0</td>
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-antrian">0</td>
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-selesai">0</td>
+                                        </tr>
+                                        
+                                    </table>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                   
+                                </div>
+                                <div class="col-md-4" style="text-align: right;">
+                                    <br>
                                     <input class="form-control" id="cari_data" placeholder="Cari......" type="text" />
                                 </div>
                             </div>
+                            
                             <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header"  >
                                 <thead>
                                     <tr role="row">
                                         <th width="5%">No</th>
-                                        <th width="5%">Status</th>
                                         <th width="5%"></th>
-                                        <th width="11%">No Order</th>
-                                        <th width="">Supplier</th>
-                                        <th width="15%">User</th>
-                                        <th width="11%">Total</th>
-                                        <th width="11%">Tanggal</th>
-                                        <th width="15%">Created</th>
+                                        <th width="3%"></th>
+                                        <th width="5%">Nomor</th>
+                                        <th width="12%">No Transaksi</th>
+                                        <th width="11%">No Register</th>
+                                        <th >Pasien</th>
+                                        <th width="13%">Metode</th>
+                                        <th width="4%">J.K</th>
+                                        <th width="5%">Umur</th>
+                                        <th width="5%">Poli</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -125,7 +168,7 @@
 						</div>
 						<!-- end panel-body -->
 					</div>
-					
+					<!-- end panel -->
 				</div>
 				<!-- end col-10 -->
 			</div>
@@ -135,13 +178,23 @@
 @push('ajax')
         
         <script type="text/javascript">
-			
+			var channel = pusher.subscribe('my-chanel');
+                channel.bind('kirim-created', function(data) {
+                
+                var pesan = data.message;
+                var bat = pesan.split('@');
+                if(bat[1]=="P"){
+                    show_data();
+                }
+                
+                
+            });
 			function tambah(id){
-				location.assign("{{url('transaksiobat/viewpersediaan')}}?id="+id)
+				location.assign("{{url('medis/view')}}?id="+id)
 			} 
 			function cari_status(statusnya){
 				var tables=$('#data-table-fixed-header').DataTable();
-                    tables.ajax.url("{{ url('transaksiobat/getdata')}}?statusnya="+statusnya).load();
+                    tables.ajax.url("{{ url('medis/getdata')}}?statusnya="+statusnya).load();
 			} 
             function hanyaAngka(evt) {
 				
@@ -182,7 +235,7 @@
                                 $('#modal-form').modal('hide')
 				                $('#tampil-form').html("")
                                 var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                        tables.ajax.url("{{ url('medis/getdata')}}").load();
                             }else{
                                 document.getElementById("loadnya").style.width = "0px";
                                 Swal.fire({
@@ -212,80 +265,60 @@
                         if (willDelete) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{url('transaksiobat/delete')}}",
+                                url: "{{url('medis/delete')}}",
                                 data: "id="+id,
                                 success: function(msg){
                                     swal("Sukses diproses", "", "success")
                                     var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('transaksiobat/getdatapersediaan')}}").load();
+                                        tables.ajax.url("{{ url('medis/getdata')}}").load();
                                 }
                             });
                            
                         } else {
                             var tables=$('#data-table-fixed-header').DataTable();
-                                tables.ajax.url("{{ url('transaksiobat/getdatapersediaan')}}").load();
+                                tables.ajax.url("{{ url('medis/getdata')}}").load();
                         }
                     });
                     
                 
             } 
-            function switch_data(id,act){
-                if(act==1){
+            function proses_antrian(id){
+                
                     
 
                     swal({
-                            title: "Aktifkan obat?",
-                            text: "Jika diaktifkan maka pengguna dapat menggunakan obat ini",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
+                        title: "Proses antrian ?",
+                        text: "",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
                         if (willDelete) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{url('transaksiobat/switch_status')}}",
-                                data: "id="+id+"&act="+act,
+                                url: "{{url('medis/proses_antrian')}}",
+                                data: "id="+id,
+                                beforeSend: function() {
+                                    document.getElementById("loadnya").style.width = "100%";
+                                },
                                 success: function(msg){
+                                    document.getElementById("loadnya").style.width = "0px";
                                     swal("Sukses diproses", "", "success")
                                     var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                        tables.ajax.url("{{ url('medis/getdata')}}").load();
+                                    load_data();
                                 }
                             });
                            
                         } else {
+                            document.getElementById("loadnya").style.width = "0px";
                             var tables=$('#data-table-fixed-header').DataTable();
-                                tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                tables.ajax.url("{{ url('medis/getdata')}}").load();
+                            load_data();
                         }
                     });
-                }
-                if(act==0){
-                    swal({
-                            title: "Non aktifkan obat?",
-                            text: "Jika nonaktifkan maka pengguna tidak dapat menggunakan obat ini",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
-                        if (willDelete) {
-                            $.ajax({
-                                type: 'GET',
-                                url: "{{url('transaksiobat/switch_status')}}",
-                                data: "id="+id+"&act="+act,
-                                success: function(msg){
-                                    swal("Sukses diproses", "", "success")
-                                    var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
-                                }
-                            });
-                           
-                        } else {
-                            var tables=$('#data-table-fixed-header').DataTable();
-                                tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
-                        }
-                    });
-                }
+                
                 
             }
         </script>

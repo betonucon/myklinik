@@ -115,6 +115,10 @@ class UserController extends Controller
         $messages['name.required']= 'Masukan nama penggguna';
         $rules['role_id']= 'required|numeric';
         $messages['role_id.required']= 'Pilih jenis otorisasi';
+        if($request->role_id==4){
+            $rules['kode_poli']= 'required|string';
+            $messages['kode_poli.required']= 'Pilih Poli / Penugasan';
+        }
         if($request->id==0){
             $rules['email']= 'required|email|unique:users';
             $messages['email.required']= 'Masukan email penggguna';
@@ -164,6 +168,7 @@ class UserController extends Controller
                         'role_id'=>$request->role_id,
                         'email'=>$request->email,
                         'name'=>$request->name,
+                        'kode_poli'=>$request->kode_poli,
                         'password'=>Hash::make($request->password),
                         'password_token'=>encoder($exp[0]),
                         'active'=>1,
@@ -179,6 +184,7 @@ class UserController extends Controller
                     $data=User::where('id',$request->id)->update([
                         'name'=>$request->name,
                         'role_id'=>$request->role_id,
+                        'kode_poli'=>$request->kode_poli,
                         'updated_at'=>date('Y-m-d H:i:s'),
                     ]);
                     if($request->password!=""){

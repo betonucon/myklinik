@@ -74,6 +74,7 @@
 	<!-- ================== BEGIN BASE JS ================== -->
 	<script src="{{url_plug()}}/assets/js/app.min.js"></script>
 	<script src="{{url_plug()}}/assets/js/theme/default.min.js"></script>
+	<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 	<script >
 		function load_data(){
 			$.ajax({ 
@@ -81,12 +82,12 @@
 			url: "{{ url('rawatjalan/getdatalayar')}}?kode_poli={{$kode_poli}}", 
 			data: { id: 1 }, 
 			dataType: 'json',
-			// beforeSend: function() {
-			// 	$('#tampil-project-load').show()
-			// 	$('.pagination').hide()
-			// },
+			beforeSend: function() {
+				$('#tampil-urutan').html("")
+				
+			},
 			success: function (data) {
-				console.log(data);
+				
 				$('#nomor-aktif').html(data.nomor_aktif);
 				
 				$.each(data.item, function(i, result){
@@ -103,6 +104,25 @@
 		$(document).ready(function() {
 			load_data()
 		});
+
+		Pusher.logToConsole = false;
+
+        var pusher = new Pusher('8222b3d50f9312cb70e7', {
+            cluster: 'ap1',
+            // forceTLS: true
+        });
+
+        var channel = pusher.subscribe('my-chanel');
+        channel.bind('kirim-created', function(data) {
+			
+            var pesan = data.message;
+            var bat = pesan.split('@');
+			if(bat[2]=="{{$kode_poli}}"){
+				load_data()
+			}
+			
+            
+        });
 	</script>
 	<!-- ================== END BASE JS ================== -->
 </body>

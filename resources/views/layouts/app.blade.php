@@ -224,15 +224,8 @@
 			</div>
 			<!-- end navbar-header --><!-- begin header-nav -->
 			<ul class="navbar-nav navbar-right">
-				<li class="navbar-form">
-					<form action="" method="POST" name="search">
-						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Enter keyword" />
-							<button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
-						</div>
-					</form>
-				</li>
-				<li class="dropdown">
+				
+				<!-- <li class="dropdown">
 					<a href="#" data-toggle="dropdown" class="dropdown-toggle f-s-14">
 						<i class="fa fa-bell"></i>
 						<span class="label">5</span>
@@ -293,19 +286,32 @@
 							<a href="javascript:;">View more</a>
 						</div>
 					</div>
-				</li>
+				</li> -->
 				<li class="dropdown navbar-user">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<img src="{{url_plug()}}/assets/img/user/user-13.jpg" alt="" /> 
-						<span class="d-none d-md-inline">Adam Schwartz</span> <b class="caret"></b>
+						<span class="d-none d-md-inline">{{Auth::user()->name}}</span> <b class="caret"></b>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a href="javascript:;" class="dropdown-item">Edit Profile</a>
-						<a href="javascript:;" class="dropdown-item"><span class="badge badge-danger pull-right">2</span> Inbox</a>
-						<a href="javascript:;" class="dropdown-item">Calendar</a>
-						<a href="javascript:;" class="dropdown-item">Setting</a>
+						@if(Auth::user()->role_id==1)
+							<a href="{{url('user')}}" class="dropdown-item">User Akses</a>
+							<a href="{{url('master/obat')}}" class="dropdown-item">Obat</a>
+							<a href="{{url('pasien')}}" class="dropdown-item">Pasien</a>
+						@endif
+						@if(Auth::user()->role_id==2)
+							<a href="{{url('master/obat')}}" class="dropdown-item">Obat</a>
+							<a href="{{url('pasien')}}" class="dropdown-item">Pasien</a>
+						@endif
+						@if(Auth::user()->role_id==3)
+							<a href="{{url('pasien')}}" class="dropdown-item">Pasien</a>
+							<a href="{{url('medis')}}" class="dropdown-item">Pemeriksaan</a>
+						@endif
+						@if(Auth::user()->role_id==4)
+							<a href="{{url('master/obat')}}" class="dropdown-item">Obat</a>
+						@endif
+						
 						<div class="dropdown-divider"></div>
-						<a href="javascript:;" class="dropdown-item">Log Out</a>
+						<a href="javascript:;" id="logout" class="dropdown-item">Log Out</a>
 					</div>
 				</li>
 			</ul>
@@ -320,24 +326,24 @@
 				<!-- begin sidebar user -->
 				<ul class="nav">
 					<li class="nav-profile">
-						<a href="javascript:;" data-toggle="nav-profile">
+						<a href="javascript:;">
 							<div class="cover with-shadow"></div>
 							<div class="image">
 								<img src="{{url_plug()}}/assets/img/user/user-13.jpg" alt="" />
 							</div>
 							<div class="info">
-								<b class="caret pull-right"></b>Sean Ngu
-								<small>Front end developer</small>
+								<b class="caret pull-right"></b>{{Auth::user()->name}}
+								<small>Administrator</small>
 							</div>
 						</a>
 					</li>
-					<li>
+					<!-- <li>
 						<ul class="nav nav-profile">
 							<li><a href="javascript:;"><i class="fa fa-cog"></i> Settings</a></li>
 							<li><a href="javascript:;"><i class="fa fa-pencil-alt"></i> Send Feedback</a></li>
 							<li><a href="javascript:;"><i class="fa fa-question-circle"></i> Helps</a></li>
 						</ul>
-					</li>
+					</li> -->
 				</ul>
 				<!-- end sidebar user -->
 				<!-- begin sidebar nav -->
@@ -399,6 +405,34 @@
         $(".typeuang").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
     </script>
     @stack('datatable')
+	<script>
+		$("#logout").on("click", function() {
+			swal({
+					title: "Yakin melakukan logout?",
+					text: "Proses logout akan mengluarkan anda dari sistem",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willDelete) => {
+				if (willDelete) {
+					location.assign("{{ url('logout-perform') }}")
+					
+				} else {
+					
+				}
+			});
+            
+        })
+		Pusher.logToConsole = false;
+
+		var pusher = new Pusher('8222b3d50f9312cb70e7', {
+			cluster: 'ap1',
+			// forceTLS: true
+		});
+
+		
+	</script>
     @stack('ajax')
 </body>
 </html>
