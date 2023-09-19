@@ -179,7 +179,7 @@ class RawatJalanController extends Controller
     {
         error_reporting(0);
         $query=ViewTransaksi::query();
-        $kode_poli='P01';
+        $kode_poli=Auth::user()->kode_poli;
         if($request->waktu!=""){
             $data = $query->where('waktu',$request->waktu);
             
@@ -305,7 +305,7 @@ class RawatJalanController extends Controller
     public function get_data_antrian_medis(request $request)
     {
         error_reporting(0);
-        $kode_poli='P01';
+        $kode_poli=Auth::user()->kode_poli;
         $query=ViewTransaksi::query();
         $antrian = $query->where('waktu',date('Y-m-d'))->where('kode_poli',$kode_poli)->where('active',1)->whereIn('status',array(1,2))->count();
         $selesai = $query->where('waktu',date('Y-m-d'))->where('kode_poli',$kode_poli)->where('active',1)->where('status','>',2)->count();
