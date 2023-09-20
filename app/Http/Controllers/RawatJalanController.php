@@ -15,6 +15,9 @@ use App\Models\Transaksi;
 use App\Models\ViewKepala;
 use App\Models\ViewTransaksi;
 use App\Models\ViewPasien;
+use App\Models\ViewStokOrder;
+use App\Models\Stok;
+use App\Models\ViewStok;
 use App\Events\KirimCreated;  
 class RawatJalanController extends Controller
 {
@@ -121,7 +124,66 @@ class RawatJalanController extends Controller
         
         
     }
-    
+    public function view_apotik (request $request)
+    {
+        error_reporting(0);
+        $template='top';
+        $id=decoder($request->id);
+        $data=ViewTransaksi::find($id);
+        
+        
+            return view('rawatjalan.view_apotik',compact('template','data','disabled','id'));
+            
+        
+        
+        
+        
+    }
+    public function get_data_obat(request $request)
+    {
+        error_reporting(0);
+        $query = ViewStokOrder::query();
+        
+        
+        $data=$query->where('no_transaksi',$request->no_transaksi)->orderBy('nama_obat','Asc')->get();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                
+                    $btn='
+                   
+                        <span class="btn btn-danger btn-xs dropdown-toggle" onclick="delete_detail('.$row->id.')" title="Pilih proses"><i class="fas fa-trash-alt fa-fw"></i></span>
+                        
+                    ';
+                
+                
+                return $btn;
+            })
+            ->addColumn('act', function ($row) {
+                $btn='<input type="checkbox" name="nik[]" value="'.$row->nik.'">';
+                
+                return $btn;
+            })
+            ->addColumn('harga', function ($row) {
+                
+                return uang($row->harga);
+            })
+            ->addColumn('total', function ($row) {
+                
+                return uang($row->total);
+            })
+            ->addColumn('status', function ($row) {
+                $btn='<span class="label label-'.$row->statusnya.'">&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+                
+                
+                return $btn;
+            })
+           
+            
+            ->rawColumns(['action','act','status'])
+            ->make(true);
+    }
     public function get_data(request $request)
     {
         error_reporting(0);
@@ -407,6 +469,32 @@ class RawatJalanController extends Controller
         $success['selesai']=$selesai;
         return response()->json($success, 200);
     }
+    public function modal_stok(request $request)
+    {
+        error_reporting(0);
+        $template='top';
+        $id=$request->id;
+        $mst=ViewStok::where('kode_obat',$request->kode_obat)->first();
+        $data=ViewTransaksi::find($id);
+        $stok=$mst->stok;
+        $satuan=$mst->satuan;
+        if($id>0){
+            
+            $nama_obat=$data->nama_obat;
+            $kode_obat=$data->kode_obat;
+            $harga=$data->harga;
+            $qty=$data->qty;
+        }else{
+            
+            $nama_obat=$mst->nama_obat;
+            $kode_obat=$mst->kode_obat;
+            $harga=$mst->harga;
+            $qty=0;
+        }
+        return view('rawatjalan.modal_stok',compact('harga','satuan','qty','stok','template','data','readonly','id','nama_obat','kode_obat'));
+        
+        
+    }
     public function get_data_antrian_apotik(request $request)
     {
         error_reporting(0);
@@ -426,6 +514,14 @@ class RawatJalanController extends Controller
             $id=decoder($request->id);
             $data = Transaksi::where('id',$id)->update(['active'=>2]);
         }
+        
+
+    }
+    public function delete_detail(request $request){
+        
+            $id=$request->id;
+            $data = Stok::where('id',$id)->delete();
+       
         
 
     }
@@ -602,6 +698,71 @@ class RawatJalanController extends Controller
                 
             
         }
+    }
+    public function store_obat(request $request){
+        error_reporting(0);
+        $rules = [];
+        $messages = [];
+        $rules['kode_obat']= 'required';
+        $messages['kode_obat.required']= 'Masukan kode obat';
+        $rules['harga']= 'required|min:0|not_in:0';
+        $messages['harga.required']= 'Lengkapi harga';
+        $messages['harga.not_in']= 'Lengkapi harga';
+        $rules['qty']= 'required|min:0|not_in:0';
+        $messages['qty.required']= 'Lengkapi qty';
+        $messages['qty.not_in']= 'Lengkapi qty';
+        
+        
+        
+        
+       
+        $validator = Validator::make($request->all(), $rules, $messages);
+        $val=$validator->Errors();
+
+
+        if ($validator->fails()) {
+            echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                foreach(parsing_validator($val) as $value){
+                    
+                    foreach($value as $isi){
+                        echo'-&nbsp;'.$isi.'<br>';
+                    }
+                }
+            echo'</div></div>';
+        }else{
+            
+            $mst=ViewStok::where('kode_obat',$request->kode_obat)->first();
+            $fistr = Transaksi::where('no_transaksi',$request->no_transaksi)->first();
+            if($fistr->status==2 || $fistr->status==3){
+                if($mst->stok>=ubah_uang($request->qty)){
+                        $harga=ubah_uang($request->harga);
+                        $qty=ubah_uang($request->qty);
+                        $data=Stok::UpdateOrcreate([
+                            'no_transaksi'=>$request->no_transaksi,
+                            'kode_obat'=>$request->kode_obat,
+                        ],[
+                            'sts_obat'=>2,
+                            'type_stok'=>2,
+                            'harga_actual'=>$harga,
+                            'harga'=>$harga,
+                            'potongan'=>0,
+                            'qty'=>$qty,
+                            'active'=>1,
+                            'total'=>($harga*$qty),
+                            'waktu'=>date('Y-m-d H:i:s'),
+                            'created_at'=>date('Y-m-d H:i:s'),
+                        ]);
+
+                        echo'@ok';
+                    }else{
+                        echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">Stok tidak mencukupi</div></div>';
+                    }
+                    
+                
+                }else{
+                    echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">Tidak dapat menambah obat</div></div>';
+                } 
+            } 
     }
     public function store_lama(request $request){
         error_reporting(0);
@@ -809,23 +970,75 @@ class RawatJalanController extends Controller
             
             
                     $mst=Transaksi::where('id',$request->id)->first();
-                    
-                    $trs=Transaksi::UpdateOrcreate([
-                        'id'=>$request->id,
-                    ],[
-                        'tensi_darah_a'=>$request->tensi_darah_a,
-                        'tensi_darah_b'=>$request->tensi_darah_b,
-                        'diagnosa_id'=>$request->diagnosa_id,
-                        'diagnosa_end'=>$request->diagnosa_end,
-                        'diagnosa_ind'=>$request->diagnosa_ind,
-                        'berat'=>$request->berat,
-                        'tinggi'=>$request->tinggi,
-                        'status'=>3,
-                        'mulai'=>$request->mulai,
-                        'sampai'=>$request->sampai,
-                    ]);
+                    $cek = ViewStokOrder::where('no_transaksi',$mst->no_transaksi)->count();
+                    if($cek>0){
 
-                    echo'@ok';
+                    
+                        $trs=Transaksi::UpdateOrcreate([
+                            'id'=>$request->id,
+                        ],[
+                            'tensi_darah_a'=>$request->tensi_darah_a,
+                            'tensi_darah_b'=>$request->tensi_darah_b,
+                            'diagnosa_id'=>$request->diagnosa_id,
+                            'diagnosa_eng'=>$request->diagnosa_eng,
+                            'diagnosa_ind'=>$request->diagnosa_ind,
+                            'berat'=>$request->berat,
+                            'tinggi'=>$request->tinggi,
+                            'surat_id'=>$request->surat_id,
+                            'status'=>3,
+                            'mulai'=>$request->mulai,
+                            'sampai'=>$request->sampai,
+                        ]);
+
+                        echo'@ok';
+                    }else{
+                        echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">Masukan Resep Obat</div></div>';
+                    } 
+                    
+                
+            
+        }
+    }
+    public function store_apotik(request $request){
+        error_reporting(0);
+        $rules = [];
+        $messages = [];
+        
+
+        
+        
+       
+        $validator = Validator::make($request->all(), $rules, $messages);
+        $val=$validator->Errors();
+
+
+        if ($validator->fails()) {
+            echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                foreach(parsing_validator($val) as $value){
+                    
+                    foreach($value as $isi){
+                        echo'-&nbsp;'.$isi.'<br>';
+                    }
+                }
+            echo'</div></div>';
+        }else{
+            
+            
+                    $mst=Transaksi::where('id',$request->id)->first();
+                    $cek = ViewStokOrder::where('no_transaksi',$mst->no_transaksi)->count();
+                    if($mst->status==3){
+
+                    
+                        $trs=Transaksi::UpdateOrcreate([
+                            'id'=>$request->id,
+                        ],[
+                            'status'=>4,
+                        ]);
+
+                        echo'@ok';
+                    }else{
+                        echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">Error pemrosesan</div></div>';
+                    } 
                     
                 
             

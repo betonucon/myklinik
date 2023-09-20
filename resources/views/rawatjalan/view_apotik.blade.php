@@ -292,101 +292,31 @@
                                                     <div class="col-xl-12 " >
                                                         <hr>
                                                     </div>
-                                                    <div class="col-xl-7 " >
+                                                    <div class="col-xl-9 " >
                                                         <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Informasi Keluhan Yang dialami</u></legend>
-                                                        <div class="form-group row m-b-1">
-                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Keluhan Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-8">
-                                                                <textarea name="keluhan" value="" placeholder="Ketik...." rows="5" class="form-control form-control-sm">{{$data->keluhan}}</textarea>
-                                                           </div>
-                                                            
-                                                        </div>
-                                                        <div class="form-group row m-b-1" >
-                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Kode Diagnosa<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-4">
-                                                                <div class="input-group input-group-sm ">
-                                                                    <input type="text" readonly name="kode_diagnosa"  id="kode_diagnosa" class="form-control">
-                                                                    <div class="input-group-addon" onclick="show_diagnosa()">
-                                                                        <i class="fa fa-search"></i>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="row">
+                                                            <div class="col-md-1">
+
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <u><b>Keluhan Pasien</b></u><br>
                                                                 
+                                                                {!!$data->keluhan!!}
                                                             </div>
+                                                            <div class="col-md-1">
+
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <u><b>Diagnosa Pasien</b></u><br>
                                                             
-                                                        </div>
-                                                        <div class="form-group row m-b-1">
-                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Diagnosa English<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-8">
-                                                                <input type="text" id="diagnosa_eng" name="diagnosa_eng" readonly  placeholder="Ketik...." class="form-control form-control-sm">
+                                                                Kode Diagnosa : {{$data->kode_diagnosa}}<br>( {!!$data->diagnosa_eng!!} ) </br>{!!$data->diagnosa_ind!!}
                                                             </div>
                                                         </div>
-                                                        <div class="form-group row m-b-1">
-                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Diagnosa Indonesia<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-8">
-                                                                <textarea name="diagnosa_ind" id="diagnosa_ind" placeholder="Ketik...." rows="5" class="form-control form-control-sm" readonly></textarea>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                    <div class="col-xl-5 mb-4" style="border: solid 1px #ceced9; background: #f9f9f9; padding-top: 1%;">
-                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Surat Keterangan Sakit / Keterangan Sehat</u></legend>
-                                                        <div class="form-group row m-b-1">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Pilih Surat <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
-                                                                <select class="form-control form-control-sm" onchange="pilih_surat(this.value)" name="surat_id">
-                                                                    <option value="0">-- Pilih --</option>
-                                                                    <option value="1">- Surat Keterangan Sakit</option>
-                                                                    <option value="2">- Surat Keterangan Sehat</option>
-                                                                    
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row m-b-1 skd">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Mulai <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-5" style="padding: 0.3%; padding-left: 5%;">
-                                                                <div class="input-group input-group-sm date datetimepicker1" id="">
-                                                                    <input type="text" name="mulai" id="" value="" class="form-control datetimepicker1">
-                                                                    <div class="input-group-addon">
-                                                                        <i class="fa fa-calendar"></i>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row m-b-1 skd">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Sampai <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-5" style="padding: 0.3%; padding-left: 5%;">
-                                                                <div class="input-group input-group-sm date datetimepicker1" id="">
-                                                                    <input type="text" name="sampai" id="" value="" class="form-control datetimepicker1">
-                                                                    <div class="input-group-addon">
-                                                                        <i class="fa fa-calendar"></i>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row m-b-1  sks">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
-                                                                <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
-                                                                <p style="font-size:16px">Kg</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row m-b-1  sks">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
-                                                                <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
-                                                                <p style="font-size:16px">Cm</p>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        
                                                         
                                                         
                                                         
                                                     </div>
+                                                    
                                                     
                                                     
                                                 </div>
@@ -705,7 +635,7 @@
                 var form=document.getElementById('mydata');
                     $.ajax({
                         type: 'POST',
-                        url: "{{ url('medis') }}",
+                        url: "{{ url('apotik') }}",
                         data: new FormData(form),
                         contentType: false,
                         cache: false,
@@ -732,7 +662,7 @@
                                         
                                     }
                                 });
-                                location.assign("{{url('medis')}}")
+                                location.assign("{{url('apotik')}}")
                             }else{
                                 document.getElementById("loadnya").style.width = "0px";
                                 $('#modal-konfirmasi').modal('hide');

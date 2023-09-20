@@ -99,7 +99,7 @@
 						<div class="panel-body">
 							<div class="row" style="margin-bottom:2%">
                                 <div class="col-md-8">
-                                    <a href="javascript:;" onclick="tambah(`{{encoder(0)}}`)" class="btn btn-primary m-r-5"><i class="fa fa-plus"></i> Tambah</a>
+                                    <!-- <a href="javascript:;" onclick="tambah(`{{encoder(0)}}`)" class="btn btn-primary m-r-5"><i class="fa fa-plus"></i> Tambah</a> -->
                                 </div>
                                 <div class="col-md-4">
                                     <input class="form-control" id="cari_data" placeholder="Cari......" type="text" />

@@ -34,11 +34,9 @@ class PasienController extends Controller
         }else{
             $disabled='readonly';
         }
-        if(Auth::user()->role_id==1 || Auth::user()->role_id==4){
+        
             return view('pasien.view',compact('template','data','disabled','id'));
-        }else{
-            return view('error');
-        }
+        
         
         
         

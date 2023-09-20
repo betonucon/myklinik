@@ -116,10 +116,13 @@ Route::group(['middleware' => 'auth','prefix' => 'medis'],function(){
     Route::get('/', [RawatjalanController::class, 'index_medis']);
     Route::get('/view', [RawatjalanController::class, 'view_medis']);
     Route::post('/', [RawatjalanController::class, 'store_medis']);
+    Route::post('/obat', [RawatjalanController::class, 'store_obat']);
     
     Route::get('/proses_antrian', [RawatjalanController::class, 'proses_antrian']);
     Route::get('/getdata', [RawatjalanController::class, 'get_data_medis']);
+    Route::get('/modal_stok', [RawatjalanController::class, 'modal_stok']);
     Route::get('/getdatapersediaan', [RawatjalanController::class, 'get_data_persediaan']);
+    Route::get('/delete_detail', [RawatjalanController::class, 'delete_detail']);
     Route::get('/getdataobat', [RawatjalanController::class, 'get_data_obat']);
     Route::get('/getdataantrian', [RawatjalanController::class, 'get_data_antrian_medis']);
 });
