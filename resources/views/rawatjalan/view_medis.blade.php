@@ -13,7 +13,8 @@
         
 
         $(document).ready(function() {
-			var table=$('#data-table-fixed-header-pasien').DataTable({
+			
+			var tablediag=$('#data-table-fixed-header-diagnosa').DataTable({
                     lengthChange:false,
                     ordering:false,
                     paging:false,
@@ -26,7 +27,7 @@
                     },
 
                     responsive: false,
-                    ajax:"{{ url('rawatjalan/getdatakepala')}}",
+                    ajax:"{{ url('master/diagnosa/getdata')}}",
                     dom: 'lrtip',
 					columns: [
                         { data: 'no_kepala', render: function (data, type, row, meta) 
@@ -35,8 +36,9 @@
 							} 
 						},
                         { data: 'pilih' },
-						{ data: 'no_kepala' },
-						{ data: 'nama_kepala' },
+						{ data: 'kode_diagnosa' },
+                        { data: 'diagnosa_ecd' },
+						{ data: 'diagnosa_ind' },
 						
 					],
 					language: {
@@ -47,7 +49,7 @@
 						}
 					}
                 });
-                $('#cari_data_obat').keyup(function(){
+                $('#cari_data_diagnosa').keyup(function(){
                     table.search($(this).val()).draw() ;
                 })
 
@@ -133,14 +135,9 @@
                                                 <span class="d-sm-block d-none"><i class="fa fa-list-ol"></i> PROFIL PASIEN</span>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a href="#default-tab-2" data-toggle="tab" class="nav-link ">
-                                                <span class="d-sm-none"><i class="fa fa-list-ol"></i> DIAGNOSA DAN HASIL</span>
-                                                <span class="d-sm-block d-none"><i class="fa fa-list-ol"></i> DIAGNOSA DAN HASIL</span>
-                                            </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="#default-tab-3" data-toggle="tab" class="nav-link">
+                                            <a href="#default-tab-2" data-toggle="tab" class="nav-link">
                                                 <span class="d-sm-none"><i class="fa fa-list-ol"></i> RESEP OBAT</span>
                                                 <span class="d-sm-block d-none"><i class="fa fa-list-ol"></i> RESEP OBAT</span>
                                             </a>
@@ -153,58 +150,59 @@
                                                 @csrf
                                                 <div class="row">
                                                     <input type="hidden" name="id" value="{{$id}}">
+                                                    <input type="hidden" name="diagnosa_id" id="diagnosa_id">
                                                     <div class="col-xl-12 ">
-                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">NO REGISTER : {{$data->no_register}}</legend>
+                                                        
                                                     </div>
-                                                    <div class="col-xl-12 mb-4">
-                                                       
+                                                    <div class="col-xl-7 mb-4">
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">NO REGISTER : {{$data->no_register}}</legend>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">NIK / Nomor KTP <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-8" style="padding: 0.3%; padding-left: 5%;">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">NIK / Nomor KTP <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
                                                                 {{$data->nik}}
                                                             </div>
                                                         </div>
                                                         @if($data->asuransi_id==2)
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">No BPJS</label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">No BPJS</label>
                                                             <div class="col-lg-9 col-xl-8"  style="padding: 0.3%; padding-left: 5%;">
                                                                 {{$data->nama_asuransi}}
                                                             </div>
                                                         </div>
                                                        @endif
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Nama Pasien <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-8"  style="padding: 0.3%; padding-left: 5%;">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Nama Pasien <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7"  style="padding: 0.3%; padding-left: 5%;">
                                                                 Tn. {{$data->nama_pasien}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Alamat Pasien <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-8">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Alamat Pasien <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7">
                                                                 {{$data->alamat}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Tanggal Lahir <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-8" style="padding: 0.3%; padding-left: 5%;">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Tanggal Lahir <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
                                                                 {{$data->tgl_lahir}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Usia Pasien <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-8" style="padding: 0.3%; padding-left: 5%;">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Usia Pasien <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
                                                                 {{$data->umur}} Th
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Jenis Kelamin  <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-8" style="padding: 0.3%; padding-left: 5%;">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Jenis Kelamin  <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
                                                                 ( {{$data->jenis_kelamin}} ) / {{$data->jk}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Jenis Asuransi  <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-8" style="padding: 0.3%; padding-left: 5%;">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Jenis Asuransi  <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
                                                                {{$data->nama_asuransi}}
                                                             </div>
                                                         </div>
@@ -213,28 +211,127 @@
                                                         
                                                         
                                                     </div>
-                                                    
-                                                    
-                                                    
-                                                    
-                                                </div>
-                                            </form>	
-                                            
-                                        </div>
-                                        <div class="tab-pane fade active" id="default-tab-2" >
-                                            <form  id="mydata" method="post" action="{{ url('user') }}" enctype="multipart/form-data" >
-                                                @csrf
-                                                <div class="row">
-                                                    <input type="hidden" name="id" value="{{$id}}">
-                                                    <div class="col-xl-12 ">
-                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Formulir Hasil Diagnosa dan Hasil Pemeriksaan</legend>
+                                                    <div class="col-xl-5 mb-4" style="border: solid 1px #ceced9; background: #f9f9f9; padding-top: 1%;">
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Formulir Rawat Jalan</u></legend>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Poli Tujuan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                {{$data->nama_poli}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tensi Darah <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                {{$data->tensi}} mmHg
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Suhu Badan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                {!!$data->suhunya!!}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                {{$data->berat}} Kg
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                        
+                                                        
                                                     </div>
-                                                    <div class="col-xl-12 mb-4">
-                                                    
-                                                            <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Alamat Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                    <div class="col-xl-12 " >
+                                                        <hr>
+                                                    </div>
+                                                    <div class="col-xl-7 " >
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Informasi Keluhan Yang dialami</u></legend>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Keluhan Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-8">
-                                                                <textarea name="alamat" value="{{$data->alamat}}" placeholder="Ketik...." rows="3" class="form-control form-control-sm"></textarea>
+                                                                <textarea name="keluhan" value="" placeholder="Ketik...." rows="5" class="form-control form-control-sm">{{$data->keluhan}}</textarea>
+                                                           </div>
+                                                            
+                                                        </div>
+                                                        <div class="form-group row m-b-1" >
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Kode Diagnosa<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-4">
+                                                                <div class="input-group input-group-sm ">
+                                                                    <input type="text" readonly name="kode_diagnosa"  id="kode_diagnosa" class="form-control">
+                                                                    <div class="input-group-addon" onclick="show_diagnosa()">
+                                                                        <i class="fa fa-search"></i>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Diagnosa English<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-8">
+                                                                <input type="text" id="diagnosa_eng" name="diagnosa_eng" readonly  placeholder="Ketik...." class="form-control form-control-sm">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Diagnosa Indonesia<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-8">
+                                                                <textarea name="diagnosa_ind" id="diagnosa_ind" placeholder="Ketik...." rows="5" class="form-control form-control-sm" readonly></textarea>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="col-xl-5 mb-4" style="border: solid 1px #ceced9; background: #f9f9f9; padding-top: 1%;">
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Surat Keterangan Sakit / Keterangan Sehat</u></legend>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Pilih Surat <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                <select class="form-control form-control-sm" onchange="pilih_surat(this.value)" name="surat_id">
+                                                                    <option value="0">-- Pilih --</option>
+                                                                    <option value="1">- Surat Keterangan Sakit</option>
+                                                                    <option value="2">- Surat Keterangan Sehat</option>
+                                                                    
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row m-b-1 skd">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Mulai <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-5" style="padding: 0.3%; padding-left: 5%;">
+                                                                <div class="input-group input-group-sm date datetimepicker1" id="">
+                                                                    <input type="text" name="mulai" id="" value="" class="form-control datetimepicker1">
+                                                                    <div class="input-group-addon">
+                                                                        <i class="fa fa-calendar"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row m-b-1 skd">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Sampai <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-5" style="padding: 0.3%; padding-left: 5%;">
+                                                                <div class="input-group input-group-sm date datetimepicker1" id="">
+                                                                    <input type="text" name="sampai" id="" value="" class="form-control datetimepicker1">
+                                                                    <div class="input-group-addon">
+                                                                        <i class="fa fa-calendar"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row m-b-1  sks">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
+                                                                <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                           </div>
+                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
+                                                                <p style="font-size:16px">Kg</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row m-b-1  sks">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
+                                                                <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                           </div>
+                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
+                                                                <p style="font-size:16px">Cm</p>
                                                             </div>
                                                         </div>
                                                         
@@ -242,12 +339,17 @@
                                                         
                                                         
                                                         
-                                                        
                                                     </div>
                                                     
                                                     
-                                                    
                                                 </div>
+                                            </form>	
+                                            
+                                        </div>
+                                        <div class="tab-pane fade " id="default-tab-2" >
+                                            <form  id="mydata" method="post" action="{{ url('user') }}" enctype="multipart/form-data" >
+                                                @csrf
+                                                
                                             </form>	
                                             
                                         </div>
@@ -297,70 +399,41 @@
                 </div>
             </div>
         </div>          
-        <div class="modal fade" id="modal-pasien-all" aria-hidden="true" style="display: none;">
+                  
+        <div class="modal fade" id="modal-diagnosa" aria-hidden="true" style="display: none;">
             <div class="modal-dialog modal-lg" style="max-width:80%">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Daftar pasien</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row" style="margin-bottom:2%">
-                                <div class="col-md-8">
-                               
-                               </div>
-                               <div class="col-md-4">
-                                   <input class="form-control" id="cari_data_pasien_all" placeholder="Cari......" type="text" />
-                               </div>     
-                                        
-                            
-                        </div>
-                        <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-pasien-all"  >
-                            <thead>
-                                <tr role="row">
-                                    <th width="2%">No</th>
-                                    <th width="2%"></th>
-                                    <th width="10%">No Reg</th>
-                                    <th>Nama Pasien</th>
-                                    <th width="12%">NIK</th>
-                                    <th width="10%">T.Lahir</th>
-                                    <th width="8%">Umur</th>
-                                    
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                    </div>
-                </div>
-            </div>
-        </div>          
-        <div class="modal fade" id="modal-pasien" aria-hidden="true" style="display: none;">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Daftar pasien</h4>
+                        <h4 class="modal-title">Daftar Diagnosa</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     </div>
                     <div class="modal-body">
                         <div class="row" style="margin-bottom:2%">
                                         
                                         
-                            <div class="col-md-8">
+                            <div class="col-md-5">
                                
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-control" onchange="pilih_serial(this.value)" id="serial">
+                                    <option value="">-- Pilih --</option>
+                                    @foreach(get_serial() as $gt)
+                                        <option value="{{$gt->srl}}"  >{{$gt->nama_serial}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="col-md-4">
                                 <input class="form-control" id="cari_data_obat" placeholder="Cari......" type="text" />
                             </div>
                         </div>
-                        <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-pasien"  >
+                        <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-diagnosa"  >
                             <thead>
                                 <tr role="row">
                                     <th width="2%">No</th>
                                     <th width="2%"></th>
-                                    <th width="18%">No Register</th>
-                                    <th >Nama Kepala Keluarga</th>
+                                    <th width="5%">Kode</th>
+                                    <th width="20%">English_name</th>
+                                    <th >Indonesia_name</th>
                                     
                                 </tr>
                             </thead>
@@ -376,14 +449,36 @@
 @push('ajax')
         
         <script type="text/javascript">
+           
+                $('.skd').hide();
+                $('.sks').hide();
+            
 			$('#non_kepala').hide();
 			$('.datetimepicker1').datetimepicker({
                 format: 'YYYY-MM-DD'
             });
-			function show_pasien(){
-				$('#modal-pasien').modal('show');
-                var tables=$('#data-table-fixed-header-pasien').DataTable();
-                    tables.ajax.url("{{ url('rawatjalan/getdatakepala')}}").load();
+			function show_diagnosa(){
+				$('#modal-diagnosa').modal('show');
+                var tables=$('#data-table-fixed-header-diagnosa').DataTable();
+                    tables.ajax.url("{{ url('master/diagnosa/getdata')}}").load();
+			} 
+			function pilih_serial(serial){
+				var tables=$('#data-table-fixed-header-diagnosa').DataTable();
+                    tables.ajax.url("{{ url('master/diagnosa/getdata')}}?serial="+serial).load();
+			} 
+			function pilih_surat(id){
+				if(id==1){
+                        $('.skd').show();
+                        $('.sks').hide();
+                }else{
+                    if(id==2){
+                        $('.skd').hide();
+                        $('.sks').show();
+                    }else{
+                        $('.skd').hide();
+                        $('.sks').hide();
+                    }
+                }
 			} 
 			function show_pasien_all(){
 				$('#modal-pasien-all').modal('show');
@@ -401,27 +496,17 @@
                 }
 			} 
             
-			function pilih_status_keluarga(id){
-				if(id==2 || id==3){
-                    $('#non_kepala').show();
-                }else{
-                    $('#non_kepala').hide();
-                }
+			
+            function pilih_diagnosa(kode_diagnosa,diagnosa_id,diagnosa_eng,diagnosa_ind){
+                $('#modal-diagnosa').modal('hide');
+				$('#kode_diagnosa').val(kode_diagnosa)
+				$('#diagnosa_id').val(diagnosa_id)
+				$('#diagnosa_eng').val(diagnosa_eng)
+				$('#diagnosa_ind').val(diagnosa_ind)
 			} 
-            function pilih_pasien(no_register,nik,nama_pasien,no_bpjs){
-                $('#modal-pasien-all').modal('hide');
-				$('#no_register').val(no_register)
-				$('#nik').val(nik)
-				$('#nama_pasien').val(nama_pasien)
-				$('#no_bpjs').val(no_bpjs)
-			} 
-			function pilih(no_kepala,nama_kepala){
-                $('#modal-pasien').modal('hide');
-				$('#no_kepala').val(no_kepala)
-				$('#nama_kepala').val(nama_kepala)
-			} 
+			
 			function kembali(){
-				location.assign("{{url('master/obat')}}")
+				location.assign("{{url('medis')}}")
 			} 
             function hanyaAngka(evt) {
 				
@@ -438,7 +523,7 @@
                 var form=document.getElementById('mydata');
                     $.ajax({
                         type: 'POST',
-                        url: "{{ url('rawatjalan/edit') }}",
+                        url: "{{ url('medis') }}",
                         data: new FormData(form),
                         contentType: false,
                         cache: false,
@@ -465,7 +550,7 @@
                                         
                                     }
                                 });
-                                location.assign("{{url('rawatjalan')}}")
+                                location.assign("{{url('medis')}}")
                             }else{
                                 document.getElementById("loadnya").style.width = "0px";
                                 $('#modal-konfirmasi').modal('hide');

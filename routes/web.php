@@ -9,6 +9,7 @@ use App\Http\Controllers\DokterController;
 use App\Http\Controllers\TransaksiobatController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\RawatJalanController;
+use App\Http\Controllers\DiagnosaController;
 use App\Http\Controllers\Auth\LogoutController;
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,15 @@ Route::group(['middleware' => 'auth','prefix' => 'master/obat'],function(){
     Route::get('/switch_status', [ObatController::class, 'switch_status']);
     Route::get('/delete', [ObatController::class, 'delete_data']);
     Route::get('/getdata', [ObatController::class, 'get_data']);
+});
+Route::group(['middleware' => 'auth','prefix' => 'master/diagnosa'],function(){
+    Route::get('/', [DiagnosaController::class, 'index']);
+    Route::get('/view', [DiagnosaController::class, 'view']);
+    Route::post('/', [DiagnosaController::class, 'store']);
+    Route::get('/modal', [DiagnosaController::class, 'modal']);
+    Route::get('/switch_status', [DiagnosaController::class, 'switch_status']);
+    Route::get('/delete', [DiagnosaController::class, 'delete_data']);
+    Route::get('/getdata', [DiagnosaController::class, 'get_data']);
 });
 Route::group(['middleware' => 'auth','prefix' => 'master/poli'],function(){
     Route::get('/', [PoliController::class, 'index']);
@@ -113,6 +123,17 @@ Route::group(['middleware' => 'auth','prefix' => 'medis'],function(){
     Route::get('/getdataobat', [RawatjalanController::class, 'get_data_obat']);
     Route::get('/getdataantrian', [RawatjalanController::class, 'get_data_antrian_medis']);
 });
+Route::group(['middleware' => 'auth','prefix' => 'apotik'],function(){
+    Route::get('/', [RawatjalanController::class, 'index_apotik']);
+    Route::get('/view', [RawatjalanController::class, 'view_apotik']);
+    Route::post('/', [RawatjalanController::class, 'store_apotik']);
+    
+    Route::get('/proses_antrian', [RawatjalanController::class, 'proses_antrian']);
+    Route::get('/getdata', [RawatjalanController::class, 'get_data_apotik']);
+    Route::get('/getdatapersediaan', [RawatjalanController::class, 'get_data_persediaan']);
+    Route::get('/getdataobat', [RawatjalanController::class, 'get_data_obat']);
+    Route::get('/getdataantrian', [RawatjalanController::class, 'get_data_antrian_apotik']);
+});
 Route::get('rawatjalan/layar', [RawatJalanController::class, 'index_layar']);
 Route::get('rawatjalan/getdatalayar', [RawatJalanController::class, 'get_data_layar']);
 Route::get('rawatjalan/getdataantrian', [RawatJalanController::class, 'get_data_antrian']);
@@ -144,3 +165,4 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home/getdatadashboard', [App\Http\Controllers\HomeController::class, 'get_data_dashboard']);

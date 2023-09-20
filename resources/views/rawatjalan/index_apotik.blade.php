@@ -16,7 +16,7 @@
         function load_data(){
 			$.ajax({ 
                 type: 'GET', 
-                url: "{{ url('rawatjalan/getdataantrian')}}", 
+                url: "{{ url('apotik/getdataantrian')}}", 
                 data: { id: 1 }, 
                 dataType: 'json',
                 beforeSend: function() {
@@ -25,10 +25,9 @@
                 },
                 success: function (data) {
                     
-                    $('#nilai-all').html(data.all);
-                    $('#nilai-umum').html(data.umum);
-                    $('#nilai-anak').html(data.anak);
-                    $('#nilai-gigi').html(data.gigi);
+                    $('#nilai-antrian').html(data.antrian);
+                    $('#nilai-selesai').html(data.selesai);
+                    $('#nilai-total').html((data.antrian+data.selesai));
                     
                     
                 }
@@ -44,7 +43,7 @@
                         headerOffset: $('#header').height()
                     },
                     responsive: true,
-                    ajax:"{{ url('rawatjalan/getdata')}}",
+                    ajax:"{{ url('apotik/getdata')}}",
                     dom: 'lrtip',
 					columns: [
                         { data: 'id', render: function (data, type, row, meta) 
@@ -95,11 +94,11 @@
 			<!-- begin breadcrumb -->
 			<ol class="breadcrumb float-xl-right">
 				<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
-				<li class="breadcrumb-item active">Daftar Rawat Jalan</li>
+				<li class="breadcrumb-item active">Daftar Permintaan Obat</li>
 			</ol>
 			<!-- end breadcrumb -->
 			<!-- begin page-header -->
-			<h1 class="page-header">Daftar Rawat Jalan <small></small></h1>
+			<h1 class="page-header">Daftar Permintaan Obat <small></small></h1>
 			<!-- end page-header -->
 			<!-- begin row -->
 			<div class="row">
@@ -127,17 +126,14 @@
                                         </tr>
                                         <tr>
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="%">TOTAL PASIEN</td>
-                                            <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="20%">PL.U</td>
-                                            <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="20%">PL.G</td>
-                                            <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="20%">PL.A</td>
+                                            <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="30%">ANTRIAN</td>
+                                            <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="30%">SELESAI</td>
                                             
                                         </tr>
                                         <tr>
-                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-all">0</td>
-                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-umum">0</td>
-                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-gigi">0</td>
-                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-anak">0</td>
-                                            
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-total">0</td>
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-antrian">0</td>
+                                            <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-selesai">0</td>
                                         </tr>
                                         
                                     </table>
@@ -146,7 +142,7 @@
                                    
                                 </div>
                                 <div class="col-md-4" style="text-align: right;">
-                                    <a href="javascript:;" style="margin-bottom:2%" onclick="tambah(`{{encoder(0)}}`)" class="btn btn-primary m-r-5"><i class="fa fa-plus"></i> Pendaftaran Rawat</a>
+                                    <br>
                                     <input class="form-control" id="cari_data" placeholder="Cari......" type="text" />
                                 </div>
                             </div>
@@ -156,12 +152,12 @@
                                     <tr role="row">
                                         <th width="5%">No</th>
                                         <th width="5%"></th>
-                                       <th width="3%"></th>
-                                       <th width="5%">Nomor</th>
+                                        <th width="3%"></th>
+                                        <th width="5%">Nomor</th>
                                         <th width="12%">No Transaksi</th>
                                         <th width="11%">No Register</th>
                                         <th >Pasien</th>
-                                        <th width="11%">Metode</th>
+                                        <th width="13%">Metode</th>
                                         <th width="4%">J.K</th>
                                         <th width="5%">Umur</th>
                                         <th width="5%">Poli</th>
@@ -194,11 +190,11 @@
                 
             });
 			function tambah(id){
-				location.assign("{{url('rawatjalan/view')}}?id="+id)
+				location.assign("{{url('apotik/view')}}?id="+id)
 			} 
 			function cari_status(statusnya){
 				var tables=$('#data-table-fixed-header').DataTable();
-                    tables.ajax.url("{{ url('rawatjalan/getdata')}}?statusnya="+statusnya).load();
+                    tables.ajax.url("{{ url('apotik/getdata')}}?statusnya="+statusnya).load();
 			} 
             function hanyaAngka(evt) {
 				
@@ -239,7 +235,7 @@
                                 $('#modal-form').modal('hide')
 				                $('#tampil-form').html("")
                                 var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('rawatjalan/getdata')}}").load();
+                                        tables.ajax.url("{{ url('apotik/getdata')}}").load();
                             }else{
                                 document.getElementById("loadnya").style.width = "0px";
                                 Swal.fire({
@@ -269,80 +265,60 @@
                         if (willDelete) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{url('rawatjalan/delete')}}",
+                                url: "{{url('apotik/delete')}}",
                                 data: "id="+id,
                                 success: function(msg){
                                     swal("Sukses diproses", "", "success")
                                     var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('rawatjalan/getdata')}}").load();
+                                        tables.ajax.url("{{ url('apotik/getdata')}}").load();
                                 }
                             });
                            
                         } else {
                             var tables=$('#data-table-fixed-header').DataTable();
-                                tables.ajax.url("{{ url('rawatjalan/getdata')}}").load();
+                                tables.ajax.url("{{ url('apotik/getdata')}}").load();
                         }
                     });
                     
                 
             } 
-            function switch_data(id,act){
-                if(act==1){
+            function proses_antrian(id){
+                
                     
 
                     swal({
-                            title: "Aktifkan obat?",
-                            text: "Jika diaktifkan maka pengguna dapat menggunakan obat ini",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
+                        title: "Proses antrian ?",
+                        text: "",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
                         if (willDelete) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{url('rawatjalan/switch_status')}}",
-                                data: "id="+id+"&act="+act,
+                                url: "{{url('apotik/proses_antrian')}}",
+                                data: "id="+id,
+                                beforeSend: function() {
+                                    document.getElementById("loadnya").style.width = "100%";
+                                },
                                 success: function(msg){
+                                    document.getElementById("loadnya").style.width = "0px";
                                     swal("Sukses diproses", "", "success")
                                     var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('rawatjalan/getdata')}}").load();
+                                        tables.ajax.url("{{ url('apotik/getdata')}}").load();
+                                    load_data();
                                 }
                             });
                            
                         } else {
+                            document.getElementById("loadnya").style.width = "0px";
                             var tables=$('#data-table-fixed-header').DataTable();
-                                tables.ajax.url("{{ url('rawatjalan/getdata')}}").load();
+                                tables.ajax.url("{{ url('apotik/getdata')}}").load();
+                            load_data();
                         }
                     });
-                }
-                if(act==0){
-                    swal({
-                            title: "Non aktifkan obat?",
-                            text: "Jika nonaktifkan maka pengguna tidak dapat menggunakan obat ini",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
-                        if (willDelete) {
-                            $.ajax({
-                                type: 'GET',
-                                url: "{{url('rawatjalan/switch_status')}}",
-                                data: "id="+id+"&act="+act,
-                                success: function(msg){
-                                    swal("Sukses diproses", "", "success")
-                                    var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('rawatjalan/getdata')}}").load();
-                                }
-                            });
-                           
-                        } else {
-                            var tables=$('#data-table-fixed-header').DataTable();
-                                tables.ajax.url("{{ url('rawatjalan/getdata')}}").load();
-                        }
-                    });
-                }
+                
                 
             }
         </script>

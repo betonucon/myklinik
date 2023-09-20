@@ -13,43 +13,7 @@
         
 
         $(document).ready(function() {
-			var table=$('#data-table-fixed-header-pasien').DataTable({
-                    lengthChange:false,
-                    ordering:false,
-                    paging:false,
-                    scrollY:        300,
-                    scrollCollapse: true,
-                    scroller:       true,
-                    fixedHeader: {
-                        header: true,
-                        headerOffset: $('#header').height()
-                    },
-
-                    responsive: false,
-                    ajax:"{{ url('rawatjalan/getdatakepala')}}",
-                    dom: 'lrtip',
-					columns: [
-                        { data: 'no_kepala', render: function (data, type, row, meta) 
-							{
-								return meta.row + meta.settings._iDisplayStart + 1;
-							} 
-						},
-                        { data: 'pilih' },
-						{ data: 'no_kepala' },
-						{ data: 'nama_kepala' },
-						
-					],
-					language: {
-						paginate: {
-							// remove previous & next text from pagination
-							previous: '<< previous',
-							next: 'Next>>'
-						}
-					}
-                });
-                $('#cari_data_obat').keyup(function(){
-                    table.search($(this).val()).draw() ;
-                })
+			
 
 			var tableall=$('#data-table-fixed-header-pasien-all').DataTable({
                     lengthChange:false,
@@ -146,38 +110,36 @@
                                                 @csrf
                                                 <div class="row">
                                                     <input type="hidden" name="id" value="{{$id}}">
-                                                    <div class="col-xl-12 ">
+                                                    <div class="col-xl-7 mb-2">
                                                         <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Formulir Pendaftaran Pasien Baru</legend>
-                                                    </div>
-                                                    <div class="col-xl-12 mb-4">
                                                        
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">NIK / Nomor KTP<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">NIK / Nomor KTP<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-5">
                                                                 <input type="number" name="nik" value="{{$data->nik}}" placeholder="Ketik...." class="form-control form-control-sm">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">No BPJS</label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">No BPJS</label>
                                                             <div class="col-lg-9 col-xl-5">
                                                                 <input type="number" name="no_bpjs" value="{{$data->no_bpjs}}" placeholder="Ketik...." class="form-control form-control-sm">
                                                             </div>
                                                         </div>
                                                        
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Nama Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Nama Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-8">
                                                                 <input type="text" name="nama_pasien" value="{{$data->nama_pasien}}" placeholder="Ketik...." class="form-control form-control-sm">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Alamat Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Alamat Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-8">
                                                                 <textarea name="alamat" value="{{$data->alamat}}" placeholder="Ketik...." rows="3" class="form-control form-control-sm"></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Tanggal Lahir<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Tanggal Lahir<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-3">
                                                                 
                                                                 <div class="input-group input-group-sm date datetimepicker1" id="">
@@ -189,7 +151,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Jenis Kelamin <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Jenis Kelamin <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-4">
                                                             
                                                                 <select class="form-control form-control-sm" name="jenis_kelamin">
@@ -202,7 +164,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Status Dalam Keluarga <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Status Dalam Keluarga <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-4">
                                                             
                                                                 <select class="form-control form-control-sm" onchange="pilih_status_keluarga(this.value)" name="status_keluarga">
@@ -217,7 +179,7 @@
                                                         </div>
                                                         
                                                         <div class="form-group row m-b-1" id="non_kepala">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Register Utama<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Register Utama<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-3">
                                                                 <div class="input-group input-group-sm ">
                                                                     <input type="text" readonly name="no_kepala" value="" id="no_kepala" class="form-control">
@@ -240,13 +202,14 @@
                                                         
                                                         
                                                     </div>
-                                                    <div class="col-xl-12 ">
-                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Formulir Rawat Jalan</legend>
-                                                    </div>
-                                                    <div class="col-xl-12 ">
+                                                    
+                                                        
+                                                    
+                                                    <div class="col-xl-5 " style="border: solid 1px #ceced9; background: #f9f9f9; padding-top: 1%;">
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Formulir Rawat Jalan</u></legend>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Poli <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-3">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Poli <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-7">
                                                                 <select class="form-control form-control-sm" name="kode_poli">
                                                                     <option value="">-- Pilih --</option>
                                                                     @foreach(get_poli() as $gt)
@@ -257,8 +220,8 @@
                                                             
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Metode Bayar <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-4">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Metode Bayar <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-7">
                                                                 <select class="form-control form-control-sm" name="asuransi_id">
                                                                     <option value="">-- Pilih --</option>
                                                                     @foreach(get_asuransi() as $gt)
@@ -269,27 +232,51 @@
                                                             
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Tensi Darah <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-2">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tensi Darah <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-3">
                                                                 <input type="number" name="tensi_darah_a" value="{{$data->tensi_darah_a}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1">
-                                                                <p style="font-size:18px">/Per</p>
                                                             </div>
-                                                            <div class="col-lg-9 col-xl-2">
-                                                                <input type="number" name="tensi_darah_b" value="{{$data->tensi_darah_b}}" placeholder="Ketik...." class="form-control form-control-sm typright">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-2">
-                                                                <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1">
-                                                                <p style="font-size:20px">Kg</p>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                                <b>/</b> 
+                                                                <input type="number" name="tensi_darah_b" style="width:80%;display: inline;"  value="{{$data->tensi_darah_b}}" placeholder="Ketik...." class="form-control form-control-sm typright">
                                                             </div>
                                                             
                                                         </div>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Suhu Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="suhu" value="{{$data->suhu}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                           </div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">&#8451;</p>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                           </div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Kg</p>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="col-xl-12 " >
+                                                        <hr>
+                                                    </div>
+                                                    <div class="col-xl-7 " >
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Informasi Keluhan Yang dialami</u></legend>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Keluhan Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-8">
+                                                                <textarea name="keluhan" value="{{$data->keluhan}}" placeholder="Ketik...." rows="5" class="form-control form-control-sm"></textarea>
+                                                           </div>
+                                                            
+                                                        </div>
+                                                        
                                                         
                                                     </div>
                                                     
@@ -312,13 +299,12 @@
                                                 @csrf
                                                 <div class="row">
                                                     <input type="hidden" name="id" value="{{$id}}">
-                                                    <div class="col-xl-12 ">
+                                                    
+                                                    <div class="col-xl-7 mb-4">
                                                         <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Formulir Pasien</legend>
-                                                    </div>
-                                                    <div class="col-xl-12 mb-4">
                                                         <div class="form-group row m-b-1" id="non_kepala">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Register Utama<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-2">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Register Utama<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-4">
                                                                 <div class="input-group input-group-sm ">
                                                                     <input type="text" readonly name="no_register" value="" id="no_register" class="form-control">
                                                                     <div class="input-group-addon" onclick="show_pasien_all()">
@@ -330,20 +316,20 @@
                                                             
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">NIK / Nomor KTP<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">NIK / Nomor KTP<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-5">
                                                                 <input type="number" id="nik" readonly value="{{$data->nik}}" placeholder="Ketik...." class="form-control form-control-sm">
                                                             </div>
                                                         </div>
-                                                        <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">No BPJS</label>
+                                                        <div class="form-group row m-b-2">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">No BPJS<span class="text-danger" style="font-size:18px;margin-top:0px">&nbsp;</span></label>
                                                             <div class="col-lg-9 col-xl-5">
                                                                 <input type="number" readonly name="no_bpjs" id="no_bpjs" value="{{$data->no_bpjs}}" placeholder="Ketik...." class="form-control form-control-sm">
                                                             </div>
                                                         </div>
                                                        
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Nama Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Nama Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-8">
                                                                 <input type="text" disabled id="nama_pasien" value="{{$data->nama_pasien}}" placeholder="Ketik...." class="form-control form-control-sm">
                                                             </div>
@@ -355,25 +341,24 @@
                                                         
                                                         
                                                     </div>
-                                                    <div class="col-xl-12 ">
-                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse">Formulir Rawat Jalan</legend>
-                                                    </div>
-                                                    <div class="col-xl-12 ">
+                                                    <div class="col-xl-5 " style="border: solid 1px #ceced9; background: #f9f9f9; padding-top: 1%;">
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Formulir Rawat Jalan</u></legend>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Poli <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-3">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Poli <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-7">
                                                                 <select class="form-control form-control-sm" name="kode_poli">
                                                                     <option value="">-- Pilih --</option>
                                                                     @foreach(get_poli() as $gt)
                                                                         <option value="{{$gt->kode_poli}}" @if($data->kode_poli==$gt->kode_poli) selected @endif >{{$gt->nm}} - {{$gt->kode_poli}} {{$gt->nama_poli}}</option>
                                                                     @endforeach
                                                                 </select>
+                                                                
                                                            </div>
                                                             
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Metode Bayar <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-4">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Metode Bayar <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-7">
                                                                 <select class="form-control form-control-sm" name="asuransi_id">
                                                                     <option value="">-- Pilih --</option>
                                                                     @foreach(get_asuransi() as $gt)
@@ -384,27 +369,52 @@
                                                             
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Tensi Darah <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-2">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tensi Darah <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-3">
                                                                 <input type="number" name="tensi_darah_a" value="{{$data->tensi_darah_a}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1">
-                                                                <p style="font-size:18px">/Per</p>
                                                             </div>
-                                                            <div class="col-lg-9 col-xl-2">
-                                                                <input type="number" name="tensi_darah_b" value="{{$data->tensi_darah_b}}" placeholder="Ketik...." class="form-control form-control-sm typright">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row m-b-1">
-                                                            <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
-                                                            <div class="col-lg-9 col-xl-2">
-                                                                <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1">
-                                                                <p style="font-size:20px">Kg</p>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                                <b>/</b> 
+                                                                <input type="number" name="tensi_darah_b" style="width:80%;display: inline;"  value="{{$data->tensi_darah_b}}" placeholder="Ketik...." class="form-control form-control-sm typright">
                                                             </div>
                                                             
                                                         </div>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Suhu Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="suhu" value="{{$data->suhu}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                           </div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">&#8451;</p>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                           </div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Kg</p>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                                    <div class="col-xl-12 " >
+                                                        <hr>
+                                                    </div>
+                                                    <div class="col-xl-7 " >
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Informasi Keluhan Yang dialami</u></legend>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Keluhan Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-8">
+                                                                <textarea name="keluhan" value="{{$data->keluhan}}" placeholder="Ketik...." rows="5" class="form-control form-control-sm"></textarea>
+                                                           </div>
+                                                            
+                                                        </div>
+                                                        
                                                         
                                                     </div>
                                                     

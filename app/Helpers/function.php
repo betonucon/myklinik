@@ -85,6 +85,9 @@ function tanggal_indo_lengkap($date){
 function tahun_saja($date){
    return date('y',strtotime($date));
 }
+function tanpa_simbol($string){
+   return preg_replace("/[^a-zA-Z ^0-9.]/", " ", $string);
+}
 function tahun_saja_all($date){
    return date('Y',strtotime($date));
 }

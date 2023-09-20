@@ -1,7 +1,7 @@
             <ul class="nav"><li class="nav-header">MENU</li>
                     <li>
 						<a href="{{url('/')}}">
-							<i class="fab fa-simplybuilt"></i>
+							<i class="fa fa-th-large"></i>
 							<span>DASHBOARD </span> 
 						</a>
 					</li>
@@ -31,7 +31,7 @@
 						<li class="has-sub @if((Request::is('master')==1 || Request::is('master/*')==1)  ) active  @endif">
 							<a href="javascript:;">
 								<b class="caret"></b>
-								<i class="fa fa-th-large"></i>
+								<i class="fa fa-bars"></i>
 								<span>MASTER DATA </span>
 							</a>
 							<ul class="sub-menu">
@@ -48,7 +48,7 @@
 					<li class="has-sub @if((Request::is('rawatjalan')==1 || Request::is('rawatjalan/*')==1)  ) active  @endif">
 						<a href="javascript:;">
 							<b class="caret"></b>
-							<i class="fa fa-th-large"></i>
+							<i class="fa fa-building"></i>
 							<span>RAWAT JALAN </span>
 						</a>
 						<ul class="sub-menu">
@@ -92,6 +92,12 @@
 							<li><a href="{{url('transaksiobat/persediaan')}}"><i class="fas fa-check-circle fa-sm"></i> ORDER OBAT</a></li>
 							<li><a href="{{url('transaksiobat/permintaan')}}"><i class="fas fa-check-circle fa-sm"></i> PERMINTAAN OBAT</a></li>
 						</ul>
+					</li>
+					<li  @if((Request::is('apotik')==1 || Request::is('apotik/*')==1)  ) class="active"  @endif>
+						<a href="{{url('apotik')}}">
+							<i class="fas fa-cubes"></i>
+							<span>PERMINTAAN OBAT </span> 
+						</a>
 					</li>
 					@endif
 					

@@ -46,6 +46,19 @@ class RawatJalanController extends Controller
        
         
     }
+    public function index_apotik(request $request)
+    {
+        if($request->waktu!=""){
+            $waktu=$request->waktu;
+        }else{
+            $waktu=date('Y-m-d');
+        }
+        // $data=KirimCreated::dispatch('@P01');
+        // dd($data);
+        return view('rawatjalan.index_apotik',compact('waktu'));
+       
+        
+    }
     public function index_pasien(request $request)
     {
         if($request->waktu!=""){
@@ -155,6 +168,73 @@ class RawatJalanController extends Controller
                 
                 return uang($row->harga);
             })
+            ->addColumn('suhunya', function ($row) {
+                
+                return $row->suhunya;
+            })
+            ->addColumn('status', function ($row) {
+                if($row->active==1){
+                    $btn='<div class="custom-control custom-switch mb-1">
+                        <input type="checkbox" class="custom-control-input" onclick="switch_data('.$row->id.',0)" id="customSwitch'.$row->id.'" checked>
+                        <label class="custom-control-label" for="customSwitch'.$row->id.'"></label>
+                    </div>';
+                }else{
+                    $btn='<div class="custom-control custom-switch mb-1">
+                        <input type="checkbox" class="custom-control-input" onclick="switch_data('.$row->id.',1)" id="customSwitch'.$row->id.'" >
+                        <label class="custom-control-label" for="customSwitch'.$row->id.'"></label>
+                    </div>';
+                }
+                
+                
+                return $btn;
+            })
+           
+            
+            ->rawColumns(['action','act','status','suhunya'])
+            ->make(true);
+    }
+    public function get_data_medis(request $request)
+    {
+        error_reporting(0);
+        $query=ViewTransaksi::query();
+        $kode_poli=Auth::user()->kode_poli;
+        if($request->waktu!=""){
+            $data = $query->where('waktu',$request->waktu);
+            
+        }else{
+            $data = $query->where('waktu',date('Y-m-d'));
+        }
+        $data = $query->where('kode_poli',$kode_poli)->whereIn('status',array(1,2));
+        $data = $query->where('active',1)->orderBy('id','Asc')->get();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                if($row->status==1){
+                    $btn='
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-warning" onclick="proses_antrian('.$row->id.')" href="javascript:;">Proses</a>
+                        </div>
+                    ';
+                }else{
+                    $btn='
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-blue" onclick="tambah(`'.encoder($row->id).'`)" href="javascript:;"><i class="fa fa-check-square"></i></a>
+                            <a class="btn btn-red " href="javascript:;"><i class="fa fa-window-close"></i></a>
+                        </div>
+                    ';
+                }
+                return $btn;
+            })
+            ->addColumn('act', function ($row) {
+                $btn='<a href="javascript:;"  class="btn btn-xs btn-'.$row->color.'" title="Dalam '.$row->nama_status.'">&nbsp;&nbsp;&nbsp;&nbsp;</a>';
+                
+                return $btn;
+            })
+            ->addColumn('harga', function ($row) {
+                
+                return uang($row->harga);
+            })
             ->addColumn('status', function ($row) {
                 if($row->active==1){
                     $btn='<div class="custom-control custom-switch mb-1">
@@ -176,7 +256,7 @@ class RawatJalanController extends Controller
             ->rawColumns(['action','act','status'])
             ->make(true);
     }
-    public function get_data_medis(request $request)
+    public function get_data_apotik(request $request)
     {
         error_reporting(0);
         $query=ViewTransaksi::query();
@@ -187,7 +267,7 @@ class RawatJalanController extends Controller
         }else{
             $data = $query->where('waktu',date('Y-m-d'));
         }
-        $data = $query->where('kode_poli',$kode_poli)->whereIn('status',array(1,2));
+        $data = $query->whereIn('status',array(3,4));
         $data = $query->where('active',1)->orderBy('id','Asc')->get();
 
         return Datatables::of($data)
@@ -327,6 +407,20 @@ class RawatJalanController extends Controller
         $success['selesai']=$selesai;
         return response()->json($success, 200);
     }
+    public function get_data_antrian_apotik(request $request)
+    {
+        error_reporting(0);
+        
+        $query=ViewTransaksi::query();
+        $antrian = $query->where('waktu',date('Y-m-d'))->where('active',1)->whereIn('status',array(3))->count();
+        $selesai = $query->where('waktu',date('Y-m-d'))->where('active',1)->where('status','>',3)->count();
+        
+        
+        $success=[];
+        $success['antrian']=$antrian;
+        $success['selesai']=$selesai;
+        return response()->json($success, 200);
+    }
     public function delete_data(request $request){
         if(Auth::user()->role_id==2){
             $id=decoder($request->id);
@@ -388,6 +482,10 @@ class RawatJalanController extends Controller
         $rules['tensi_darah_b']= 'required|string';
         $messages['tensi_darah_b.required']= 'Masukan Tensi Darah ';
         $messages['tensi_darah_b.string']= 'eror inputan Tensi Darah';
+
+        $rules['suhu']= 'required|string';
+        $messages['suhu.required']= 'Masukan suhu Badan ';
+        $messages['suhu.string']= 'eror inputan suhu Badan';
 
         $rules['berat']= 'required|string';
         $messages['berat.required']= 'Masukan Berat Badan ';
@@ -489,6 +587,8 @@ class RawatJalanController extends Controller
                             'tensi_darah_a'=>$request->tensi_darah_a,
                             'tensi_darah_b'=>$request->tensi_darah_b,
                             'berat'=>$request->berat,
+                            'suhu'=>$request->suhu,
+                            'keluhan'=>$request->keluhan,
                             'nomor'=>$nomor,
                             'waktu'=>$waktu,
                             'status'=>1,
@@ -527,6 +627,10 @@ class RawatJalanController extends Controller
         $rules['tensi_darah_b']= 'required|string';
         $messages['tensi_darah_b.required']= 'Masukan Tensi Darah ';
         $messages['tensi_darah_b.string']= 'eror inputan Tensi Darah';
+
+        $rules['suhu']= 'required|string';
+        $messages['suhu.required']= 'Masukan suhu Badan ';
+        $messages['suhu.string']= 'eror inputan suhu Badan';
 
         $rules['berat']= 'required|string';
         $messages['berat.required']= 'Masukan Berat Badan ';
@@ -573,6 +677,8 @@ class RawatJalanController extends Controller
                         'tensi_darah_b'=>$request->tensi_darah_b,
                         'berat'=>$request->berat,
                         'asuransi_id'=>$request->asuransi_id,
+                        'suhu'=>$request->suhu,
+                        'keluhan'=>$request->keluhan,
                         'nomor'=>$nomor,
                         'waktu'=>$waktu,
                         'status'=>1,
@@ -604,6 +710,9 @@ class RawatJalanController extends Controller
         $messages['tensi_darah_b.required']= 'Masukan Tensi Darah ';
         $messages['tensi_darah_b.string']= 'eror inputan Tensi Darah';
 
+        $rules['suhu']= 'required|string';
+        $messages['suhu.required']= 'Masukan suhu Badan ';
+        $messages['suhu.string']= 'eror inputan suhu Badan';
         $rules['berat']= 'required|string';
         $messages['berat.required']= 'Masukan Berat Badan ';
         $messages['berat.string']= 'eror inputan Berat Badan';
@@ -643,7 +752,77 @@ class RawatJalanController extends Controller
                         'tensi_darah_b'=>$request->tensi_darah_b,
                         'asuransi_id'=>$request->asuransi_id,
                         'berat'=>$request->berat,
+                        'suhu'=>$request->suhu,
+                        'keluhan'=>$request->keluhan,
                         'active'=>1,
+                    ]);
+
+                    echo'@ok';
+                    
+                
+            
+        }
+    }
+    public function store_medis(request $request){
+        error_reporting(0);
+        $rules = [];
+        $messages = [];
+        
+
+        $rules['diagnosa_id']= 'required|numeric';
+        $messages['diagnosa_id.required']= 'Pilih Diagnosa ';
+        $messages['diagnosa_id.numeric']= 'eror inputan Diagnosa';
+
+        if($request->surat_id==1){
+            $rules['mulai']= 'required|string';
+            $messages['mulai.required']= 'Masukan Tanggal mulai ';
+            $messages['mulai.string']= 'eror inputan Tanggal mulai';
+            $rules['sampai']= 'required|string';
+            $messages['sampai.required']= 'Masukan Tanggal sampai ';
+            $messages['sampai.string']= 'eror inputan Tanggal sampai';
+        }
+        if($request->surat_id==2){
+            $rules['berat']= 'required|string';
+            $messages['berat.required']= 'Masukan Berat Badan ';
+            $messages['berat.string']= 'eror inputan Berat Badan';
+            $rules['tinggi']= 'required|string';
+            $messages['tinggi.required']= 'Masukan tinggi Badan ';
+            $messages['tinggi.string']= 'eror inputan tinggi Badan';
+        }
+        
+        
+       
+        $validator = Validator::make($request->all(), $rules, $messages);
+        $val=$validator->Errors();
+
+
+        if ($validator->fails()) {
+            echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                foreach(parsing_validator($val) as $value){
+                    
+                    foreach($value as $isi){
+                        echo'-&nbsp;'.$isi.'<br>';
+                    }
+                }
+            echo'</div></div>';
+        }else{
+            
+            
+                    $mst=Transaksi::where('id',$request->id)->first();
+                    
+                    $trs=Transaksi::UpdateOrcreate([
+                        'id'=>$request->id,
+                    ],[
+                        'tensi_darah_a'=>$request->tensi_darah_a,
+                        'tensi_darah_b'=>$request->tensi_darah_b,
+                        'diagnosa_id'=>$request->diagnosa_id,
+                        'diagnosa_end'=>$request->diagnosa_end,
+                        'diagnosa_ind'=>$request->diagnosa_ind,
+                        'berat'=>$request->berat,
+                        'tinggi'=>$request->tinggi,
+                        'status'=>3,
+                        'mulai'=>$request->mulai,
+                        'sampai'=>$request->sampai,
                     ]);
 
                     echo'@ok';
