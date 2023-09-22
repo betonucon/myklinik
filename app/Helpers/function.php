@@ -82,6 +82,8 @@ function tanggal_indo_lengkap($date){
    return date('d-m-Y H:i:s',strtotime($date));
 }
 
+
+
 function tahun_saja($date){
    return date('y',strtotime($date));
 }
@@ -95,7 +97,7 @@ function tanggal_indo($date=null){
    if($date==null){
       return "";
    }else{
-      return date('d M,y',strtotime($date));
+      return date('d F, Y',strtotime($date));
    }
    
 }

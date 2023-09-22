@@ -208,6 +208,18 @@
                                                     <div class="col-xl-5 " style="border: solid 1px #ceced9; background: #f9f9f9; padding-top: 1%;">
                                                         <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Formulir Rawat Jalan</u></legend>
                                                         <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tujuan Kunjungan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-7">
+                                                                <select class="form-control form-control-sm" name="tujuan_id">
+                                                                    <option value="1"> Berobat / Kontrol / Rawat Jalan</option>
+                                                                    <option value="2"> Surat Keterangan Sehat</option>
+                                                                    
+                                                                </select>
+                                                                
+                                                           </div>
+                                                            
+                                                        </div>
+                                                        <div class="form-group row m-b-1">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Poli <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-7">
                                                                 <select class="form-control form-control-sm" name="kode_poli">
@@ -343,6 +355,18 @@
                                                     </div>
                                                     <div class="col-xl-5 " style="border: solid 1px #ceced9; background: #f9f9f9; padding-top: 1%;">
                                                         <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Formulir Rawat Jalan</u></legend>
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tujuan Kunjungan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-7">
+                                                                <select class="form-control form-control-sm" name="tujuan_id">
+                                                                    <option value="1"> Berobat / Kontrol / Rawat Jalan</option>
+                                                                    <option value="2"> Surat Keterangan Sehat</option>
+                                                                    
+                                                                </select>
+                                                                
+                                                           </div>
+                                                            
+                                                        </div>
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Poli <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-7">

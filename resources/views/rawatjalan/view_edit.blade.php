@@ -165,6 +165,18 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tujuan Kunjungan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-7">
+                                                                <select class="form-control form-control-sm" name="tujuan_id">
+                                                                    <option value="1" @if($data->tujuan_id==1) selected @endif > Berobat / Kontrol / Rawat Jalan</option>
+                                                                    <option value="2" @if($data->tujuan_id==2) selected @endif > Surat Keterangan Sehat</option>
+                                                                    
+                                                                </select>
+                                                                
+                                                           </div>
+                                                            
+                                                        </div>
+                                                        <div class="form-group row m-b-1">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Metode Bayar <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-7">
                                                                 <select class="form-control form-control-sm" name="asuransi_id">

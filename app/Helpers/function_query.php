@@ -19,6 +19,10 @@
         $data=App\Models\Role::orderBy('id','Asc')->get();
         return $data;
     }
+    function get_aturan(){
+        $data=App\Models\Aturan::where('id','!=',1)->orderBy('id','Asc')->get();
+        return $data;
+    }
     function get_serial(){
         $data=App\Models\ViewSerialDiagnosa::orderBy('srl','Asc')->get();
         return $data;

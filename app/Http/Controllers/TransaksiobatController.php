@@ -485,6 +485,7 @@ class TransaksiobatController extends Controller
                         'kode_obat'=>$request->kode_obat,
                     ],[
                         'sts_obat'=>1,
+                        'aturan_id'=>1,
                         'type_stok'=>1,
                         'harga_actual'=>$harga,
                         'harga'=>$harga,

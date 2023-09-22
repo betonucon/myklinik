@@ -116,10 +116,8 @@
                         { data: 'action' },
 						{ data: 'kode_obat' },
 						{ data: 'nama_obat' },
-						{ data: 'satuan' },
-                        { data: 'qty',className: "text-right"  },
-                        { data: 'harga',className: "text-right"  },
-                        { data: 'total',className: "text-right"  },
+						{ data: 'qty',className: "text-right"  },
+                        { data: 'aturan_pakai'},
 						
 						
 					],
@@ -182,14 +180,14 @@
                                                 <span class="d-sm-block d-none"><i class="fa fa-list-ol"></i> PROFIL PASIEN</span>
                                             </a>
                                         </li>
-                                        </li>
+                                        @if($data->tujuan_id==1)
                                         <li class="nav-item">
                                             <a href="#default-tab-2" data-toggle="tab" class="nav-link">
                                                 <span class="d-sm-none"><i class="fa fa-list-ol"></i> RESEP OBAT</span>
                                                 <span class="d-sm-block d-none"><i class="fa fa-list-ol"></i> RESEP OBAT</span>
                                             </a>
                                         </li>
-                                        
+                                        @endif
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane fade active show" id="default-tab-1" >
@@ -292,6 +290,7 @@
                                                     <div class="col-xl-12 " >
                                                         <hr>
                                                     </div>
+                                                    @if($data->tujuan_id==1)
                                                     <div class="col-xl-7 " >
                                                         <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Informasi Keluhan Yang dialami</u></legend>
                                                         <div class="form-group row m-b-1">
@@ -387,7 +386,48 @@
                                                         
                                                         
                                                     </div>
-                                                    
+                                                    @endif
+
+                                                    @if($data->tujuan_id==2)
+                                                        <div class="col-xl-6 mb-4" style="border: solid 1px #ceced9; background: #f9f9f9; padding-top: 1%;">
+                                                            <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Surat Keterangan Sehat</u></legend>
+                                                            <div class="form-group row m-b-1">
+                                                                <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Pilih Surat <b>:</b></label>
+                                                                <div class="col-lg-9 col-xl-5" style="padding: 0.3%; padding-left: 5%;">
+                                                                    <select class="form-control form-control-sm" onchange="pilih_surat(this.value)" name="surat_id">
+                                                                        <option value="2">- Surat Keterangan Sehat</option>
+                                                                        
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group row m-b-1">
+                                                                <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
+                                                                <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
+                                                                    <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                            </div>
+                                                                <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
+                                                                    <p style="font-size:16px">Kg</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row m-b-1">
+                                                                <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
+                                                                <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
+                                                                    <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                            </div>
+                                                                <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
+                                                                    <p style="font-size:16px">Cm</p>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                        </div>
+                                                    @endif
+
+                                        
                                                     
                                                 </div>
                                             </form>	
@@ -410,10 +450,8 @@
                                                         <th width="5%"></th>
                                                         <th width="11%">Kode</th>
                                                         <th>Nama Obat</th>
-                                                        <th width="11%">Satuan</th>
                                                         <th width="5%">Qty</th>
-                                                        <th width="11%">Harga</th>
-                                                        <th width="12%">Total</th>
+                                                        <th width="30%">Aturan Pakai</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -489,7 +527,7 @@
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <input class="form-control" id="cari_data_obat" placeholder="Cari......" type="text" />
+                                <input class="form-control" id="cari_data_diagnosa" placeholder="Cari......" type="text" />
                             </div>
                         </div>
                         <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-diagnosa"  >

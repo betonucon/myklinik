@@ -176,15 +176,24 @@
 		</div>       
 @endsection
 @push('ajax')
-        
+<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
         <script type="text/javascript">
+            Pusher.logToConsole = false;
+
+            var pusher = new Pusher('8222b3d50f9312cb70e7', {
+                cluster: 'ap1',
+                // forceTLS: true
+            });
 			var channel = pusher.subscribe('my-chanel');
                 channel.bind('kirim-created', function(data) {
-                
+			
                 var pesan = data.message;
                 var bat = pesan.split('@');
-                if(bat[1]=="P"){
-                    show_data();
+                
+                if(bat[2]=="{{Auth::user()->kode_poli}}"){
+                    load_data();
+                    var tables=$('#data-table-fixed-header').DataTable();
+                        tables.ajax.url("{{ url('medis/getdata')}}").load();
                 }
                 
                 

@@ -16,40 +16,26 @@
 <body>
 	
 	<div id="page-container" style="padding-top: 0px;" class="page-container fade page-without-sidebar page-header-fixed page-with-top-menu">
-		<!-- begin #header -->
-		<!-- <div id="header" class="header navbar-default">
-			
-			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>Color</b> Admin</a>
-				<button type="button" class="navbar-toggle" data-click="top-menu-toggled">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			
-		</div> -->
-		<!-- end #header -->
 		
 		<!-- begin #content -->
 		<div id="content" class="content" style="padding: 10px;">
 			<div class="row">
 				<div class="col-md-4">
 					<div class="row">
-						<div class="col-md-12" style="font-size:170px; font-weight:bold;text-align:center">
+						<div class="col-md-12" style="background: #fff;border: double 6px #3c3cb3;font-size:170px; font-weight:bold;text-align:center">
 							<div class="panel">
 						
-								<div class="panel-body" id="nomor-aktif" style="height:190px;padding: 1px; font-family: sans-serif;">
+								<div class="panel-body" id="nomor-aktif" style="color: #31317c;height: 190px; border-bottom: solid 3px; padding-bottom: 4% !important; padding: 1px; font-family: sans-serif; font-size: 140px;">
 									
 								</div>
-								<div class="panel-body" id="nama_pasien" style="text-transform:uppercase;font-size:60px;height:70px;padding: 1px; font-family: sans-serif;color:blue">
+								<div class="panel-body" id="nama_pasien" style="color: #31317c;text-transform:uppercase;font-size:53px;height:70px;padding: 1px; font-family: sans-serif;color:blue">
 									
 								</div>
 							</div>
 						
 						</div>
 					</div>
-					<div class="row" style="padding: 2%;" id="tampil-urutan">
+					<div class="row" style="padding-top: 1%;" id="tampil-urutan">
 						
 						
 						
@@ -62,8 +48,16 @@
 					<div class="panel">
 						
 						<div class="panel-body" style="padding: 3px;">
-						
-							<iframe width="100%" height="530" src="https://www.youtube.com/embed/0RH_RarRDNo?autoplay=1&mute=1" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							@if($kode_poli=='P01')
+							<iframe width="100%" height="530" src="https://www.youtube.com/embed/kShW7sDabTE?autoplay=1&amp;mute=1&loop=1&playlist=kShW7sDabTE" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							@endif
+							@if($kode_poli=='P02')
+							<iframe width="100%" height="530" src="https://www.youtube.com/embed/nroyp6xuHII?autoplay=1&amp;mute=1&loop=1&playlist=nroyp6xuHII" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							@endif
+							@if($kode_poli=='P03')
+							<iframe width="100%" height="530" src="https://www.youtube.com/embed/0RH_RarRDNo?autoplay=1&amp;mute=1&loop=1&playlist=0RH_RarRDNo" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							@endif
+							
 						</div>
 					</div>
 				</div>
@@ -95,10 +89,10 @@
 				$('#nama_pasien').html(data.singkatan);
 				
 				$.each(data.item, function(i, result){
-					$("#tampil-urutan").append('<div class="col-md-3"  style="font-size:30px; font-weight:bold;text-align:center;background:#fff;border:solid 1px #aaaab7">'
+					$("#tampil-urutan").append('<div class="col-md-3"  style="margin-bottom:1%;color:yellow;font-size:25px; font-weight:bold;text-align:center;background:#32326c;border: double 4px #3c3cb3; border-right: 0px;s">'
 						+result.nomor
 						+'</div>'
-						+'<div class="col-md-9"  style="color:blue;text-transform:uppercase;font-size:30px; font-weight:bold;text-align:center;background:#fff;border:solid 1px #aaaab7">'
+						+'<div class="col-md-9"  style="margin-bottom:1%;color:yellow;text-transform:uppercase;font-size:25px; font-weight:bold;text-align:left;background:#32326c;border: double 4px #3c3cb3; border-left: 0px;">'
 						+result.singkatan
 						+'</div>');
 					});

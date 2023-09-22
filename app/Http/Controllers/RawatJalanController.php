@@ -107,6 +107,22 @@ class RawatJalanController extends Controller
         
         
     }
+    public function print_struk(request $request)
+    {
+        error_reporting(0);
+        $template='top';
+        $no_transaksi=$request->no_transaksi;
+        $data=ViewTransaksi::where('no_transaksi',$no_transaksi)->first();
+        $query = ViewStokOrder::query();
+        
+        
+        $get=$query->where('no_transaksi',$request->no_transaksi)->orderBy('nama_obat','Asc')->get();
+        return view('rawatjalan.print',compact('template','data','disabled','no_transaksi','get'));
+            
+        
+        
+        
+    }
     public function view_medis (request $request)
     {
         error_reporting(0);
@@ -335,10 +351,10 @@ class RawatJalanController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                if($row->status==1){
+                if($row->status==4){
                     $btn='
                         <div class="btn-group btn-group-sm">
-                            <a class="btn btn-warning" onclick="proses_antrian('.$row->id.')" href="javascript:;">Proses</a>
+                            <a class="btn btn-warning" onclick="tambah(`'.encoder($row->id).'`)"  href="javascript:;">View</a>
                         </div>
                     ';
                 }else{
@@ -407,10 +423,10 @@ class RawatJalanController extends Controller
         $data = $query->where('kode_poli',$request->kode_poli);
         $data = $query->where('waktu',date('Y-m-d'));
         $data = $query->where('active',1)->where('status',1)->orderBy('nomor','asc')->get();
-        $cekaktif = ViewTransaksi::where('kode_poli',$request->kode_poli)->where('active',1)->where('status',2)->count();
+        $cekaktif = ViewTransaksi::where('kode_poli',$request->kode_poli)->where('waktu',date('Y-m-d'))->where('active',1)->where('status',2)->count();
         
         if($cekaktif>0){
-            $aktif = ViewTransaksi::where('kode_poli',$request->kode_poli)->where('active',1)->where('status',2)->orderBy('nomor','desc')->FirstOrfail();
+            $aktif = ViewTransaksi::where('kode_poli',$request->kode_poli)->where('waktu',date('Y-m-d'))->where('active',1)->where('status',2)->orderBy('nomor','desc')->FirstOrfail();
             $noaktif=$aktif->nomor;
             $nama_pasien=$aktif->nama_pasien;
             $awal=explode(' ',$aktif->nama_pasien);
@@ -679,6 +695,7 @@ class RawatJalanController extends Controller
                             'created_at'=>$created_at,
                         ],[
                             'kode_poli'=>$request->kode_poli,
+                            'tujuan_id'=>$request->tujuan_id,
                             'asuransi_id'=>$request->asuransi_id,
                             'tensi_darah_a'=>$request->tensi_darah_a,
                             'tensi_darah_b'=>$request->tensi_darah_b,
@@ -744,6 +761,7 @@ class RawatJalanController extends Controller
                             'sts_obat'=>2,
                             'type_stok'=>2,
                             'harga_actual'=>$harga,
+                            'aturan_id'=>$request->aturan_id,
                             'harga'=>$harga,
                             'potongan'=>0,
                             'qty'=>$qty,
@@ -834,6 +852,7 @@ class RawatJalanController extends Controller
                         'created_at'=>$created_at,
                     ],[
                         'kode_poli'=>$request->kode_poli,
+                        'tujuan_id'=>$request->tujuan_id,
                         'tensi_darah_a'=>$request->tensi_darah_a,
                         'tensi_darah_b'=>$request->tensi_darah_b,
                         'berat'=>$request->berat,
@@ -910,6 +929,7 @@ class RawatJalanController extends Controller
                         'id'=>$request->id,
                     ],[
                         'tensi_darah_a'=>$request->tensi_darah_a,
+                        'tujuan_id'=>$request->tujuan_id,
                         'tensi_darah_b'=>$request->tensi_darah_b,
                         'asuransi_id'=>$request->asuransi_id,
                         'berat'=>$request->berat,
@@ -928,21 +948,29 @@ class RawatJalanController extends Controller
         error_reporting(0);
         $rules = [];
         $messages = [];
-        
+        $mst=Transaksi::where('id',$request->id)->first();
+        if($mst->tujuan_id==1){
+            $rules['diagnosa_id']= 'required|numeric';
+            $messages['diagnosa_id.required']= 'Pilih Diagnosa ';
+            $messages['diagnosa_id.numeric']= 'eror inputan Diagnosa';
 
-        $rules['diagnosa_id']= 'required|numeric';
-        $messages['diagnosa_id.required']= 'Pilih Diagnosa ';
-        $messages['diagnosa_id.numeric']= 'eror inputan Diagnosa';
-
-        if($request->surat_id==1){
-            $rules['mulai']= 'required|string';
-            $messages['mulai.required']= 'Masukan Tanggal mulai ';
-            $messages['mulai.string']= 'eror inputan Tanggal mulai';
-            $rules['sampai']= 'required|string';
-            $messages['sampai.required']= 'Masukan Tanggal sampai ';
-            $messages['sampai.string']= 'eror inputan Tanggal sampai';
-        }
-        if($request->surat_id==2){
+            if($request->surat_id==1){
+                $rules['mulai']= 'required|string';
+                $messages['mulai.required']= 'Masukan Tanggal mulai ';
+                $messages['mulai.string']= 'eror inputan Tanggal mulai';
+                $rules['sampai']= 'required|string';
+                $messages['sampai.required']= 'Masukan Tanggal sampai ';
+                $messages['sampai.string']= 'eror inputan Tanggal sampai';
+            }
+            if($request->surat_id==2){
+                $rules['berat']= 'required|string';
+                $messages['berat.required']= 'Masukan Berat Badan ';
+                $messages['berat.string']= 'eror inputan Berat Badan';
+                $rules['tinggi']= 'required|string';
+                $messages['tinggi.required']= 'Masukan tinggi Badan ';
+                $messages['tinggi.string']= 'eror inputan tinggi Badan';
+            }
+        }else{
             $rules['berat']= 'required|string';
             $messages['berat.required']= 'Masukan Berat Badan ';
             $messages['berat.string']= 'eror inputan Berat Badan';
@@ -969,7 +997,7 @@ class RawatJalanController extends Controller
         }else{
             
             
-                    $mst=Transaksi::where('id',$request->id)->first();
+                if($mst->tujuan_id==1){   
                     $cek = ViewStokOrder::where('no_transaksi',$mst->no_transaksi)->count();
                     if($cek>0){
 
@@ -977,8 +1005,6 @@ class RawatJalanController extends Controller
                         $trs=Transaksi::UpdateOrcreate([
                             'id'=>$request->id,
                         ],[
-                            'tensi_darah_a'=>$request->tensi_darah_a,
-                            'tensi_darah_b'=>$request->tensi_darah_b,
                             'diagnosa_id'=>$request->diagnosa_id,
                             'diagnosa_eng'=>$request->diagnosa_eng,
                             'diagnosa_ind'=>$request->diagnosa_ind,
@@ -989,12 +1015,29 @@ class RawatJalanController extends Controller
                             'mulai'=>$request->mulai,
                             'sampai'=>$request->sampai,
                         ]);
-
+                        $stok=Stok::where('no_transaksi',$mst->no_transaksi)->update([
+                            'active'=>1,
+                        ]);
                         echo'@ok';
                     }else{
                         echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">Masukan Resep Obat</div></div>';
                     } 
-                    
+                }else{
+                    $trs=Transaksi::UpdateOrcreate([
+                        'id'=>$request->id,
+                    ],[
+                        'diagnosa_id'=>0,
+                        'diagnosa_eng'=>'Surat Kesehatan',
+                        'diagnosa_ind'=>'Surat Kesehatan',
+                        'berat'=>$request->berat,
+                        'tinggi'=>$request->tinggi,
+                        'surat_id'=>$request->surat_id,
+                        'status'=>3,
+                        'mulai'=>$request->mulai,
+                        'sampai'=>$request->sampai,
+                    ]);
+                    echo'@ok';
+                }   
                 
             
         }

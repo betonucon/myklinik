@@ -45,6 +45,17 @@
                                                 <input type="text" name="total" id="total" readonly value="" placeholder="Ketik...." class="form-control typeuang">
                                             </div>
                                         </div>
+                                        <div class="form-group row m-b-10">
+                                            <label class="col-lg-4 text-lg-right col-form-label">Total <span class="text-danger">*</span></label>
+                                            <div class="col-lg-8 col-xl-7">
+                                                <select name="aturan_id"  class="form-control ">
+                                                    @foreach(get_aturan() as $o)
+                                                        <option value="{{$o->id}}">{{$o->aturan_pakai}}</option>
+
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                         
                                     </div>
                                     

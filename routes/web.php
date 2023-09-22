@@ -137,6 +137,7 @@ Route::group(['middleware' => 'auth','prefix' => 'apotik'],function(){
     Route::get('/getdataobat', [RawatjalanController::class, 'get_data_obat']);
     Route::get('/getdataantrian', [RawatjalanController::class, 'get_data_antrian_apotik']);
 });
+Route::get('print_struk', [RawatJalanController::class, 'print_struk']);
 Route::get('rawatjalan/layar', [RawatJalanController::class, 'index_layar']);
 Route::get('rawatjalan/getdatalayar', [RawatJalanController::class, 'get_data_layar']);
 Route::get('rawatjalan/getdataantrian', [RawatJalanController::class, 'get_data_antrian']);

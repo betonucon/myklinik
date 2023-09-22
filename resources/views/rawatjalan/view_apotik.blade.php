@@ -152,9 +152,9 @@
         <div id="content" class="content">
 			<ol class="breadcrumb float-xl-right">
 				<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
-				<li class="breadcrumb-item active">Pemeriksaan</li>
+				<li class="breadcrumb-item active">Penerimaan Obat</li>
 			</ol>
-			<h1 class="page-header">Formulir Pemeriksaan<small></small></h1>
+			<h1 class="page-header">Formulir Penerimaan Obat<small></small></h1>
 			<div class="row">
 				
 				<div class="col-xl-12 ui-sortable">
@@ -182,14 +182,14 @@
                                                 <span class="d-sm-block d-none"><i class="fa fa-list-ol"></i> PROFIL PASIEN</span>
                                             </a>
                                         </li>
-                                        </li>
+                                        @if($data->tujuan_id==1)
                                         <li class="nav-item">
                                             <a href="#default-tab-2" data-toggle="tab" class="nav-link">
                                                 <span class="d-sm-none"><i class="fa fa-list-ol"></i> RESEP OBAT</span>
                                                 <span class="d-sm-block d-none"><i class="fa fa-list-ol"></i> RESEP OBAT</span>
                                             </a>
                                         </li>
-                                        
+                                        @endif
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane fade active show" id="default-tab-1" >
@@ -284,6 +284,15 @@
                                                                 {{$data->berat}} Kg
                                                             </div>
                                                         </div>
+                                                        @if($data->tujuan_id==2)
+                                                        <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                {{$data->tinggi}} Cm
+                                                            </div>
+                                                        </div>
+
+                                                        @endif
                                                         
                                                         
                                                         
@@ -292,6 +301,7 @@
                                                     <div class="col-xl-12 " >
                                                         <hr>
                                                     </div>
+                                                    @if($data->tujuan_id==1)
                                                     <div class="col-xl-9 " >
                                                         <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Informasi Keluhan Yang dialami</u></legend>
                                                         <div class="row">
@@ -316,7 +326,25 @@
                                                         
                                                         
                                                     </div>
-                                                    
+                                                    @else
+                                                    <div class="col-xl-9 " >
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Informasi Keluhan Yang dialami</u></legend>
+                                                        <div class="row">
+                                                            <div class="col-md-1">
+
+                                                            </div>
+                                                            <div class="col-md-10">
+                                                                <u><b>Tujuan Pasien</b></u><br>
+                                                                
+                                                                Pembuatan Surat Keterangan Sehat
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        
+                                                        
+                                                    </div>
+                                                    @endif
                                                     
                                                     
                                                 </div>
@@ -326,7 +354,9 @@
                                         <div class="tab-pane fade " id="default-tab-2" >
                                             <div class="row" style="margin-bottom:2%">
                                                 <div class="col-md-8" style="background: #fdf5cd; padding: 1%;">
+                                                @if($data->status==3)
                                                 <a href="javascript:;"  onclick="tambah_obat()()"  class="btn btn-primary m-r-5"><i class="fa fa-save"></i> Tambah Obat</a>
+                                                @endif
                                                 </div>
                                                 
                                                 <div class="col-md-4">
@@ -358,7 +388,19 @@
                                             <!-- begin col-8 -->
                                             <div class="col-xl-12 ">
                                                 <a href="javascript:;" onclick="kembali()" class="btn btn-danger m-r-5"><i class="fa fa-step-backward"></i> Kembali</a>
-                                                <a href="javascript:;"  onclick="simpan_proses_data(1)"  class="btn btn-primary m-r-5"><i class="fa fa-save"></i> Submit</a>
+                                                @if($data->status==3)
+                                                    <a href="javascript:;"  onclick="simpan_proses_data(1)"  class="btn btn-primary m-r-5"><i class="fa fa-save"></i> Tutup Pelayanan</a>
+                                                @else
+                                                    @if($data->tujuan_id==1)
+                                                        <a href="javascript:;"  onclick="cetak_data()"  class="btn btn-info m-r-5"><i class="fa fa-print"></i> Cetak Resep</a>
+                                                        @if($data->surat_id==1)
+                                                         <a href="javascript:;"  onclick="cetak_surat_skd()"  class="btn btn-info m-r-5"><i class="fa fa-print"></i> Cetak SKD</a>
+                                                        @endif
+                                                    @else
+                                                        <a href="javascript:;"  onclick="cetak_surat_sks()"  class="btn btn-info m-r-5"><i class="fa fa-print"></i> Cetak S.Keterangan Sehat</a>
+                                                    @endif
+                                                @endif
+                                                
                                                 
                                             </div>
                                         </div>
@@ -463,6 +505,25 @@
                     </div>
                 </div>
             </div>
+        </div> 
+        <div class="modal fade" id="modal-cetak" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body" style="height:450px;overflow-y:scroll">
+                        
+                        <div id="tampil-form-cetak"></div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
+                        <a href="javascript:;" class="btn btn-danger" onclick="printDiv('tampil-form-cetak','Title')"  ><i class="fas fa-print"></i> Cetak</a>
+                    </div>
+                </div>
+            </div>
         </div>    
         <div class="modal fade" id="modal-obat" aria-hidden="true" style="display: none;">
             <div class="modal-dialog modal-lg">
@@ -515,6 +576,28 @@
                 var tables=$('#data-table-fixed-header-diagnosa').DataTable();
                     tables.ajax.url("{{ url('master/diagnosa/getdata')}}").load();
 			} 
+            function printDiv(divId,title) {
+
+                let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
+
+                    mywindow.document.write(`<html><head><title>${title}</title>`);
+                    mywindow.document.write('</head><body >');
+                    mywindow.document.write(document.getElementById(divId).innerHTML);
+                    mywindow.document.write('</body></html>');
+
+                    mywindow.document.close(); // necessary for IE >= 10
+                    mywindow.focus(); // necessary for IE >= 10*/
+
+                    mywindow.print();
+                    mywindow.close();
+
+                return true;
+            }
+            function cetak_data(){
+                $('#modal-cetak .modal-title').text('Konfirmasi ');
+                $('#modal-cetak').modal('show');
+                $('#tampil-form-cetak').load("{{url('print_struk')}}?no_transaksi={{$data->no_transaksi}}")
+            }
             function tambah_obat(){
                 $('#modal-obat').modal('show');
                 var tables=$('#data-table-fixed-header-obat').DataTable();
@@ -543,6 +626,7 @@
                     $('#tampil-order').load("{{url('medis/modal_stok')}}?id="+id+"&no_transaksi={{$data->no_transaksi}}&kode_obat="+kode_obat);
                 }
 			} 
+            @if($data->status==3)
             function delete_detail(id){
                     swal({
                             title: "Yakin menghapus data ini ?",
@@ -574,6 +658,7 @@
                 
                 
             } 
+            @endif
 			function pilih_serial(serial){
 				var tables=$('#data-table-fixed-header-diagnosa').DataTable();
                     tables.ajax.url("{{ url('master/diagnosa/getdata')}}?serial="+serial).load();
@@ -662,7 +747,7 @@
                                         
                                     }
                                 });
-                                location.assign("{{url('apotik')}}")
+                                location.assign("{{url('apotik/view')}}?id={{encoder($data->id)}}");
                             }else{
                                 document.getElementById("loadnya").style.width = "0px";
                                 $('#modal-konfirmasi').modal('hide');
