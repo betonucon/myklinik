@@ -106,6 +106,8 @@
 
 		$(document).ready(function() {
 			load_data()
+			var adu = document.getElementById("myAudio");
+			adu.play();
 		});
 
 		Pusher.logToConsole = false;
@@ -117,11 +119,11 @@
 
         var channel = pusher.subscribe('my-chanel');
         channel.bind('kirim-created', function(data) {
-			var adu = document.getElementById("myAudio");
+			// var adu = document.getElementById("myAudio");
             var pesan = data.message;
             var bat = pesan.split('@');
 			if(bat[2]=="{{$kode_poli}}"){
-				adu.play();
+				// adu.play();
 				load_data();
 			}
 			
