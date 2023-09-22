@@ -67,7 +67,9 @@
 		
 	</div>
 	<!-- end page container -->
-	
+	<audio id="myAudio">
+        <source src="{{url_plug()}}/img/ping.mp3" type="audio/mp3">
+    </audio>
 	<!-- ================== BEGIN BASE JS ================== -->
 	<script src="{{url_plug()}}/assets/js/app.min.js"></script>
 	<script src="{{url_plug()}}/assets/js/theme/default.min.js"></script>
@@ -115,11 +117,12 @@
 
         var channel = pusher.subscribe('my-chanel');
         channel.bind('kirim-created', function(data) {
-			
+			var adu = document.getElementById("myAudio");
             var pesan = data.message;
             var bat = pesan.split('@');
 			if(bat[2]=="{{$kode_poli}}"){
-				load_data()
+				adu.play();
+				load_data();
 			}
 			
             
