@@ -74,19 +74,28 @@
         <div class="boody">
             <table width="97%" style="margin-left:3%">
                 <tr>
-                    <td class="tth" colspan="4" style="text-align:center;font-size:19px"><b>KLINIK UWEN SERANG</b></td>
+                    <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:16px"><b>KLINIK</b></td>
                 </tr>
                 <tr>
-                    <td class="tth" colspan="4" style="text-align:center;font-size:14px"><b>Jl. K.H. Abdul Hadi No.06, Kebon Jahe, Kec. Serang, Kota Serang, Banten 42117</b></td>
+                    <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:28px"><b>UWEN YUHENI</b></td>
                 </tr>
                 <tr>
-                    <td class="tth" colspan="4" style="text-align:center;font-size:14px"><b>Tlp. 0878-0936-3812 Kode POS.42117</b></td>
+                    <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:14px"><b>SIP : 445/07750//Klinik/DPMPTSP/XII/2018</b></td>
                 </tr>
                 <tr>
-                    <td class="tth" colspan="4" style="text-align:center;font-size:14px"><b><hr style="border:double 2px #000;margin-bottom:0px"></b></td>
+                    <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:16px"><b>PENGOBATAN UMUM & BERSALIN</b></td>
                 </tr>
                 <tr>
-                    <td class="tth" colspan="4" style="text-align:center;font-size:14px"><b><hr style="border:double 1px #000;margin-top:0px"></b></td>
+                    <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:14px"><b>Jl. K.H. Abdul Hadi RT. 02/14 Kebon Jahe Serang</b></td>
+                </tr>
+                <tr>
+                    <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:14px"><b>Tlp. 087809363812/08128247487</b></td>
+                </tr>
+                <tr>
+                    <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:14px"><b><hr style="border:double 2px #000;margin-bottom:0px"></b></td>
+                </tr>
+                <tr>
+                    <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:14px"><b><hr style="border:double 1px #000;margin-top:0px"></b></td>
                 </tr>
                 <tr>
                     <td class="tthlg" width="15%">No Register</td>
@@ -137,7 +146,7 @@
                     <td class="tthlg"></td>
                     <td class="tthlb"></td>
                     <td class="tthlg"></td>
-                    <td class="tthlb" style="text-align:center"><b>Serang, {{tanggal_indo($data->waktu)}}<br>Klinik Uwen Serang<br><br><br><br><br><br>(................................)</b></td>
+                    <td class="tthlb" style="text-align:center"><b>Serang, {{tanggal_indo($data->waktu)}}<br>Klinik Uwen Yuheni<br><br><br><br><br><br>(................................)</b></td>
                 </tr>
                 <!-- <tr>
                     <td class="tthlg" width="8%">NOMOR</td>
