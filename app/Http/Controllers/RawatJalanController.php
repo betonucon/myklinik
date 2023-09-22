@@ -545,7 +545,7 @@ class RawatJalanController extends Controller
        
             $mst = Transaksi::where('id',$request->id)->first();
             $data = Transaksi::where('id',$request->id)->update(['status'=>2]);
-            $datanot='@P@'.$mst->kode_poli.'@';
+            $datanot='@P@'.$mst->kode_poli.'@22@';
             KirimCreated::dispatch($datanot);
         
 
