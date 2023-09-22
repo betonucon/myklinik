@@ -49,13 +49,13 @@
 						
 						<div class="panel-body" style="padding: 3px;">
 							@if($kode_poli=='P01')
-							<iframe width="100%" height="530" src="https://www.youtube.com/embed/kShW7sDabTE?autoplay=1&amp;mute=1&loop=1&playlist=kShW7sDabTE" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							<iframe width="100%" height="790" src="https://www.youtube.com/embed/kShW7sDabTE?autoplay=1&amp;mute=1&loop=1&playlist=kShW7sDabTE" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 							@endif
 							@if($kode_poli=='P02')
-							<iframe width="100%" height="530" src="https://www.youtube.com/embed/nroyp6xuHII?autoplay=1&amp;mute=1&loop=1&playlist=nroyp6xuHII" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							<iframe width="100%" height="790" src="https://www.youtube.com/embed/nroyp6xuHII?autoplay=1&amp;mute=1&loop=1&playlist=nroyp6xuHII" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 							@endif
 							@if($kode_poli=='P03')
-							<iframe width="100%" height="530" src="https://www.youtube.com/embed/0RH_RarRDNo?autoplay=1&amp;mute=1&loop=1&playlist=0RH_RarRDNo" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							<iframe width="100%" height="790" src="https://www.youtube.com/embed/0RH_RarRDNo?autoplay=1&amp;mute=1&loop=1&playlist=0RH_RarRDNo" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 							@endif
 							
 						</div>
