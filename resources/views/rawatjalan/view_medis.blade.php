@@ -362,6 +362,15 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group row m-b-1 skd">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Pekerjaan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                <div class="input-group input-group-sm date " id="">
+                                                                    <input type="text" name="pekerjaan" id="" value="" class="form-control">
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group row m-b-1  sks">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
@@ -380,7 +389,15 @@
                                                                 <p style="font-size:16px">Cm</p>
                                                             </div>
                                                         </div>
-                                                        
+                                                        <div class="form-group row m-b-1 sks">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tujuan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                <div class="input-group input-group-sm date " id="">
+                                                                    <input type="text" name="tujuan_surat" id="" value="" class="form-control">
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         
                                                         
                                                         

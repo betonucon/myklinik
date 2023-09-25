@@ -961,6 +961,8 @@ class RawatJalanController extends Controller
                 $rules['sampai']= 'required|string';
                 $messages['sampai.required']= 'Masukan Tanggal sampai ';
                 $messages['sampai.string']= 'eror inputan Tanggal sampai';
+                $rules['pekerjaan']= 'required|string';
+                $messages['pekerjaan.required']= 'Masukan Pekerjaan ';
             }
             if($request->surat_id==2){
                 $rules['berat']= 'required|string';
@@ -969,6 +971,8 @@ class RawatJalanController extends Controller
                 $rules['tinggi']= 'required|string';
                 $messages['tinggi.required']= 'Masukan tinggi Badan ';
                 $messages['tinggi.string']= 'eror inputan tinggi Badan';
+                $rules['tujuan_surat']= 'required|string';
+                $messages['tujuan_surat.required']= 'Masukan tujuan surat ';
             }
         }else{
             $rules['berat']= 'required|string';
@@ -977,6 +981,8 @@ class RawatJalanController extends Controller
             $rules['tinggi']= 'required|string';
             $messages['tinggi.required']= 'Masukan tinggi Badan ';
             $messages['tinggi.string']= 'eror inputan tinggi Badan';
+            $rules['tujuan_surat']= 'required|string';
+            $messages['tujuan_surat.required']= 'Masukan tujuan surat ';
         }
         
         
@@ -1011,6 +1017,7 @@ class RawatJalanController extends Controller
                             'berat'=>$request->berat,
                             'tinggi'=>$request->tinggi,
                             'surat_id'=>$request->surat_id,
+                            'pekerjaan'=>$request->pekerjaan,
                             'status'=>3,
                             'mulai'=>$request->mulai,
                             'sampai'=>$request->sampai,
@@ -1031,8 +1038,9 @@ class RawatJalanController extends Controller
                         'diagnosa_ind'=>'Surat Kesehatan',
                         'berat'=>$request->berat,
                         'tinggi'=>$request->tinggi,
-                        'surat_id'=>$request->surat_id,
                         'status'=>3,
+                        'surat_id'=>$request->surat_id,
+                        'tujuan_surat'=>$request->tujuan_surat,
                         'mulai'=>$request->mulai,
                         'sampai'=>$request->sampai,
                     ]);

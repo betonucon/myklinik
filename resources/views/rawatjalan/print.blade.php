@@ -119,7 +119,7 @@
                              </tr>
                             <tr>
                                 <td style="padding-bottom:5px;" class="tthlg">Pada Tanggal </td>
-                                <td style="padding-bottom:5px;" class="tthlb">: {{$data->waktu}} </td>
+                                <td style="padding-bottom:5px;" class="tthlb">: {{date('d M ,Y',strtotime($data->waktu))}} </td>
                              </tr>
                             
                             <tr>
@@ -135,12 +135,12 @@
                                 <td class="tthlg" colspan="2" style="text-align:justify;padding-bottom:5px;"> &nbsp;&nbsp;&nbsp;b. Perlu istirahat karena sakit selama :   {{$data->izin}}  Hari</td>
                             </tr>
                             <tr>
-                                <td class="tthlg" colspan="2" style="text-align:justify;padding-bottom:5px;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dari tanggal : {{$data->mulai}}  s/d  {{$data->sampai}}</td>
+                                <td class="tthlg" colspan="2" style="text-align:justify;padding-bottom:5px;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dari tanggal : {{date('d M ,Y',strtotime($data->mulai))}}  s/d  {{date('d M ,Y',strtotime($data->sampai))}}</td>
                             </tr>
                             
                             <tr>
                                 <td class="tthlg"></td>
-                                <td class="tthlb" style="text-align:center"><br><br><br><br><b>Serang, {{tanggal_indo($data->waktu)}}<br><br><br><br><br><br>(................................)</b></td>
+                                <td class="tthlb" style="text-align:center"><br><br><br><br><b>Serang, {{date('d M ,Y',strtotime($data->waktu))}}<br><br><br><br><br><br>(................................)</b></td>
                             </tr>
                             <!-- <tr>
                                 <td class="tthlg" width="8%">NOMOR</td>
@@ -195,7 +195,7 @@
                                 <td class="tthlg">Umur Pasien</td>
                                 <td class="tthlb">: {{$data->umur}} Tahun</td>
                                 <td class="tthlg">Tanggal</td>
-                                <td class="tthlb">: {{$data->waktu}}</td>
+                                <td class="tthlb">: {{date('d M ,Y',strtotime($data->waktu))}}</td>
                             </tr>
                             <tr>
                                 <td class="tthlg">Alamat Pasien</td>
@@ -224,11 +224,11 @@
                             <tr>
                                 <td class="tth" colspan="4" style="text-align:center;font-size:14px"><b><hr style="border:dotted 2px #0c0b0b;;margin-top:8px"></b></td>
                             </tr>
+                        </table>
+                        <table width="100%" >
                             <tr>
                                 <td class="tthlg"></td>
-                                <td class="tthlb"></td>
-                                <td class="tthlg"></td>
-                                <td class="tthlb" style="text-align:center"><b>Serang, {{tanggal_indo($data->waktu)}}<br>Klinik Uwen Yuheni<br><br><br><br><br><br>(................................)</b></td>
+                                <td class="tthlb" width="30%"style="text-align:center"><b>Serang, {{date('d M ,Y',strtotime($data->waktu))}}<br>Klinik Uwen Yuheni<br><br><br><br><br><br>(................................)</b></td>
                             </tr>
                             <!-- <tr>
                                 <td class="tthlg" width="8%">NOMOR</td>
