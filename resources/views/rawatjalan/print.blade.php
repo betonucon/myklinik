@@ -75,7 +75,7 @@
             <table width="100%" >
                 <tr>
                     @if($data->surat_id==1)
-                    <td style="padding:1%;border:double 6px #000">
+                    <td style="padding:1%;vertical-align:top;border:double 6px #000">
                     
                         <table width="100%" >
                             <tr>
@@ -140,7 +140,7 @@
                             
                             <tr>
                                 <td class="tthlg"></td>
-                                <td class="tthlb" style="text-align:center"><b>Serang, {{tanggal_indo($data->waktu)}}<br><br><br><br><br><br>(................................)</b></td>
+                                <td class="tthlb" style="text-align:center"><br><br><br><br><b>Serang, {{tanggal_indo($data->waktu)}}<br><br><br><br><br><br>(................................)</b></td>
                             </tr>
                             <!-- <tr>
                                 <td class="tthlg" width="8%">NOMOR</td>
@@ -159,7 +159,7 @@
                     @else
                     <td ></td>
                     @endif
-                    <td width="56%" style="padding:3%">
+                    <td width="56%" style="padding:3%;vertical-align:top;">
                         <table width="100%" >
                             <tr>
                                 <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:20px"><b>KLINIK UWEN YUHENI</b></td>

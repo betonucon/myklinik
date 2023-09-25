@@ -393,9 +393,7 @@
                                                 @else
                                                     @if($data->tujuan_id==1)
                                                         <a href="javascript:;"  onclick="cetak_data()"  class="btn btn-info m-r-5"><i class="fa fa-print"></i> Cetak Resep</a>
-                                                        @if($data->surat_id==1)
-                                                         <a href="javascript:;"  onclick="cetak_surat_skd()"  class="btn btn-info m-r-5"><i class="fa fa-print"></i> Cetak SKD</a>
-                                                        @endif
+                                                        
                                                     @else
                                                         <a href="javascript:;"  onclick="cetak_surat_sks()"  class="btn btn-info m-r-5"><i class="fa fa-print"></i> Cetak S.Keterangan Sehat</a>
                                                     @endif
