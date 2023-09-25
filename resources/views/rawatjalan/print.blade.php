@@ -72,27 +72,26 @@
     <body>
        
         <div class="boody">
-            <table width="97%" style="margin-left:3%">
+            <table width="100%" >
                 <tr>
+                    @if($data->surat_id==1)
                     <td style="padding:1%;border:double 6px #000">
+                    
                         <table width="100%" >
                             <tr>
-                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:14px"><b>KLINIK</b></td>
+                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:20px"><b>KLINIK UWEN YUHENI</b></td>
                             </tr>
                             <tr>
-                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:22px"><b>UWEN YUHENI</b></td>
+                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:12px"><b>Sertifikat Standar : 82100142116710001</b></td>
                             </tr>
                             <tr>
-                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:12px"><b>SIP : 445/07750//Klinik/DPMPTSP/XII/2018</b></td>
+                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:12px"><b>Jalan KH. Abdul Hadi RT 02 RW 14 Kebon Jahe</b></td>
                             </tr>
                             <tr>
-                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:14px"><b>PENGOBATAN UMUM & BERSALIN</b></td>
+                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:12px"><b>Serang – Banten 42117</b></td>
                             </tr>
                             <tr>
-                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:12px"><b>Jl. K.H. Abdul Hadi RT. 02/14 Kebon Jahe Serang</b></td>
-                            </tr>
-                            <tr>
-                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:12px"><b>Tlp. 087809363812/08128247487</b></td>
+                                <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:12px"><b>Telp. (0254) 7915161, HP/WA. 087809363812, IG: klinikuyuheni</b></td>
                             </tr>
                             <tr>
                                 <td class="tth" colspan="2" style="padding:0px;text-align:center;font-size:12px"><b><hr style="border:double 1px #000;margin-bottom:4px"></b></td>
@@ -107,7 +106,7 @@
                             
                             
                             <tr>
-                                <td style="padding-bottom:5px;" width="30%" class="tthlg">Nama </td>
+                                <td style="padding-bottom:5px;" width="35%" class="tthlg">Nama </td>
                                 <td style="padding-bottom:5px;" class="tthlb">: Tn. {{$data->nama_pasien}}</td>
                             </tr>
                             <tr>
@@ -116,11 +115,11 @@
                              </tr>
                             <tr>
                                 <td style="padding-bottom:5px;" class="tthlg">Pekerjaan </td>
-                                <td style="padding-bottom:5px;" class="tthlb">: {{$data->umur}} Tahun</td>
+                                <td style="padding-bottom:5px;" class="tthlb">: {{$data->pekerjaan}} </td>
                              </tr>
                             <tr>
                                 <td style="padding-bottom:5px;" class="tthlg">Pada Tanggal </td>
-                                <td style="padding-bottom:5px;" class="tthlb">: {{$data->umur}} Tahun</td>
+                                <td style="padding-bottom:5px;" class="tthlb">: {{$data->waktu}} </td>
                              </tr>
                             
                             <tr>
@@ -155,26 +154,24 @@
                             </tr> -->
                             
                         </table>
+                        
                     </td>
-                    <td width="60%" style="padding:3%">
+                    @else
+                    <td ></td>
+                    @endif
+                    <td width="56%" style="padding:3%">
                         <table width="100%" >
                             <tr>
-                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:16px"><b>KLINIK</b></td>
+                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:20px"><b>KLINIK UWEN YUHENI</b></td>
                             </tr>
                             <tr>
-                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:28px"><b>UWEN YUHENI</b></td>
+                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:12px"><b>Sertifikat Standar : 82100142116710001</b></td>
                             </tr>
                             <tr>
-                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:14px"><b>SIP : 445/07750//Klinik/DPMPTSP/XII/2018</b></td>
+                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:12px"><b>Alamat : Jalan KH. Abdul Hadi RT 02 RW 14 Kebon Jahe Serang – Banten 42117</b></td>
                             </tr>
                             <tr>
-                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:16px"><b>PENGOBATAN UMUM & BERSALIN</b></td>
-                            </tr>
-                            <tr>
-                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:14px"><b>Jl. K.H. Abdul Hadi RT. 02/14 Kebon Jahe Serang</b></td>
-                            </tr>
-                            <tr>
-                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:14px"><b>Tlp. 087809363812/08128247487</b></td>
+                                <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:12px"><b>Telp. (0254) 7915161, HP/WA. 087809363812, IG: klinikuyuheni</b></td>
                             </tr>
                             <tr>
                                 <td class="tth" colspan="4" style="padding:0px;text-align:center;font-size:14px"><b><hr style="border:double 2px #000;margin-bottom:0px"></b></td>
