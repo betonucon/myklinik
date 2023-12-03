@@ -416,7 +416,7 @@
                                                             
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tensi Darah <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tensi Darah </label>
                                                             <div class="col-lg-9 col-xl-3">
                                                                 <input type="number" name="tensi_darah_a" value="{{$data->tensi_darah_a}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
                                                             </div>
@@ -427,7 +427,7 @@
                                                             
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Suhu Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Suhu Badan </label>
                                                             <div class="col-lg-9 col-xl-3">
                                                                 <input type="number" name="suhu" value="{{$data->suhu}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
                                                            </div>
@@ -437,7 +437,7 @@
                                                             
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan </label>
                                                             <div class="col-lg-9 col-xl-3">
                                                                 <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
                                                            </div>

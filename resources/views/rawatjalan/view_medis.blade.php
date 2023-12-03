@@ -375,11 +375,11 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan</label>
                                                             <div class="col-lg-9 col-xl-3">
-                                                                <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1">
+                                                            <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                        </div>
+                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
                                                                 <p style="font-size:16px">Kg</p>
                                                             </div>
                                                         </div>
@@ -527,24 +527,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group row m-b-1  sks">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
-                                                                <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
-                                                                <p style="font-size:16px">Kg</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row m-b-1  sks">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
-                                                                <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
-                                                                <p style="font-size:16px">Cm</p>
-                                                            </div>
-                                                        </div>
                                                         <div class="form-group row m-b-1 sks">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tujuan <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
@@ -574,15 +556,6 @@
                                                                 </div>
                                                             </div>
                                                             
-                                                            <div class="form-group row m-b-1">
-                                                                <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
-                                                                <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
-                                                                    <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                            </div>
-                                                                <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
-                                                                    <p style="font-size:16px">Kg</p>
-                                                                </div>
-                                                            </div>
                                                             <div class="form-group row m-b-1">
                                                                 <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
                                                                 <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">

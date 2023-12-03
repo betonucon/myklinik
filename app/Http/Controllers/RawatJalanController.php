@@ -787,22 +787,6 @@ class RawatJalanController extends Controller
         $messages['asuransi_id.required']= 'Pilih Metode Bayar ';
         $messages['asuransi_id.numeric']= 'eror inputan Metode Bayar';
 
-        $rules['tensi_darah_a']= 'required|string';
-        $messages['tensi_darah_a.required']= 'Masukan Tensi Darah ';
-        $messages['tensi_darah_a.string']= 'eror inputan Tensi Darah';
-
-        $rules['tensi_darah_b']= 'required|string';
-        $messages['tensi_darah_b.required']= 'Masukan Tensi Darah ';
-        $messages['tensi_darah_b.string']= 'eror inputan Tensi Darah';
-
-        $rules['suhu']= 'required|string';
-        $messages['suhu.required']= 'Masukan suhu Badan ';
-        $messages['suhu.string']= 'eror inputan suhu Badan';
-
-        $rules['berat']= 'required|string';
-        $messages['berat.required']= 'Masukan Berat Badan ';
-        $messages['berat.string']= 'eror inputan Berat Badan';
-
         if($request->asuransi_id==2){
             $rules['no_bpjs']= 'required|string';
             $messages['no_bpjs.required']= 'Masukan No BPJS ';
@@ -939,10 +923,27 @@ class RawatJalanController extends Controller
         $rules = [];
         $messages = [];
         $mst=Transaksi::where('id',$request->id)->first();
+        var_dump($request->berat);
         if($mst->tujuan_id==1){
             $rules['diagnosa_id']= 'required|numeric';
             $messages['diagnosa_id.required']= 'Pilih Diagnosa ';
             $messages['diagnosa_id.numeric']= 'eror inputan Diagnosa';
+
+            $rules['tensi_darah_a']= 'required|string';
+            $messages['tensi_darah_a.required']= 'Masukan Tensi Darah ';
+            $messages['tensi_darah_a.string']= 'eror inputan Tensi Darah';
+    
+            $rules['tensi_darah_b']= 'required|string';
+            $messages['tensi_darah_b.required']= 'Masukan Tensi Darah ';
+            $messages['tensi_darah_b.string']= 'eror inputan Tensi Darah';
+    
+            $rules['suhu']= 'required|string';
+            $messages['suhu.required']= 'Masukan suhu Badan ';
+            $messages['suhu.string']= 'eror inputan suhu Badan';
+    
+            $rules['berat']= 'required|string';
+            $messages['berat.required']= 'Masukan Berat Badan ';
+            $messages['berat.string']= 'eror inputan Berat Badan';
 
             if($request->surat_id==1){
                 $rules['mulai']= 'required|string';
@@ -955,9 +956,6 @@ class RawatJalanController extends Controller
                 $messages['pekerjaan.required']= 'Masukan Pekerjaan ';
             }
             if($request->surat_id==2){
-                $rules['berat']= 'required|string';
-                $messages['berat.required']= 'Masukan Berat Badan ';
-                $messages['berat.string']= 'eror inputan Berat Badan';
                 $rules['tinggi']= 'required|string';
                 $messages['tinggi.required']= 'Masukan tinggi Badan ';
                 $messages['tinggi.string']= 'eror inputan tinggi Badan';
@@ -965,12 +963,7 @@ class RawatJalanController extends Controller
                 $messages['tujuan_surat.required']= 'Masukan tujuan surat ';
             }
         }else{
-            $rules['berat']= 'required|string';
-            $messages['berat.required']= 'Masukan Berat Badan ';
-            $messages['berat.string']= 'eror inputan Berat Badan';
-            $rules['tinggi']= 'required|string';
-            $messages['tinggi.required']= 'Masukan tinggi Badan ';
-            $messages['tinggi.string']= 'eror inputan tinggi Badan';
+            
             $rules['tujuan_surat']= 'required|string';
             $messages['tujuan_surat.required']= 'Masukan tujuan surat ';
         }
@@ -996,8 +989,6 @@ class RawatJalanController extends Controller
                 if($mst->tujuan_id==1){   
 //                    $cek = ViewStokOrder::where('no_transaksi',$mst->no_transaksi)->count();
 //                    if($cek>0){
-
-                    
                         $trs=Transaksi::UpdateOrcreate([
                             'id'=>$request->id,
                         ],[
