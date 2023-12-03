@@ -114,10 +114,11 @@ class RawatJalanController extends Controller
         $no_transaksi=$request->no_transaksi;
         $data=ViewTransaksi::where('no_transaksi',$no_transaksi)->first();
         $query = ViewStokOrder::query();
+		$data2=ViewPasien::where('nik',$data->nik)->first();
         
         
-        $get=$query->where('no_transaksi',$request->no_transaksi)->orderBy('nama_obat','Asc')->get();
-        return view('rawatjalan.print',compact('template','data','disabled','no_transaksi','get'));
+        $get=ViewStokOrder::where('no_transaksi',$request->no_transaksi)->orderBy('nama_obat','Asc')->get();
+        return view('rawatjalan.print',compact('template','data','disabled','no_transaksi','get','data2'));
             
         
         
@@ -129,14 +130,14 @@ class RawatJalanController extends Controller
         $template='top';
         $id=decoder($request->id);
         $data=ViewTransaksi::find($id);
-        
+		$data2=ViewPasien::where('nik',$data->nik)->first();
         if(Auth::user()->role_id==3){
-            return view('rawatjalan.view_medis',compact('template','data','disabled','id'));
+			
+            return view('rawatjalan.view_medis',compact('template','data','disabled','id','data2'));
             
         }else{
             return view('error');
         }
-        
         
         
     }
@@ -146,9 +147,12 @@ class RawatJalanController extends Controller
         $template='top';
         $id=decoder($request->id);
         $data=ViewTransaksi::find($id);
+		$data1=Transaksi::find($id);
+		$data2=ViewPasien::where('nik',$data->nik)->first();
+		var_dump($data3);
         
         
-            return view('rawatjalan.view_apotik',compact('template','data','disabled','id'));
+            return view('rawatjalan.view_apotik',compact('template','data','disabled','id','data2','data1'));
             
         
         
@@ -205,7 +209,7 @@ class RawatJalanController extends Controller
         error_reporting(0);
         $query=ViewTransaksi::query();
         if($request->waktu!=""){
-            $data = $query->where('waktu',$request->waktu);
+            $data = $query->where('waktu',date('Y-m-d',strtotime($request->waktu)));
         }else{
             $data = $query->where('waktu',date('Y-m-d'));
         }
@@ -231,6 +235,8 @@ class RawatJalanController extends Controller
                             <a href="#" data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" title="Pilih proses"><i class="fas fa-cog fa-fw"></i></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a href="javascript:;" class="dropdown-item" onclick="tambah(`'.encoder($row->id).'`)"><i class="fas fa-pencil-alt fa-fw"></i> Ubah</a>
+								<div class="dropdown-divider"></div>
+                                <a href="javascript:;" class="dropdown-item" onclick="delete_data(`'.encoder($row->id).'`)"><i class="fas fa-trash-alt fa-fw"></i> Hapus</a>
                              </div>
                         </div>
                     ';
@@ -277,7 +283,7 @@ class RawatJalanController extends Controller
         $query=ViewTransaksi::query();
         $kode_poli=Auth::user()->kode_poli;
         if($request->waktu!=""){
-            $data = $query->where('waktu',$request->waktu);
+            $data = $query->where('waktu',date('Y-m-d',strtotime($request->waktu)));
             
         }else{
             $data = $query->where('waktu',date('Y-m-d'));
@@ -298,7 +304,7 @@ class RawatJalanController extends Controller
                     $btn='
                         <div class="btn-group btn-group-sm">
                             <a class="btn btn-blue" onclick="tambah(`'.encoder($row->id).'`)" href="javascript:;"><i class="fa fa-check-square"></i></a>
-                            <a class="btn btn-red " href="javascript:;"><i class="fa fa-window-close"></i></a>
+                            <a class="btn btn-warning" onclick="proses_antrian('.$row->id.')" href="javascript:;"><i class="fa fa-info"></i></a>
                         </div>
                     ';
                 }
@@ -340,7 +346,7 @@ class RawatJalanController extends Controller
         $query=ViewTransaksi::query();
         $kode_poli=Auth::user()->kode_poli;
         if($request->waktu!=""){
-            $data = $query->where('waktu',$request->waktu);
+            $data = $query->where('waktu',date('Y-m-d',strtotime($request->waktu)));
             
         }else{
             $data = $query->where('waktu',date('Y-m-d'));
@@ -424,32 +430,25 @@ class RawatJalanController extends Controller
         $data = $query->where('waktu',date('Y-m-d'));
         $data = $query->where('active',1)->where('status',1)->orderBy('nomor','asc')->get();
         $cekaktif = ViewTransaksi::where('kode_poli',$request->kode_poli)->where('waktu',date('Y-m-d'))->where('active',1)->where('status',2)->count();
-        
         if($cekaktif>0){
             $aktif = ViewTransaksi::where('kode_poli',$request->kode_poli)->where('waktu',date('Y-m-d'))->where('active',1)->where('status',2)->orderBy('nomor','desc')->FirstOrfail();
             $noaktif=$aktif->nomor;
             $nama_pasien=$aktif->nama_pasien;
-            $awal=explode(' ',$aktif->nama_pasien);
-            $singkatanawal=$awal[0];
         }else{
             $noaktif='000';
             $nama_pasien='';
-            $singkatanawal='';
         }
         $success=[];
             $sub=[];
             foreach($data as $o){
                 $aws=explode(' ',$o->nama_pasien);
-                $singkatan=$aws[0];
                 $detail['nomor']=$o->nomor;
                 $detail['nama_pasien']=$o->nama_pasien;
-                $detail['singkatan']=$singkatan;
                 $detail['no_register']=$o->no_register;
                 $sub[]=$detail;
             }
         $success['nomor_aktif']=$noaktif;
         $success['nama_pasien']=$nama_pasien;
-        $success['singkatan']=$singkatanawal;
         $success['item']=$sub;
         return response()->json($success, 200);
     }
@@ -639,6 +638,8 @@ class RawatJalanController extends Controller
                         }
                         $tgl_register=date('Y-m-d');
                         if($request->status_keluarga==1){
+							$orgDate = $request->tgl_lahir;
+						    $newDate = date("Y-m-d", strtotime($orgDate));
                             $penomoran_register=penomoran_register(1,0);
                             $data=Pasien::UpdateOrcreate([
                                 'nik'=>$request->nik,
@@ -651,13 +652,14 @@ class RawatJalanController extends Controller
                                 'nama_pasien'=>$request->nama_pasien,
                                 'nama_orangtua'=>$kepala,
                                 'alamat'=>$request->alamat,
-                                'tgl_lahir'=>$request->tgl_lahir,
+                                'tgl_lahir'=>$newDate,
                                 'status_keluarga'=>$request->status_keluarga,
                                 'active'=>1,
                                 'created_at'=>date('Y-m-d H:i:s'),
                             ]);
                         }else{
-                            
+							$orgDate = $request->tgl_lahir;
+						    $newDate = date("Y-m-d", strtotime($orgDate));
                             // if($request->no_kepala!=""){
                             //     $no_kepala=$request->no_kepala;
                             //     $penomoran_register=penomoran_register($request->status_keluarga,0);
@@ -678,7 +680,7 @@ class RawatJalanController extends Controller
                                 'nama_pasien'=>$request->nama_pasien,
                                 'nama_orangtua'=>$kepala,
                                 'alamat'=>$request->alamat,
-                                'tgl_lahir'=>$request->tgl_lahir,
+                                'tgl_lahir'=>$newDate,
                                 'status_keluarga'=>$request->status_keluarga,
                                 'active'=>1,
                                 'created_at'=>date('Y-m-d H:i:s'),
@@ -702,6 +704,7 @@ class RawatJalanController extends Controller
                             'berat'=>$request->berat,
                             'suhu'=>$request->suhu,
                             'keluhan'=>$request->keluhan,
+                            'tinggi'=>$request->tinggi,
                             'nomor'=>$nomor,
                             'waktu'=>$waktu,
                             'status'=>1,
@@ -858,6 +861,7 @@ class RawatJalanController extends Controller
                         'berat'=>$request->berat,
                         'asuransi_id'=>$request->asuransi_id,
                         'suhu'=>$request->suhu,
+                        'tinggi'=>$request->tinggi,
                         'keluhan'=>$request->keluhan,
                         'nomor'=>$nomor,
                         'waktu'=>$waktu,
@@ -934,6 +938,7 @@ class RawatJalanController extends Controller
                         'asuransi_id'=>$request->asuransi_id,
                         'berat'=>$request->berat,
                         'suhu'=>$request->suhu,
+                        'tinggi'=>$request->tinggi,
                         'keluhan'=>$request->keluhan,
                         'active'=>1,
                     ]);
@@ -1004,8 +1009,8 @@ class RawatJalanController extends Controller
             
             
                 if($mst->tujuan_id==1){   
-                    $cek = ViewStokOrder::where('no_transaksi',$mst->no_transaksi)->count();
-                    if($cek>0){
+//                    $cek = ViewStokOrder::where('no_transaksi',$mst->no_transaksi)->count();
+//                    if($cek>0){
 
                     
                         $trs=Transaksi::UpdateOrcreate([
@@ -1014,10 +1019,14 @@ class RawatJalanController extends Controller
                             'diagnosa_id'=>$request->diagnosa_id,
                             'diagnosa_eng'=>$request->diagnosa_eng,
                             'diagnosa_ind'=>$request->diagnosa_ind,
+                            'tensi_darah_a'=>$request->tensi_darah_a,
+                            'tensi_darah_b'=>$request->tensi_darah_b,
+                            'suhu'=>$request->suhu,
                             'berat'=>$request->berat,
                             'tinggi'=>$request->tinggi,
                             'surat_id'=>$request->surat_id,
                             'pekerjaan'=>$request->pekerjaan,
+							'tindak_lanjut'=>$request->tindak_lanjut,
                             'status'=>3,
                             'mulai'=>$request->mulai,
                             'sampai'=>$request->sampai,
@@ -1026,9 +1035,9 @@ class RawatJalanController extends Controller
                             'active'=>1,
                         ]);
                         echo'@ok';
-                    }else{
-                        echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">Masukan Resep Obat</div></div>';
-                    } 
+//                    }else{
+//                        echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">Masukan Resep Obat</div></div>';
+//                    } 
                 }else{
                     $trs=Transaksi::UpdateOrcreate([
                         'id'=>$request->id,

@@ -43,6 +43,8 @@
                         headerOffset: $('#header').height()
                     },
                     responsive: true,
+					processing: true,
+					serverSide: false,
                     ajax:"{{ url('medis/getdata')}}",
                     dom: 'lrtip',
 					columns: [
@@ -82,6 +84,12 @@
         $(document).ready(function() {
 			show_data();
             load_data();
+			$('.datetimepicker1').datetimepicker({
+                format: 'DD-MM-YYYY'
+            });
+			$('#change_date').click(function(){
+				change_data($('#waktu_change').val());
+			})
 		});
         
 		
@@ -122,15 +130,22 @@
                                 <div class="col-md-5" style="background: #fdf5cd; padding: 1%;">
                                     <table width="100%">
                                         <tr>
-                                            <td colspan="4" style="font-size:20px">TGL : {{$waktu}}</td>
+                                            <td colspan="4" style="font-size:20px">TGL
+												<div class="input-group input-group-sm date datetimepicker1" id="">
+                                                    <input type="text" id="waktu_change" name="waktu_change" value="{{date('d-m-Y',strtotime($waktu))}}" class="form-control datetimepicker1" >
+                                                    <div class="btn btn-primary" id="change_date">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                </div>
+											</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="antrian">
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="%">TOTAL PASIEN</td>
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="30%">ANTRIAN</td>
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="30%">SELESAI</td>
                                             
                                         </tr>
-                                        <tr>
+                                        <tr id="antrian1">
                                             <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-total">0</td>
                                             <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-antrian">0</td>
                                             <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-selesai">0</td>
@@ -173,6 +188,9 @@
 				<!-- end col-10 -->
 			</div>
 			<!-- end row -->
+			<audio id="myAudio">
+				<source src="{{url_plug()}}/img/ping.mp3" type="audio/mp3">
+			</audio>
 		</div>       
 @endsection
 @push('ajax')
@@ -292,11 +310,10 @@
                 
             } 
             function proses_antrian(id){
-                
-                    
-
+                    var adu = document.getElementById("myAudio");
+                    adu.play();
                     swal({
-                        title: "Proses antrian ?",
+                        title: "Apakah Pasien Sudah Hadir ?",
                         text: "",
                         icon: "warning",
                         buttons: true,
@@ -313,7 +330,7 @@
                                 },
                                 success: function(msg){
                                     document.getElementById("loadnya").style.width = "0px";
-                                    swal("Sukses diproses", "", "success")
+                                    swal("Pasien telah hadir", "", "success")
                                     var tables=$('#data-table-fixed-header').DataTable();
                                         tables.ajax.url("{{ url('medis/getdata')}}").load();
                                     load_data();
@@ -330,5 +347,26 @@
                 
                 
             }
+			function change_data(data) {
+				const date = new Date();
+				let day = date.getDate();
+				let month = date.getMonth() + 1;
+				let year = date.getFullYear();
+				const currentDate = `${day}-${month}-${year}`;
+				if(data != currentDate){
+					document.getElementById('antrian').style.display = "none";
+					document.getElementById('antrian1').style.display = "none";
+				} else {
+					document.getElementById('antrian').style.display = "";
+					document.getElementById('antrian1').style.display = "";
+				}
+				if ($('#data-table-fixed-header').length !== 0) {
+					var tables=$('#data-table-fixed-header').DataTable();
+                    tables.ajax.url("{{ url('medis/getdata')}}?waktu="+data).load();
+					$('#cari_data').keyup(function(){
+					table.search($(this).val()).draw() ;
+					})
+				}
+			}
         </script>
 @endpush

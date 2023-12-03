@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PasienController;
+use App\Http\Controllers\RekamMedisController;
 use App\Http\Controllers\PoliController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\TransaksiobatController;
@@ -59,6 +60,15 @@ Route::group(['middleware' => 'auth','prefix' => 'master/diagnosa'],function(){
     Route::get('/delete', [DiagnosaController::class, 'delete_data']);
     Route::get('/getdata', [DiagnosaController::class, 'get_data']);
 });
+Route::group(['middleware' => 'auth','prefix' => '/diagnosa'],function(){
+    Route::get('/', [DiagnosaController::class, 'index']);
+    Route::get('/view', [DiagnosaController::class, 'view']);
+    Route::post('/', [DiagnosaController::class, 'store']);
+    Route::get('/modal', [DiagnosaController::class, 'modal']);
+    Route::get('/switch_status', [DiagnosaController::class, 'switch_status']);
+    Route::get('/delete', [DiagnosaController::class, 'delete_data']);
+    Route::get('/getdata', [DiagnosaController::class, 'get_data']);
+});
 Route::group(['middleware' => 'auth','prefix' => 'master/poli'],function(){
     Route::get('/', [PoliController::class, 'index']);
     Route::get('/view', [PoliController::class, 'view']);
@@ -76,6 +86,16 @@ Route::group(['middleware' => 'auth','prefix' => 'pasien'],function(){
     Route::get('/switch_status', [PasienController::class, 'switch_status']);
     Route::get('/delete', [PasienController::class, 'delete_data']);
     Route::get('/getdata', [PasienController::class, 'get_data']);
+});
+Route::group(['middleware' => 'auth','prefix' => 'rekammedis'],function(){
+    Route::get('/', [RekamMedisController::class, 'index']);
+    Route::get('/view', [RekamMedisController::class, 'view']);
+    Route::post('/', [RekamMedisController::class, 'store']);
+    Route::get('/modal', [RekamMedisController::class, 'modal']);
+    Route::get('/switch_status', [RekamMedisController::class, 'switch_status']);
+    Route::get('/delete', [RekamMedisController::class, 'delete_data']);
+    Route::get('/getdata', [RekamMedisController::class, 'get_data']);
+	Route::get('/getdatarm', [RekamMedisController::class, 'get_data_rm']);
 });
 Route::group(['middleware' => 'auth','prefix' => 'master/dokter'],function(){
     Route::get('/', [DokterController::class, 'index']);

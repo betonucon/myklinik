@@ -19,6 +19,8 @@
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -53,7 +55,10 @@
 					}
                 });
                 $('#cari_data_pasien_all').keyup(function(){
-                    table.search($(this).val()).draw() ;
+                    tableall.search($(this).val()).draw() ;
+                })
+				$('#cari_data_pasien_lama').keyup(function(){
+                    tableall.search($(this).val()).draw() ;
                 })
 
 		});
@@ -210,7 +215,7 @@
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tujuan Kunjungan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-7">
-                                                                <select class="form-control form-control-sm" name="tujuan_id">
+                                                                <select class="form-control form-control-sm" name="tujuan_id" onchange="show_tb(this)">
                                                                     <option value="1"> Berobat / Kontrol / Rawat Jalan</option>
                                                                     <option value="2"> Surat Keterangan Sehat</option>
                                                                     
@@ -222,7 +227,7 @@
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Poli <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-7">
-                                                                <select class="form-control form-control-sm" name="kode_poli">
+                                                                <select class="form-control form-control-sm" name="kode_poli" id="kode_poli_baru">
                                                                     <option value="">-- Pilih --</option>
                                                                     @foreach(get_poli() as $gt)
                                                                         <option value="{{$gt->kode_poli}}" @if($data->kode_poli==$gt->kode_poli) selected @endif >{{$gt->nm}} - {{$gt->kode_poli}} {{$gt->nama_poli}}</option>
@@ -273,6 +278,24 @@
                                                                 <p style="font-size:16px">Kg</p>
                                                             </div>
                                                             
+                                                        </div>
+														<div class="form-group row m-b-1" id="tinggi_badan_baru">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan </label>
+															<div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+															</div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Cm</p>
+                                                            </div>
+                                                        </div>
+														<div class="form-group row m-b-1" id="lila_baru">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Lila </label>
+															<div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="lila" value="{{$data->lila}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+															</div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Cm</p>
+                                                            </div>
                                                         </div>
                                                         
                                                     </div>
@@ -358,7 +381,7 @@
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tujuan Kunjungan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-7">
-                                                                <select class="form-control form-control-sm" name="tujuan_id">
+                                                                <select class="form-control form-control-sm" name="tujuan_id" onchange="show_tb(this)">
                                                                     <option value="1"> Berobat / Kontrol / Rawat Jalan</option>
                                                                     <option value="2"> Surat Keterangan Sehat</option>
                                                                     
@@ -370,7 +393,7 @@
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Poli <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-7">
-                                                                <select class="form-control form-control-sm" name="kode_poli">
+                                                                <select class="form-control form-control-sm" name="kode_poli" id="kode_poli_lama">
                                                                     <option value="">-- Pilih --</option>
                                                                     @foreach(get_poli() as $gt)
                                                                         <option value="{{$gt->kode_poli}}" @if($data->kode_poli==$gt->kode_poli) selected @endif >{{$gt->nm}} - {{$gt->kode_poli}} {{$gt->nama_poli}}</option>
@@ -422,6 +445,24 @@
                                                                 <p style="font-size:16px">Kg</p>
                                                             </div>
                                                             
+                                                        </div>
+														<div class="form-group row m-b-1" id="tinggi_badan_lama">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan </label>
+															<div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+															</div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Cm</p>
+                                                            </div>
+                                                        </div>
+														<div class="form-group row m-b-1" id="lila_lama">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Lila </label>
+															<div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="lila" value="{{$data->lila}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+															</div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Cm</p>
+                                                            </div>
                                                         </div>
                                                         
                                                         
@@ -519,7 +560,6 @@
                                     <th width="12%">NIK</th>
                                     <th width="10%">T.Lahir</th>
                                     <th width="8%">Umur</th>
-                                    
                                 </tr>
                             </thead>
                         </table>
@@ -545,10 +585,10 @@
                                
                             </div>
                             <div class="col-md-4">
-                                <input class="form-control" id="cari_data_obat" placeholder="Cari......" type="text" />
+                                <input class="form-control" id="cari_data_pasien_lama" placeholder="Cari......" type="text" />
                             </div>
                         </div>
-                        <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-pasien"  >
+                        <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-pasien-lama"  >
                             <thead>
                                 <tr role="row">
                                     <th width="2%">No</th>
@@ -572,8 +612,20 @@
         <script type="text/javascript">
 			$('#non_kepala').hide();
 			$('.datetimepicker1').datetimepicker({
-                format: 'YYYY-MM-DD'
+                format: 'DD-MM-YYYY'
             });
+			function thelila(){
+				if($('#kode_poli_lama').val() == "P03" || 
+				   $('#kode_poli_baru').val() == "P03"){
+					$('#lila_lama').show();
+					$('#lila_baru').show();
+				} else {
+					$('#lila_lama').hide();
+					$('#lila_baru').hide();
+				}
+				setTimeout(thelila,500);
+			}
+			thelila();
 			function show_pasien(){
 				$('#modal-pasien').modal('show');
                 var tables=$('#data-table-fixed-header-pasien').DataTable();

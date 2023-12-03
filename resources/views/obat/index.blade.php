@@ -23,6 +23,8 @@
                         header: true,
                         headerOffset: $('#header').height()
                     },
+					processing: true,
+					serverSide: false,
                     responsive: false,
                     ajax:"{{ url('master/obat/getdata')}}",
                     dom: 'lrtip',

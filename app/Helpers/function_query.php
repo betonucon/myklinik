@@ -31,6 +31,10 @@
         $data=App\Models\Satuan::orderBy('id','Asc')->get();
         return $data;
     }
+	function get_obat($no_transaksi){
+        $data=App\Models\ViewStokOrder::where('no_transaksi',$no_transaksi)->orderBy('id','Asc')->get();
+        return $data;
+    }
     function get_asuransi(){
         $data=App\Models\Asuransi::orderBy('id','Asc')->get();
         return $data;

@@ -23,6 +23,8 @@
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -64,6 +66,8 @@
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -306,7 +310,7 @@
         
         <script type="text/javascript">
 			$('#datetimepicker1').datetimepicker({
-                format: 'YYYY-MM-DD'
+                format: 'DD-MM-YYYY'
             });
 			function tambah_obat(){
                 $('#modal-obat').modal('show');

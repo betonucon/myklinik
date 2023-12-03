@@ -17,6 +17,8 @@
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -50,13 +52,15 @@
 						}
 					}
                 });
-                $('#cari_data_obat').keyup(function(){
+				$('#cari_data_obat').keyup(function(){
                     tableobat.search($(this).val()).draw() ;
                 })
 			var tablediag=$('#data-table-fixed-header-diagnosa').DataTable({
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -131,9 +135,88 @@
 						}
 					}
                 });
+				
+				function htmlDecode(input) {
+					let doc = new DOMParser().parseFromString(input, "text/html");
+					return doc.documentElement.textContent;
+				}
+				
+				var rekammedis=$('#data-table-fixed-header-rekammedis').DataTable({
+                    lengthChange:false,
+                    ordering:false,
+                    paging:true,
+					processing: true,
+					serverSide: false,
+                    scrollY:        300,
+                    scrollCollapse: true,
+                    scroller:       true,
+                    fixedHeader: {
+                        header: true,
+                        headerOffset: $('#header').height()
+                    },
+
+                    responsive: false,
+					ajax:"{{ url('rekammedis/getdatarm')}}?req={{$data->no_register}}",
+                    dom: 'lrtip',
+					columns: [
+                        { data: 'created_at', render: function (data, type, row, meta) 
+							{
+								return meta.row + meta.settings._iDisplayStart + 1;
+							} 
+						},
+                        { data: 'created_at' ,render: function (data, type, row, meta) 
+							{
+								var dates = new Date(Date.parse(row.created_at));
+								var month = parseInt(dates.getMonth())+1;
+								dates = dates.getDate() + '-' + month  
+										+ '-' + dates.getFullYear() +' '+ dates.getHours() + 
+										':'+dates.getMinutes()+':'+dates.getSeconds();
+								return dates;
+							} 
+						},
+						{ data: 'kode_poli', render: function (data, type, row, meta) 
+							{
+								switch(row.kode_poli){
+									case "P01" : return "UMUM";
+									case "P02" : return "GIGI";
+									case "P03" : return "KIA";
+								}
+								return  row.kode_poli;
+							}  },
+						{ data: 'nomor' },
+						{ data: 'skrining_dasar' , render: function (data, type, row, meta) 
+							{
+								return  htmlDecode(row.skrining_dasar);
+							}  },
+						{ data: 'keluhan' },
+						{ data: 'diagnonsa_eng',  render: function (data, type, row, meta) 
+							{
+								return  row.diagnosa_eng;
+							}  },
+						{ data: 'diagnonsa_ind',  render: function (data, type, row, meta) 
+							{
+								return  row.diagnosa_ind;
+							} },
+						{ data: 'tindak_lanjut' },
+						{ data: 'array_obat' },
+						
+					],
+					language: {
+						paginate: {
+							// remove previous & next text from pagination
+							previous: '<< previous',
+							next: 'Next>>'
+						}
+					}
+                })
+				
                 $('#cari_data').keyup(function(){
                     tabledetail.search($(this).val()).draw() ;
-                })
+                });
+				
+				$('#cari_data_obat').keyup(function(){
+                    tableobat.search($(this).val()).draw() ;
+                });
 
                 $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
                     $($.fn.dataTable.tables(true)).DataTable()
@@ -213,32 +296,32 @@
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">No BPJS</label>
                                                             <div class="col-lg-9 col-xl-8"  style="padding: 0.3%; padding-left: 5%;">
-                                                                {{$data->nama_asuransi}}
+                                                                {{$data2->no_bpjs}}
                                                             </div>
                                                         </div>
                                                        @endif
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Nama Pasien <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7"  style="padding: 0.3%; padding-left: 5%;">
-                                                                Tn. {{$data->nama_pasien}}
+                                                                {{$data->nama_pasien}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Alamat Pasien <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-7">
-                                                                {{$data->alamat}}
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                {{$data2->alamat}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Tanggal Lahir <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
-                                                                {{$data->tgl_lahir}}
+                                                                {{date('d-m-Y',strtotime($data->tgl_lahir))}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Usia Pasien <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
-                                                                {{$data->umur}} Th
+                                                                {{$data->umur}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
@@ -278,22 +361,34 @@
                                                                 {!!$data->suhunya!!}
                                                             </div>
                                                         </div>
+														<div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                @if($data->tinggi > 0)
+																	{{$data->tinggi}} cm
+																@else
+																	Belum diukur tingginya
+																@endif
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
                                                                 {{$data->berat}} Kg
                                                             </div>
                                                         </div>
-                                                        @if($data->tujuan_id==2)
-                                                        <div class="form-group row m-b-1">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
+														@if($data->kode_poli=="P03")
+														<div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Lila <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
-                                                                {{$data->tinggi}} Cm
+                                                                @if($data->lila > 0)
+																	{{$data->lila}} cm
+																@else
+																	Belum diukur lilanya
+																@endif
                                                             </div>
                                                         </div>
-
-                                                        @endif
-                                                        
+														@endif                                                        
                                                         
                                                         
                                                         
@@ -312,6 +407,14 @@
                                                                 <u><b>Keluhan Pasien</b></u><br>
                                                                 
                                                                 {!!$data->keluhan!!}
+                                                            </div>
+                                                            <div class="col-md-1">
+
+                                                            </div>
+															<div class="col-md-5">
+                                                                <u><b>Tindakkan Lanjut atau Therapi yang Diberikan Dokter atau Tenaga Kesehatan</b></u><br>
+                                                                
+                                                                {{$data1->tindak_lanjut}}
                                                             </div>
                                                             <div class="col-md-1">
 
@@ -348,14 +451,33 @@
                                                     
                                                     
                                                 </div>
-                                            </form>	
+                                            </form>
+											<div class="col-md-11" style="background: #fdf5cd; padding: 1%;">
+												<legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Rekam Medis Pasien</u></legend>
+												<table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-rekammedis"  >
+													<thead>
+														<tr role="row">
+															<th width="2%">No</th>
+															<th width="2%">Tanggal Berobat</th>
+															<th width="2%">Poli</th>
+															<th width="2%">Nomor Antrean</th>
+															<th width="15%">Skrining Dasar</th>
+															<th width="10%">Keluhan dan Anamnesa</th>
+															<th width="10%">Diagnosa Inggris</th>
+															<th width="10%">Diagnosa Indonesia</th>
+															<th width="10%">Therapy atau Tindakkan yang Dilakukan Tenaga Kesehatan</th>
+															<th width="10%">Resep Obat</th>																		
+														</tr>
+													</thead>
+												</table>
+											</div>
                                             
                                         </div>
                                         <div class="tab-pane fade " id="default-tab-2" >
                                             <div class="row" style="margin-bottom:2%">
                                                 <div class="col-md-8" style="background: #fdf5cd; padding: 1%;">
                                                 @if($data->status==3)
-                                                <a href="javascript:;"  onclick="tambah_obat()()"  class="btn btn-primary m-r-5"><i class="fa fa-save"></i> Tambah Obat</a>
+                                                <a href="javascript:;"  onclick="tambah_obat()"  class="btn btn-primary m-r-5"><i class="fa fa-save"></i> Tambah Obat</a>
                                                 @endif
                                                 </div>
                                                 
@@ -395,7 +517,7 @@
                                                         <a href="javascript:;"  onclick="cetak_data()"  class="btn btn-info m-r-5"><i class="fa fa-print"></i> Cetak Resep</a>
                                                         
                                                     @else
-                                                        <a href="javascript:;"  onclick="cetak_surat_sks()"  class="btn btn-info m-r-5"><i class="fa fa-print"></i> Cetak S.Keterangan Sehat</a>
+                                                        <a href="javascript:;"  onclick="cetak_data()"  class="btn btn-info m-r-5"><i class="fa fa-print"></i> Cetak Keterangan Sehat</a>
                                                     @endif
                                                 @endif
                                                 
@@ -578,7 +700,7 @@
 
                 let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
 
-                    mywindow.document.write(`<html><head><title>${title}</title>`);
+                    mywindow.document.write('<html><head><title>${title}</title>');
                     mywindow.document.write('</head><body >');
                     mywindow.document.write(document.getElementById(divId).innerHTML);
                     mywindow.document.write('</body></html>');
@@ -655,7 +777,10 @@
                 
                 
                 
-            } 
+            }
+			$('#cari_data_obat').keyup(function(){
+                    tables.search($(this).val()).draw() ;
+                });
             @endif
 			function pilih_serial(serial){
 				var tables=$('#data-table-fixed-header-diagnosa').DataTable();

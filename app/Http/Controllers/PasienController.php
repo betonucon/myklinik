@@ -34,8 +34,13 @@ class PasienController extends Controller
         }else{
             $disabled='readonly';
         }
+		
+		$orgDate = $data->tgl_lahir;
+		$newDate = date("d-m-Y", strtotime($orgDate));
+		unset($data->tgl_lahir);
+		$data->tgl_lahir = $newDate;
         
-            return view('pasien.view',compact('template','data','disabled','id'));
+        return view('pasien.view',compact('template','data','disabled','id'));
         
         
         
@@ -205,7 +210,8 @@ class PasienController extends Controller
                         
                     }
             
-                
+                    $orgDate = $request->tgl_lahir;
+		     	    $newDate = date("Y-m-d", strtotime($orgDate));
                     
                     $data=Pasien::UpdateOrcreate([
                         'id'=>$request->id,
@@ -215,7 +221,7 @@ class PasienController extends Controller
                         'no_bpjs'=>$request->no_bpjs,
                         'nama_pasien'=>$request->nama_pasien,
                         'alamat'=>$request->alamat,
-                        'tgl_lahir'=>$request->tgl_lahir,
+                        'tgl_lahir'=>$newDate,
                         'status_keluarga'=>$request->status_keluarga,
                         'active'=>1,
                         'created_at'=>date('Y-m-d H:i:s'),

@@ -101,7 +101,7 @@
                                         <div class="form-group row m-b-1">
                                             <label class="col-lg-3 text-lg-right col-form-label" style="padding:3px !important">NIK / Nomor KTP<span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                             <div class="col-lg-9 col-xl-5">
-                                                <input type="number" name="nik" value="{{$data->nik}}" placeholder="Ketik...." class="form-control form-control-sm">
+                                                <input type="number" disabled name="nik" value="{{$data->nik}}" placeholder="Ketik...." class="form-control form-control-sm">
                                             </div>
                                         </div>
                                         <div class="form-group row m-b-1">
