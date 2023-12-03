@@ -586,21 +586,6 @@ class RawatJalanController extends Controller
         $messages['asuransi_id.required']= 'Pilih Metode Bayar ';
         $messages['asuransi_id.numeric']= 'eror inputan Metode Bayar';
 
-        $rules['tensi_darah_a']= 'required|string';
-        $messages['tensi_darah_a.required']= 'Masukan Tensi Darah ';
-        $messages['tensi_darah_a.string']= 'eror inputan Tensi Darah';
-
-        $rules['tensi_darah_b']= 'required|string';
-        $messages['tensi_darah_b.required']= 'Masukan Tensi Darah ';
-        $messages['tensi_darah_b.string']= 'eror inputan Tensi Darah';
-
-        $rules['suhu']= 'required|string';
-        $messages['suhu.required']= 'Masukan suhu Badan ';
-        $messages['suhu.string']= 'eror inputan suhu Badan';
-
-        $rules['berat']= 'required|string';
-        $messages['berat.required']= 'Masukan Berat Badan ';
-        $messages['berat.string']= 'eror inputan Berat Badan';
 
         if($request->asuransi_id==2){
             $rules['no_bpjs']= 'required|string';
