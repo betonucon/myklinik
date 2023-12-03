@@ -771,7 +771,14 @@
             });
 			function show_diagnosa(){
 				$('#modal-diagnosa').modal('show');
-                var tables=$('#data-table-fixed-header-diagnosa').DataTable();
+                var tables=$('#data-table-fixed-header-diagnosa').DataTable({
+                    processing: true,
+                    retrieve: true,
+					serverSide: false,
+                    scrollY:        300,
+                    scrollCollapse: true,
+                    scroller:       true
+                });
                     tables.ajax.url("{{ url('master/diagnosa/getdata')}}").load();
 			} 
             function tambah_obat(){

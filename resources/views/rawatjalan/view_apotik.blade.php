@@ -100,6 +100,8 @@
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+                    processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -220,8 +222,7 @@
 
                 $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
                     $($.fn.dataTable.tables(true)).DataTable()
-                        .columns.adjust()
-                        .fixedColumns().relayout();
+                        .columns.adjust();
                 });
 
 		});
@@ -657,7 +658,7 @@
                                         
                                         
                             <div class="col-md-12">
-                                <input class="form-control" id="cari_data_obat" placeholder="Cari......" type="text" />
+                                <input class="form-control" id="cari_data_obat_modal" placeholder="Cari......" type="text" />
                             </div>
                         </div>
                         <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-obat"  >
@@ -720,9 +721,12 @@
             }
             function tambah_obat(){
                 $('#modal-obat').modal('show');
-                var tables=$('#data-table-fixed-header-obat').DataTable();
+                var tables=$('#data-table-fixed-header-obat').DataTable({processing: true,
+					serverSide: false});
                         tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
-                
+                $('#cari_data_obat_modal').keyup(function(){
+                    tables.search($(this).val()).draw() ;
+                })
             }
             function pilih(id,kode_obat,stok){
 				if(stok==0){
