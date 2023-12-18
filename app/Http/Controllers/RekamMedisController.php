@@ -8,22 +8,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use GuzzleHttp\Client;
 use Validator;
-use App\Models\Diagnosa;
-use App\Models\ViewDiagnosa;
-class DiagnosaController extends Controller
+use App\Models\Pasien;
+use App\Models\ViewPasien;
+use App\Models\Stok;
+use App\Models\Obat;
+use App\Models\ViewTransaksi;
+class RekamMedisController extends Controller
 {
     
     public function index(request $request)
     {
        
-            return view('diagnosa.index');
+            return view('rekammedis.index');
        
         
     }
     
     public function view(request $request)
     {
-        error_reporting(0);
+        //error_reporting(0);
         // dd(penomoran_register(3,'23-000020'));
         $template='top';
         $id=decoder($request->id);
@@ -34,40 +37,125 @@ class DiagnosaController extends Controller
         }else{
             $disabled='readonly';
         }
-        if(Auth::user()->role_id==1 || Auth::user()->role_id==4){
-            return view('diagnosa.view',compact('template','data','disabled','id'));
-        }else{
-            return view('error');
-        }
+		
+		if(isset($data->tgl_lahir)){
+			$orgDate = $data->tgl_lahir;
+			$newDate = date("d-m-Y", strtotime($orgDate));
+			unset($data->tgl_lahir);
+			$data->tgl_lahir = $newDate;
+		}
+        
+        return view('rekammedis.view',compact('template','data','disabled','id'));
+        
         
         
         
     }
+	public function get_data_rm(request $request)
+    {
+        error_reporting(0);
+		$id=$request->req;
+		$history=$request->data;
+		$data = "";
+		if($history == ""){
+			$data = ViewTransaksi::where('no_register',$id)->orderBy('no_transaksi','Asc')->get();
+		} else {
+			$data = ViewTransaksi::where('no_register',$id)->where('waktu','<',date('Y-m-d'))->orderBy('no_transaksi','Asc')->get();
+		}
+		if(count($data)>=1){
+			return Datatables::of($data)
+				->addIndexColumn()
+				->addColumn('skrining_dasar', function($row){
+					$skrining = "TD = ".$row->tensi." mmHg</br></br>".
+					"TB = ".($row->tinggi != "" ? $row->tinggi . "CM" : "Belum Diukur Tingginya")." </br> </br>".
+					"BB = ".$row->berat." Kg</br> </br>".
+					"S = ".$row->suhu." °C</br> </br>".
+					($row->nm == "A" ? "LILA = " .
+					($row->lila != "" ? $row->lila : "Belum Diukur Lilanya") ."</br></br>".
+					"Triple Eliminasi = ".($row->eliminasi != 0 ? "Sudah Diperiksa Triple Eliminasi"."</br>" : "Belum Diperiksa Triple Eliminasi") ."</br>": "</br>");
+					return $skrining;
+				})
+				->addColumn('array_obat', function ($row) {
+					$obat = "";
+					$rsp_obat = get_obat($row->no_transaksi);
+					if(count($rsp_obat) == 0){
+						$obat.="Tidak diberikan obat dari poli";
+					} else {
+						$obat .="<ul>";
+						foreach($rsp_obat as $val){
+							$obat.="<li>".$val->nama_obat." ".$val->qty."pcs ".$val->aturan_pakai." </li>";
+						}
+						$obat .="</ul>";
+					}
+					return $obat;
+				})
+				->rawColumns(['skiring_dasar','array_obat'])
+				->make(true);
+		} else {
+			$success['data']="";
+			return response()->json($success, 200);
+		}
+    }
+
     
     public function get_data(request $request)
     {
         error_reporting(0);
-        $query = ViewDiagnosa::query();
-        if($request->serial != ""){
-            $data=$query->where('serial',$request->serial);
-        }else{
-            $data=$query;
-        }
-        
-        $data=$query->orderBy('kode_diagnosa','Asc')->get();
-
-        return Datatables::of($data)
-            ->addIndexColumn()
-            
-            
-            ->addColumn('pilih', function ($row) {
-                $btn='<span class="btn btn-primary btn-xs" onclick="pilih_diagnosa(`'.$row->kode_diagnosa.'`,'.$row->id.',`'.tanpa_simbol($row->diagnosa_ecd).'`,`'.tanpa_simbol($row->diagnosa_ind).'`)">Pilih</span>';
+        $data = ViewPasien::whereIn('active',array(1,0))->orderBy('no_kepala','Asc')->get();
+		if(count($data)>=1){
+			return Datatables::of($data)
+				->addIndexColumn()
+				->addColumn('action', function ($row) {
+				$btn='
+					<div class="btn-group btn-group-sm ">
+						<a href="#" data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" title="Pilih proses"><i class="fas fa-cog fa-fw"></i></a>
+						<div class="dropdown-menu dropdown-menu-right">
+							<a href="javascript:;" class="dropdown-item" onclick="tambah(`'.encoder($row->id).'`)"><i class="fas fa-pencil-alt fa-fw"></i> Lihat</a>
+							<div class="dropdown-divider"></div>
+								<a href="javascript:;" class="dropdown-item" onclick="delete_data(`'.encoder($row->id).'`)"><i class="fas fa-trash-alt fa-fw"></i> Hapus</a>
+							</div>
+						</div>
+					</div>
+                ';
+                return $btn;
+				})
+				->addColumn('act', function ($row) {
+					$btn='<input type="checkbox" name="nik[]" value="'.$row->nik.'">';
+                
+					return $btn;
+				})
+				->addColumn('harga', function ($row) {
+                
+					return uang($row->harga);
+				})
+				->addColumn('status', function ($row) {
+					if($row->active==1){
+						$btn='<div class="custom-control custom-switch mb-1">
+								<input type="checkbox" class="custom-control-input" onclick="switch_data('.$row->id.',0)" id="customSwitch'.$row->id.'" checked>
+								<label class="custom-control-label" for="customSwitch'.$row->id.'"></label>
+							</div>';
+					}else{
+						$btn='<div class="custom-control custom-switch mb-1">
+								<input type="checkbox" class="custom-control-input" onclick="switch_data('.$row->id.',1)" id="customSwitch'.$row->id.'" >
+								<label class="custom-control-label" for="customSwitch'.$row->id.'"></label>
+							</div>';
+					}
+                
                 
                 return $btn;
-            })
+				})
+				->addColumn('pilih', function ($row) {
+					$btn='<span class="btn btn-primary btn-xs" onclick="pilih_pasien(`'.$row->no_register.'`,`'.$row->nik.'`,`'.$row->nama_pasien.'`,`'.$row->no_bpjs.'`)">Pilih</span>';
+                
+					return $btn;
+				})
             
-            ->rawColumns(['pilih'])
-            ->make(true);
+				->rawColumns(['action','act','status','pilih'])
+				->make(true);
+		} else{
+			$success['data']="";
+			return response()->json($success, 200);
+		}
     }
     
     
@@ -178,7 +266,8 @@ class DiagnosaController extends Controller
                         
                     }
             
-                
+                    $orgDate = $request->tgl_lahir;
+		     	    $newDate = date("Y-m-d", strtotime($orgDate));
                     
                     $data=Pasien::UpdateOrcreate([
                         'id'=>$request->id,
@@ -188,7 +277,7 @@ class DiagnosaController extends Controller
                         'no_bpjs'=>$request->no_bpjs,
                         'nama_pasien'=>$request->nama_pasien,
                         'alamat'=>$request->alamat,
-                        'tgl_lahir'=>$request->tgl_lahir,
+                        'tgl_lahir'=>$newDate,
                         'status_keluarga'=>$request->status_keluarga,
                         'active'=>1,
                         'created_at'=>date('Y-m-d H:i:s'),

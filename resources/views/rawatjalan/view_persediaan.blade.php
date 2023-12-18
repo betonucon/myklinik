@@ -23,6 +23,8 @@
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,

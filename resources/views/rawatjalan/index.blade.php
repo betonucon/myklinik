@@ -4,6 +4,7 @@
     <link href="{{url_plug()}}/assets/plugins/switchery/switchery.min.css" rel="stylesheet" />
 	<link href="{{url_plug()}}/assets/plugins/abpetkov-powerange/dist/powerange.min.css" rel="stylesheet" />
     <script src="{{url_plug()}}/assets/plugins/switchery/switchery.min.js"></script>
+    <script src="{{url_plug()}}/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 	<script src="{{url_plug()}}/assets/plugins/abpetkov-powerange/dist/powerange.min.js"></script>
     <script src="{{url_plug()}}/assets/js/demo/form-slider-switcher.demo.js"></script>
     <script type="text/javascript">
@@ -43,6 +44,8 @@
                         header: true,
                         headerOffset: $('#header').height()
                     },
+					processing: true,
+					serverSide: false,
                     responsive: true,
                     ajax:"{{ url('rawatjalan/getdata')}}",
                     dom: 'lrtip',
@@ -83,6 +86,12 @@
         $(document).ready(function() {
 			show_data();
             load_data();
+			$('.datetimepicker1').datetimepicker({
+                format: 'DD-MM-YYYY'
+            });
+			$('#change_date').click(function(){
+				change_data($('#waktu_change').val());
+			})
 		});
         
 		
@@ -123,16 +132,23 @@
                                 <div class="col-md-5" style="background: #fdf5cd; padding: 1%;">
                                     <table width="100%">
                                         <tr>
-                                            <td colspan="4" style="font-size:20px">TGL : {{$waktu}}</td>
+                                            <td colspan="4" style="font-size:20px">TGL
+												<div class="input-group input-group-sm date datetimepicker1" id="">
+                                                    <input type="text" id="waktu_change" name="waktu_change" value="{{date('d-m-Y',strtotime($waktu))}}" class="form-control datetimepicker1" >
+                                                    <div class="btn btn-primary" id="change_date">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                </div>
+											</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="antrian">
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="%">TOTAL PASIEN</td>
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="20%">PL.U</td>
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="20%">PL.G</td>
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="20%">PL.A</td>
                                             
                                         </tr>
-                                        <tr>
+                                        <tr id="antrian1">
                                             <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-all">0</td>
                                             <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-umum">0</td>
                                             <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-gigi">0</td>
@@ -145,10 +161,12 @@
                                 <div class="col-md-3">
                                    
                                 </div>
+								@if(Auth::user()->role_id<3)
                                 <div class="col-md-4" style="text-align: right;">
                                     <a href="javascript:;" style="margin-bottom:2%" onclick="tambah(`{{encoder(0)}}`)" class="btn btn-primary m-r-5"><i class="fa fa-plus"></i> Pendaftaran Rawat</a>
                                     <input class="form-control" id="cari_data" placeholder="Cari......" type="text" />
                                 </div>
+								@endif
                             </div>
                             
                             <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header"  >
@@ -345,5 +363,26 @@
                 }
                 
             }
+			function change_data(data) {
+				const date = new Date();
+				let day = date.getDate();
+				let month = date.getMonth() + 1;
+				let year = date.getFullYear();
+				const currentDate = `${day}-${month}-${year}`;
+				if(data != currentDate){
+					document.getElementById('antrian').style.display = "none";
+					document.getElementById('antrian1').style.display = "none";
+				} else {
+					document.getElementById('antrian').style.display = "";
+					document.getElementById('antrian1').style.display = "";
+				}
+				if ($('#data-table-fixed-header').length !== 0) {
+					var tables=$('#data-table-fixed-header').DataTable();
+                    tables.ajax.url("{{ url('rawatjalan/getdata')}}?waktu="+data).load();
+					$('#cari_data').keyup(function(){
+					table.search($(this).val()).draw() ;
+					})
+				}
+			}
         </script>
 @endpush

@@ -24,6 +24,8 @@
                         headerOffset: $('#header').height()
                     },
                     responsive: false,
+					processing: true,
+					serverSide: false,
                     ajax:"{{ url('transaksiobat/getdatapersediaan')}}",
                     dom: 'lrtip',
 					columns: [

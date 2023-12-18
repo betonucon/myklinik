@@ -8,7 +8,10 @@
 	<meta content="" name="description" />
 	<meta content="" name="author" />
 	
-	<!-- ================== BEGIN BASE CSS STYLE ================== -->
+	<!-- ================== BEGIN BASE CSS STYLE ==================
+     <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=cL7z0zaQdduUd3jM&amp;controls=0&amp;list=PLWX187nYYN9wcV9cTXgKf60Nye5yIfzew" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+	-->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 	<link href="{{url_plug()}}/assets/css/default/app.min.css" rel="stylesheet" />
 	<!-- ================== END BASE CSS STYLE ================== -->
@@ -20,7 +23,7 @@
 		<!-- begin #content -->
 		<div id="content" class="content" style="padding: 10px;">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-5">
 					<div class="row">
 						<div class="col-md-12" style="background: #fff;border: double 6px #3c3cb3;font-size:170px; font-weight:bold;text-align:center">
 							<div class="panel">
@@ -28,7 +31,7 @@
 								<div class="panel-body" id="nomor-aktif" style="color: #31317c;height: 190px; border-bottom: solid 3px; padding-bottom: 4% !important; padding: 1px; font-family: sans-serif; font-size: 140px;">
 									
 								</div>
-								<div class="panel-body" id="nama_pasien" style="color: #31317c;text-transform:uppercase;font-size:53px;height:70px;padding: 1px; font-family: sans-serif;color:blue">
+								<div class="panel-body" id="nama_pasien" style="color: #31317c;text-transform:uppercase;font-size:40%;height:auto;padding: 1px; font-family: sans-serif;color:blue">
 									
 								</div>
 							</div>
@@ -43,7 +46,7 @@
 					</div>
 				
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-7">
 				<marquee style=" text-transform: uppercase; font-size: 15px; background: yellow; padding: 1%; font-weight: bold; ">Klinik Bidan Uwen Yuheni Serang  *  Jl. K.H. Abdul Hadi No.06, Kebon Jahe, Kec. Serang, Kota Serang, Banten 42117 * Nomor telepon: 0878-0936-3812.</marquee>
 					<div class="panel">
 						
@@ -54,8 +57,8 @@
 							@if($kode_poli=='P02')
 							<iframe width="100%" height="790" src="https://www.youtube.com/embed/nroyp6xuHII?autoplay=1&amp;mute=1&loop=1&playlist=nroyp6xuHII" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 							@endif
-							@if($kode_poli=='P03')
-							<iframe width="100%" height="790" src="https://www.youtube.com/embed/0RH_RarRDNo?autoplay=1&amp;mute=1&loop=1&playlist=0RH_RarRDNo" title="NUSSA : SONG COMPILATION VOL. 1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							@if($kode_poli=='P03') 
+							<iframe width="100%" height="790" src="https://www.youtube.com/embed/0RH_RarRDNo?si=udmXkagPK2AObzJb&amp;autoplay=1&amp;mute=1&loop=1&list=PLYc1pO20eF3jchZ2_7OS9gnjuLMkS58gp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 							@endif
 							
 						</div>
@@ -88,14 +91,14 @@
 			success: function (data) {
 				
 				$('#nomor-aktif').html(data.nomor_aktif);
-				$('#nama_pasien').html(data.singkatan);
+				$('#nama_pasien').html(data.nama_pasien);
 				
 				$.each(data.item, function(i, result){
-					$("#tampil-urutan").append('<div class="col-md-3"  style="margin-bottom:1%;color:yellow;font-size:25px; font-weight:bold;text-align:center;background:#32326c;border: double 4px #3c3cb3; border-right: 0px;s">'
+					$("#tampil-urutan").append('<div class="col-md-3"  style="margin-bottom:1%;color:yellow;font-size:4em; padding:0px; font-weight:bold;text-align:center;background:#32326c;border: double 4px #3c3cb3; border-right: 0px;">'
 						+result.nomor
 						+'</div>'
-						+'<div class="col-md-9"  style="margin-bottom:1%;color:yellow;text-transform:uppercase;font-size:25px; font-weight:bold;text-align:left;background:#32326c;border: double 4px #3c3cb3; border-left: 0px;">'
-						+result.singkatan
+						+'<div class="col-md-9"  style="margin-bottom:1%;color:yellow;text-transform:uppercase;font-size:3.5em; font-weight:bold;text-align:left;background:#32326c;border: double 4px #3c3cb3; border-left: 0px;">'
+						+result.nama_pasien
 						+'</div>');
 					});
 					

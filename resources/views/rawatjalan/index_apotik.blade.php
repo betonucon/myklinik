@@ -34,19 +34,21 @@
 			});
 		}
         function show_data() {
-            if ($('#data-table-fixed-header').length !== 0) {
-                var table=$('#data-table-fixed-header').DataTable({
-                    lengthMenu: [20, 40, 60],
-                    lengthChange:false,
-                    fixedHeader: {
-                        header: true,
-                        headerOffset: $('#header').height()
-                    },
-                    responsive: true,
-                    ajax:"{{ url('apotik/getdata')}}",
-                    dom: 'lrtip',
+			if ($('#data-table-fixed-header').length !== 0) {
+				var table=$('#data-table-fixed-header').DataTable({
+					lengthMenu: [20, 40, 60],
+					lengthChange:false,
+					fixedHeader: {
+						header: true,
+						headerOffset: $('#header').height()
+					},
+					processing: true,
+					serverSide: false,
+					responsive: true,
+					ajax:"{{ url('apotik/getdata')}}",
+					dom: 'lrtip',
 					columns: [
-                        { data: 'id', render: function (data, type, row, meta) 
+						{ data: 'id', render: function (data, type, row, meta) 
 							{
 								return meta.row + meta.settings._iDisplayStart + 1;
 							} 
@@ -58,8 +60,8 @@
 						{ data: 'no_register' },
 						{ data: 'nama_pasien' },
 						{ data: 'nama_asuransi' },
-                        { data: 'jenis_kelamin' },
-                        { data: 'umur' },
+						{ data: 'jenis_kelamin' },
+						{ data: 'umur' },
 						{ data: 'nm_poli',className: "text-center"  },
 						
 						
@@ -71,17 +73,23 @@
 							next: 'Next>>'
 						}
 					}
-                });
-                $('#cari_data').keyup(function(){
-                    table.search($(this).val()).draw() ;
-                })
-            }
-        };
+				});
+				$('#cari_data').keyup(function(){
+					table.search($(this).val()).draw() ;
+				})
+			}
+		}
 
 
         $(document).ready(function() {
 			show_data();
             load_data();
+			$('.datetimepicker1').datetimepicker({
+                format: 'DD-MM-YYYY'
+            });
+			$('#change_date').click(function(){
+				change_data($('#waktu_change').val());
+			})
 		});
         
 		
@@ -122,15 +130,22 @@
                                 <div class="col-md-5" style="background: #fdf5cd; padding: 1%;">
                                     <table width="100%">
                                         <tr>
-                                            <td colspan="4" style="font-size:20px">TGL : {{$waktu}}</td>
+                                            <td colspan="4" style="font-size:20px">TGL</br>
+												<div class="input-group input-group-sm date datetimepicker1" id="">
+                                                    <input type="text" id="waktu_change" name="waktu_change" value="{{date('d-m-Y',strtotime($waktu))}}" class="form-control datetimepicker1" >
+                                                    <div class="btn btn-primary" id="change_date">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                </div>
+											</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="antrian">
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="%">TOTAL PASIEN</td>
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="30%">ANTRIAN</td>
                                             <td style="border:solid 1px #fff;color:#fff;background:blue;text-align:center" width="30%">SELESAI</td>
                                             
                                         </tr>
-                                        <tr>
+                                        <tr id="antrian1">
                                             <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-total">0</td>
                                             <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-antrian">0</td>
                                             <td style="font-weight:bold;font-size:16px;border:solid 1px #fff;color:#000;background:aqua;text-align:center" id="nilai-selesai">0</td>
@@ -153,7 +168,7 @@
                                         <th width="5%">No</th>
                                         <th width="5%"></th>
                                         <th width="3%"></th>
-                                        <th width="5%">Nomor</th>
+                                        <th width="5%">Antrian</th>
                                         <th width="12%">No Transaksi</th>
                                         <th width="11%">No Register</th>
                                         <th >Pasien</th>
@@ -189,6 +204,7 @@
                 
                 
             });
+			
 			function tambah(id){
 				location.assign("{{url('apotik/view')}}?id="+id)
 			} 
@@ -321,5 +337,26 @@
                 
                 
             }
+			function change_data(data) {
+				const date = new Date();
+				let day = date.getDate();
+				let month = date.getMonth() + 1;
+				let year = date.getFullYear();
+				const currentDate = `${day}-${month}-${year}`;
+				if(data != currentDate){
+					document.getElementById('antrian').style.display = "none";
+					document.getElementById('antrian1').style.display = "none";
+				} else {
+					document.getElementById('antrian').style.display = "";
+					document.getElementById('antrian1').style.display = "";
+				}
+				if ($('#data-table-fixed-header').length !== 0) {
+					var tables=$('#data-table-fixed-header').DataTable();
+                    tables.ajax.url("{{ url('apotik/getdata')}}?waktu="+data).load();
+					$('#cari_data').keyup(function(){
+					table.search($(this).val()).draw() ;
+					})
+				}
+			}
         </script>
 @endpush

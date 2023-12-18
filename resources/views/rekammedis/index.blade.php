@@ -23,10 +23,10 @@
                         header: true,
                         headerOffset: $('#header').height()
                     },
-                    responsive: false,
 					processing: true,
 					serverSide: false,
-                    ajax:"{{ url('transaksiobat/getdata')}}",
+                    responsive: false,
+                    ajax:"{{ url('rekammedis/getdata')}}",
                     dom: 'lrtip',
 					columns: [
                         { data: 'id', render: function (data, type, row, meta) 
@@ -35,11 +35,13 @@
 							} 
 						},
 						{ data: 'status' },
-						{ data: 'kode_obat' },
-						{ data: 'nama_obat' },
-                        { data: 'spesifikasi' },
-						{ data: 'harga',className: "text-right"  },
-						{ data: 'stok',className: "text-right"  },
+						{ data: 'action' },
+						{ data: 'no_register' },
+                        { data: 'nama_pasien' },
+						{ data: 'nik' },
+						{ data: 't_lahir' },
+						{ data: 'umur' },
+						{ data: 'nama_kepala' },
 						
 						
 					],
@@ -73,11 +75,11 @@
 			<!-- begin breadcrumb -->
 			<ol class="breadcrumb float-xl-right">
 				<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
-				<li class="breadcrumb-item active">Stok Obat</li>
+				<li class="breadcrumb-item active">Pasien</li>
 			</ol>
 			<!-- end breadcrumb -->
 			<!-- begin page-header -->
-			<h1 class="page-header">Stok Obat <small></small></h1>
+			<h1 class="page-header">List Pasien <small></small></h1>
 			<!-- end page-header -->
 			<!-- begin row -->
 			<div class="row">
@@ -98,24 +100,8 @@
 						
 						<div class="panel-body">
 							<div class="row" style="margin-bottom:2%">
-                                <div class="col-md-5" style="background: #fdf5cd; padding: 1%;">
-                                    <table width="100%">
-                                        <tr>
-                                            <td width="7%"><span style="cursor: pointer;" onclick="cari_status(`danger`)" class="label label-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-                                            <td>Stok Habis</td>
-                                        </tr>
-                                        <tr>
-                                            <td><span style="cursor: pointer;" onclick="cari_status(`warning`)" class="label label-warning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-                                            <td>Butuh Penambahan Stok / Stok dibawah Safety Stok</td>
-                                        </tr>
-                                        <tr>
-                                            <td><span style="cursor: pointer;" onclick="cari_status(`success`)" class="label label-success">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-                                            <td>Stok Tersedia</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-md-3">
-                                   
+                                <div class="col-md-8">
+                                    <!-- <a href="javascript:;" onclick="tambah(`{{encoder(0)}}`)" class="btn btn-primary m-r-5"><i class="fa fa-plus"></i> Tambah</a> -->
                                 </div>
                                 <div class="col-md-4">
                                     <input class="form-control" id="cari_data" placeholder="Cari......" type="text" />
@@ -126,12 +112,14 @@
                                     <tr role="row">
                                         <th width="5%">No</th>
                                         <th width="5%"></th>
-                                        <th width="11%">Kode</th>
-                                        <th width="15%">Nama Obat</th>
+                                        <th width="5%"></th>
+                                        <th width="10%">No Reg</th>
                                         
-                                        <th width="">Keterangan</th>
-                                        <th width="11%">Harga</th>
-                                        <th width="5%">Stok</th>
+                                        <th>Nama Pasien</th>
+                                        <th width="12%">NIK</th>
+                                        <th width="10%">T.Lahir</th>
+                                        <th width="8%">Umur</th>
+                                        <th width="20%">KK</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -151,11 +139,7 @@
         <script type="text/javascript">
 			
 			function tambah(id){
-				location.assign("{{url('transaksiobat/view')}}?id="+id)
-			} 
-			function cari_status(statusnya){
-				var tables=$('#data-table-fixed-header').DataTable();
-                    tables.ajax.url("{{ url('transaksiobat/getdata')}}?statusnya="+statusnya).load();
+				location.assign("{{url('rekammedis/view')}}?id="+id)
 			} 
             function hanyaAngka(evt) {
 				
@@ -196,7 +180,7 @@
                                 $('#modal-form').modal('hide')
 				                $('#tampil-form').html("")
                                 var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                        tables.ajax.url("{{ url('master/dokter/getdata')}}").load();
                             }else{
                                 document.getElementById("loadnya").style.width = "0px";
                                 Swal.fire({
@@ -226,18 +210,18 @@
                         if (willDelete) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{url('transaksiobat/delete')}}",
+                                url: "{{url('master/dokter/delete')}}",
                                 data: "id="+id,
                                 success: function(msg){
                                     swal("Sukses diproses", "", "success")
                                     var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                        tables.ajax.url("{{ url('master/dokter/getdata')}}").load();
                                 }
                             });
                            
                         } else {
                             var tables=$('#data-table-fixed-header').DataTable();
-                                tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                tables.ajax.url("{{ url('master/dokter/getdata')}}").load();
                         }
                     });
                     
@@ -248,8 +232,8 @@
                     
 
                     swal({
-                            title: "Aktifkan obat?",
-                            text: "Jika diaktifkan maka pengguna dapat menggunakan obat ini",
+                            title: "Aktifkan dokter/ medis?",
+                            text: "Jika diaktifkan maka pengguna dapat menggunakan dokter/ medis ini",
                             icon: "warning",
                             buttons: true,
                             dangerMode: true,
@@ -258,25 +242,25 @@
                         if (willDelete) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{url('transaksiobat/switch_status')}}",
+                                url: "{{url('master/dokter/switch_status')}}",
                                 data: "id="+id+"&act="+act,
                                 success: function(msg){
                                     swal("Sukses diproses", "", "success")
                                     var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                        tables.ajax.url("{{ url('master/dokter/getdata')}}").load();
                                 }
                             });
                            
                         } else {
                             var tables=$('#data-table-fixed-header').DataTable();
-                                tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                tables.ajax.url("{{ url('master/dokter/getdata')}}").load();
                         }
                     });
                 }
                 if(act==0){
                     swal({
-                            title: "Non aktifkan obat?",
-                            text: "Jika nonaktifkan maka pengguna tidak dapat menggunakan obat ini",
+                            title: "Non aktifkan dokter/ medis?",
+                            text: "Jika nonaktifkan maka pengguna tidak dapat menggunakan dokter/ medis ini",
                             icon: "warning",
                             buttons: true,
                             dangerMode: true,
@@ -285,18 +269,18 @@
                         if (willDelete) {
                             $.ajax({
                                 type: 'GET',
-                                url: "{{url('transaksiobat/switch_status')}}",
+                                url: "{{url('master/dokter/switch_status')}}",
                                 data: "id="+id+"&act="+act,
                                 success: function(msg){
                                     swal("Sukses diproses", "", "success")
                                     var tables=$('#data-table-fixed-header').DataTable();
-                                        tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                        tables.ajax.url("{{ url('master/dokter/getdata')}}").load();
                                 }
                             });
                            
                         } else {
                             var tables=$('#data-table-fixed-header').DataTable();
-                                tables.ajax.url("{{ url('transaksiobat/getdata')}}").load();
+                                tables.ajax.url("{{ url('master/dokter/getdata')}}").load();
                         }
                     });
                 }

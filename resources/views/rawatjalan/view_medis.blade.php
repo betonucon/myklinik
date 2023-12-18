@@ -17,6 +17,8 @@
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -57,6 +59,9 @@
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
+					searchDelay: 350,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -89,13 +94,15 @@
 					}
                 });
                 $('#cari_data_diagnosa').keyup(function(){
-                    table.search($(this).val()).draw() ;
+                    tablediag.search($(this).val()).draw() ;
                 })
 
                 var tabledetail=$('#data-table-fixed-header-detail').DataTable({
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -137,6 +144,81 @@
                     $($.fn.dataTable.tables(true)).DataTable()
                         .columns.adjust()
                         .fixedColumns().relayout();
+                });
+				
+				function htmlDecode(input) {
+					let doc = new DOMParser().parseFromString(input, "text/html");
+					return doc.documentElement.textContent;
+				}
+				
+				var rekammedis=$('#data-table-fixed-header-rekammedis').DataTable({
+                    lengthChange:false,
+                    ordering:false,
+                    paging:true,
+					processing: true,
+					serverSide: false,
+                    scrollY:        300,
+                    scrollCollapse: true,
+                    scroller:       true,
+                    fixedHeader: {
+                        header: true,
+                        headerOffset: $('#header').height()
+                    },
+
+                    responsive: false,
+					ajax:"{{ url('rekammedis/getdatarm')}}?req={{$data->no_register}}&data=history",
+                    dom: 'lrtip',
+					columns: [
+                        { data: 'created_at', render: function (data, type, row, meta) 
+							{
+								return meta.row + meta.settings._iDisplayStart + 1;
+							} 
+						},
+                        { data: 'created_at' ,render: function (data, type, row, meta) 
+							{
+								var dates = new Date(Date.parse(row.created_at));
+								var month = parseInt(dates.getMonth())+1;
+								dates = dates.getDate() + '-' + month  
+										+ '-' + dates.getFullYear() +' '+ dates.getHours() + 
+										':'+dates.getMinutes()+':'+dates.getSeconds();
+								return dates;
+							}
+
+						},
+						{ data: 'kode_poli', render: function (data, type, row, meta) 
+							{
+								switch(row.kode_poli){
+									case "P01" : return "UMUM";
+									case "P02" : return "GIGI";
+									case "P03" : return "KIA";
+								}
+								return  row.kode_poli;
+							}  },
+						{ data: 'nomor' },
+						{ data: 'skrining_dasar', render: function (data, type, row, meta) 
+							{
+								return  htmlDecode(row.skrining_dasar);
+							}  },
+						{ data: 'keluhan' },
+						{ data: 'diagnonsa_eng',  render: function (data, type, row, meta) 
+							{
+								return  row.diagnosa_eng;
+							}  },
+						{ data: 'diagnonsa_ind',  render: function (data, type, row, meta) 
+							{
+								return  row.diagnosa_ind;
+							} },
+						{ data: 'tindak_lanjut' },
+						{ data: 'array_obat' },
+						
+					],
+					language: {
+						paginate: {
+							// remove previous & next text from pagination
+							previous: '<< previous',
+							next: 'Next>>'
+						}
+					}
                 });
 
 		});
@@ -211,32 +293,32 @@
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">No BPJS</label>
                                                             <div class="col-lg-9 col-xl-8"  style="padding: 0.3%; padding-left: 5%;">
-                                                                {{$data->nama_asuransi}}
+                                                                {{$data2->no_bpjs}}
                                                             </div>
                                                         </div>
                                                        @endif
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Nama Pasien <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7"  style="padding: 0.3%; padding-left: 5%;">
-                                                                Tn. {{$data->nama_pasien}}
+                                                                {{$data->nama_pasien}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Alamat Pasien <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-7">
-                                                                {{$data->alamat}}
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                 {{$data2->alamat}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Tanggal Lahir <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
-                                                                {{$data->tgl_lahir}}
+                                                                {{date('d-m-Y',strtotime($data->tgl_lahir))}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
                                                             <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Usia Pasien <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
-                                                                {{$data->umur}} Th
+                                                                {{$data->umur}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
@@ -265,23 +347,54 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tensi Darah <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
-                                                                {{$data->tensi}} mmHg
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tensi Darah <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="tensi_darah_a" value="{{$data->tensi_darah_a}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                            </div>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                                <b>/</b> 
+                                                                <input type="number" name="tensi_darah_b" style="width:80%;display: inline;"  value="{{$data->tensi_darah_b}}" placeholder="Ketik...." class="form-control form-control-sm typright">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Suhu Badan <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
-                                                                {!!$data->suhunya!!}
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Suhu Badan <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="suhu" value="{{$data->suhu}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                           </div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">&#8451;</p>
+                                                            </div>
+                                                        </div>
+														<div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan </label>
+															<div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+															</div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Cm</p>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
-                                                                {{$data->berat}} Kg
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan</label>
+                                                            <div class="col-lg-9 col-xl-3">
+                                                            <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+                                                        </div>
+                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
+                                                                <p style="font-size:16px">Kg</p>
                                                             </div>
                                                         </div>
+														@if($data->kode_poli=="P03")
+														<div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Lila </label>
+															<div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="lila" value="{{$data->lila}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+															</div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Cm</p>
+                                                            </div>
+                                                        </div>
+														@endif
+														
                                                         
                                                         
                                                         
@@ -292,11 +405,18 @@
                                                     </div>
                                                     @if($data->tujuan_id==1)
                                                     <div class="col-xl-7 " >
-                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Informasi Keluhan Yang dialami</u></legend>
+                                                        <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Informasi Anamnesa Pasien</u></legend>
                                                         <div class="form-group row m-b-1">
-                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Keluhan Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Anamnesa Pasien <span class="text-danger" style="font-size:18px;margin-top:0px">*</span></label>
                                                             <div class="col-lg-9 col-xl-8">
                                                                 <textarea name="keluhan" value="" placeholder="Ketik...." rows="5" class="form-control form-control-sm">{{$data->keluhan}}</textarea>
+                                                           </div>
+                                                            
+                                                        </div>
+														<div class="form-group row m-b-1">
+                                                            <label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Tindakkan atau Therapi yang diberikan Dokter atau Tenaga Kesehatan </label>
+                                                            <div class="col-lg-9 col-xl-8">
+                                                                <textarea name="tindak_lanjut" value="" placeholder="Ketik...." rows="5" class="form-control form-control-sm">{{$data->tindak_lanjut}}</textarea>
                                                            </div>
                                                             
                                                         </div>
@@ -325,7 +445,43 @@
                                                                 <textarea name="diagnosa_ind" id="diagnosa_ind" placeholder="Ketik...." rows="5" class="form-control form-control-sm" readonly></textarea>
                                                             </div>
                                                         </div>
-                                                        
+														@if($data->nama_poli=="Poli KIA")
+														<div class="form-group row m-b-1" id="lila">
+															<label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Lila </label>
+															<div class="col-lg-9 col-xl-3">
+																<input type="number" name="lila" value="{{$data->lila}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+															</div>
+															<div class="col-lg-9 col-xl-1">
+																<p style="font-size:16px">Cm</p>
+															</div>
+														</div>
+														<div class="form-group row m-b-1" id="eliminasi">
+															<label class="col-lg-4 text-lg-right col-form-label" style="padding:3px !important">Sudah Pernah Diperiksa Triple Eliminasi? </label>
+															<div class="col-lg-9 col-xl-3">
+																<input type="checkbox" name="eliminasi" value="{{$data->eliminasi}}" class="form-control form-control-sm"> 
+															</div>
+														</div>
+														@endif
+														
+                                                        <div class="col-md-11" style="background: #fdf5cd; padding: 1%;">
+															<legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Rekam Medis Pasien</u></legend>
+															<table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-rekammedis"  >
+																<thead>
+																	<tr role="row">
+																		<th width="2%">No</th>
+																		<th width="2%">Tanggal Berobat</th>
+																		<th width="2%">Poli</th>
+																		<th width="2%">Nomor Antrean</th>
+																		<th width="15%">Skrining Dasar</th>
+																		<th width="10%">Keluhan dan Anamnesa</th>
+																		<th width="10%">Diagnosa Inggris</th>
+																		<th width="10%">Diagnosa Indonesia</th>
+																		<th width="10%">Therapy atau Tindakkan yang Dilakukan Tenaga Kesehatan</th>
+																		<th width="10%">Resep Obat</th>																		
+																	</tr>
+																</thead>
+															</table>
+														</div>
                                                     </div>
                                                     <div class="col-xl-5 mb-4" style="border: solid 1px #ceced9; background: #f9f9f9; padding-top: 1%;">
                                                         <legend class="no-border f-w-700 p-b-0 m-t-0 m-b-20 f-s-16 text-inverse"><u>Surat Keterangan Sakit / Keterangan Sehat</u></legend>
@@ -371,24 +527,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group row m-b-1  sks">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
-                                                                <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
-                                                                <p style="font-size:16px">Kg</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row m-b-1  sks">
-                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
-                                                            <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
-                                                                <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                           </div>
-                                                            <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
-                                                                <p style="font-size:16px">Cm</p>
-                                                            </div>
-                                                        </div>
                                                         <div class="form-group row m-b-1 sks">
                                                             <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tujuan <b>:</b></label>
                                                             <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
@@ -419,15 +557,6 @@
                                                             </div>
                                                             
                                                             <div class="form-group row m-b-1">
-                                                                <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Berat Badan <b>:</b></label>
-                                                                <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
-                                                                    <input type="number" name="berat" value="{{$data->berat}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
-                                                            </div>
-                                                                <div class="col-lg-9 col-xl-1" style="padding: 0.3%; padding-left: 5%;">
-                                                                    <p style="font-size:16px">Kg</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row m-b-1">
                                                                 <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan <b>:</b></label>
                                                                 <div class="col-lg-9 col-xl-3" style="padding: 0.3%; padding-left: 5%;">
                                                                     <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
@@ -436,7 +565,16 @@
                                                                     <p style="font-size:16px">Cm</p>
                                                                 </div>
                                                             </div>
-                                                            
+															
+                                                            <div class="form-group row m-b-1">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tujuan <b>:</b></label>
+                                                            <div class="col-lg-9 col-xl-7" style="padding: 0.3%; padding-left: 5%;">
+                                                                     <div class="input-group input-group-sm date " id="">
+                                                                        <textarea name="tujuan_surat" id="tujuan_surat" value="" class="form-control"></textarea>
+                                                                    
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             
                                                             
                                                             
@@ -453,7 +591,7 @@
                                         <div class="tab-pane fade " id="default-tab-2" >
                                             <div class="row" style="margin-bottom:2%">
                                                 <div class="col-md-8" style="background: #fdf5cd; padding: 1%;">
-                                                <a href="javascript:;"  onclick="tambah_obat()()"  class="btn btn-primary m-r-5"><i class="fa fa-save"></i> Tambah Obat</a>
+                                                <a href="javascript:;"  onclick="tambah_obat()"  class="btn btn-primary m-r-5"><i class="fa fa-save"></i> Tambah Obat</a>
                                                 </div>
                                                 
                                                 <div class="col-md-4">
@@ -472,10 +610,6 @@
                                                     </tr>
                                                 </thead>
                                             </table>
-                                            
-                                        </div>
-                                        <div class="tab-pane fade" id="default-tab-3">
-                                            
                                         </div>
                                     </div>
                                     <div class="panel-body" style="margin-top:1%;background: #f5f5fb; padding: 1%;">
@@ -547,7 +681,7 @@
                                 <input class="form-control" id="cari_data_diagnosa" placeholder="Cari......" type="text" />
                             </div>
                         </div>
-                        <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer" id="data-table-fixed-header-diagnosa"  >
+                        <table class="table table-striped table-bordered table-td-valign-middle dataTable no-footer tablediagnosa" id="data-table-fixed-header-diagnosa"  >
                             <thead>
                                 <tr role="row">
                                     <th width="2%">No</th>
@@ -633,11 +767,18 @@
             
 			$('#non_kepala').hide();
 			$('.datetimepicker1').datetimepicker({
-                format: 'YYYY-MM-DD'
+                format: 'DD-MM-YYYY'
             });
 			function show_diagnosa(){
 				$('#modal-diagnosa').modal('show');
-                var tables=$('#data-table-fixed-header-diagnosa').DataTable();
+                var tables=$('#data-table-fixed-header-diagnosa').DataTable({
+                    processing: true,
+                    retrieve: true,
+					serverSide: false,
+                    scrollY:        300,
+                    scrollCollapse: true,
+                    scroller:       true
+                });
                     tables.ajax.url("{{ url('master/diagnosa/getdata')}}").load();
 			} 
             function tambah_obat(){

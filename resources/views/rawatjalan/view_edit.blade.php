@@ -19,6 +19,8 @@
                     lengthChange:false,
                     ordering:false,
                     paging:false,
+					processing: true,
+					serverSide: false,
                     scrollY:        300,
                     scrollCollapse: true,
                     scroller:       true,
@@ -219,6 +221,26 @@
                                                             </div>
                                                             
                                                         </div>
+														<div class="form-group row m-b-1" id="tinggi_badan">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Tinggi Badan </label>
+															<div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="tinggi" value="{{$data->tinggi}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+															</div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Cm</p>
+                                                            </div>
+                                                        </div>
+														@if($data->kode_poli=="P03")
+														<div class="form-group row m-b-1" id="lila">
+                                                            <label class="col-lg-5 text-lg-right col-form-label" style="padding:3px !important">Lila </label>
+															<div class="col-lg-9 col-xl-3">
+                                                                <input type="number" name="lila" value="{{$data->lila}}" placeholder="Ketik...." class="form-control form-control-sm typright"> 
+															</div>
+                                                            <div class="col-lg-9 col-xl-1">
+                                                                <p style="font-size:16px">Cm</p>
+                                                            </div>
+                                                        </div>
+														@endif
                                                         
                                                         
                                                     </div>
@@ -370,7 +392,7 @@
         <script type="text/javascript">
 			$('#non_kepala').hide();
 			$('.datetimepicker1').datetimepicker({
-                format: 'YYYY-MM-DD'
+                format: 'DD-MM-YYYY'
             });
 			function show_pasien(){
 				$('#modal-pasien').modal('show');

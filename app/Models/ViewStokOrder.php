@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ViewStokOrder extends Model
 {
     use HasFactory;
-    protected $table = 'view_stok_order';
+    protected $table = 'view_stok_order_new';
     protected $guarded = ['id'];
     public $timestamps = false;
     
